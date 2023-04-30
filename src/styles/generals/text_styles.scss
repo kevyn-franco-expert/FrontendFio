@@ -1,0 +1,71 @@
+// font family per tags
+
+a, p {
+    font-family: 'Cocomat';
+    font-weight: 300;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Cocomat'!important;
+    font-weight: bold!important;
+}
+
+.nav {
+    &-li {
+        color: white;
+        font-family: 'Cocomat';
+        font-weight: 300!important;   
+    }
+}
+
+.btn {
+    &-outline {
+        color: var(--white-color);
+        font-family: 'Cocomat';
+        font-weight: 300;
+        &:hover {
+            color: var(--red-color)!important;
+        }
+    }
+}
+
+
+.heading-red {
+    color: var(--red-color-text)!important;
+    font-size: var(--title-size-xxl);
+}
+
+.text-p {
+    &-blue {
+        color: var(--blue-color);
+    }
+}
+
+.title {
+    &-highlight {
+        background-color: var(--red-color);
+        border-radius: 10px;
+        color: white;
+        background-size: contain;
+        text-align: center;
+        width: fit-content;
+        min-width: 600px;
+        margin: auto;
+        padding: 10px 20px 0;
+
+        @include responsive(phone) {
+            min-width: 100%;
+            padding: 10px 5px 0;
+        }
+
+        &.blue {
+            background-color: var(--blue-color);
+        }
+    }
+
+    &-black {
+        font-weight: bold;
+        max-width: 600px;
+        text-align: center;
+    }
+}

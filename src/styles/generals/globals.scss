@@ -1,0 +1,82 @@
+.radio-list {
+    gap: 10px;
+    margin-top: 10px;
+    .month {
+        &-selected {
+            background-color: var(--bg-base);
+            border-radius: 10px;
+            font-family: 'Cocomat';
+            gap: 10px;
+            font-weight: bold;
+            font-size: var(--title-size-base);
+            padding: 10px 20px!important;
+
+            @include responsive(phone) {
+                font-size: var(--text-size-xl);
+                gap: 1px;
+                padding: 5px!important;
+            }
+    
+            svg {
+                background-color: var(--gray-color);
+                border-radius: 100%;
+                padding: 2px;
+                color: white;
+                margin-bottom: 4px;
+            }
+            &[data-checked] {
+                svg {
+                    background-color: var(--red-color);
+                }
+            }
+        }
+    }
+    
+    &.bigger {
+        .month {
+            &-selected {
+                width: 100%;
+            }
+        }
+        .box-radio {
+            width: 100%;
+        }
+    }
+
+}
+
+.document-types {
+    .radio-list {
+        .box-radio {
+            min-width: 250px;
+            @include responsive(phone) {
+                min-width: 150px;
+            }
+        }
+    }
+}
+
+.chakra-input {
+    border: 0!important;
+    border-radius: 0!important;
+
+    border-bottom: 1px solid var(--gray-color)!important;
+
+    &:hover,:active, &:focus, &:focus-visible {
+        outline: none!important;
+        box-shadow: inherit!important;
+        border-bottom: 2px solid var(--gray-color)!important;
+    }
+}
+
+.line-trought {
+    align-items: center;
+    background-color: var(--red-color);
+    display: flex;
+    height: 2px;
+    margin-bottom: 50px;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+
+}
