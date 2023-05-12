@@ -3,6 +3,7 @@
 a, p {
     font-family: 'Cocomat';
     font-weight: 300;
+    color: black;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -12,7 +13,7 @@ h1,h2,h3,h4,h5,h6 {
 
 .nav {
     &-li {
-        color: white;
+        color: white!important;
         font-family: 'Cocomat';
         font-weight: 300!important;   
     }
@@ -20,7 +21,7 @@ h1,h2,h3,h4,h5,h6 {
 
 .btn {
     &-outline {
-        color: var(--white-color);
+        color: var(--white-color)!important;
         font-family: 'Cocomat';
         font-weight: 300;
         &:hover {
@@ -37,7 +38,7 @@ h1,h2,h3,h4,h5,h6 {
 
 .text-p {
     &-blue {
-        color: var(--blue-color);
+        color: var(--blue-color)!important;
     }
 }
 
@@ -67,5 +68,22 @@ h1,h2,h3,h4,h5,h6 {
         font-weight: bold;
         max-width: 600px;
         text-align: center;
+    }
+
+    &-account {
+        font-size: 25px;
+        font-weight: bold;
+        max-width: 600px;
+        text-align: left;
+        margin-bottom: 20px;
+        padding-left: 15px;
+    }
+
+    &-red {
+        color: var(--red-color-text)!important;
+        text-align: center;
+        margin: 15px 0 30px;
+        font-size: 28px;
+        font-weight: 600;
     }
 }

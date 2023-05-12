@@ -40,7 +40,6 @@ import {
             justify="space-around"
             fontSize={{ base: "12px", md: "16px" }}
             color="white"
-            _dark={{ color: "white" }}
             textAlign={{ base: "center", md: "left" }}
           >
             <Flex justify="start" direction="column">
@@ -68,10 +67,10 @@ import {
 
             <Flex justify="start" direction="column">
             <Text as='b'>Contacto</Text>
-              <Text>Disponible de Lunes a Viernes</Text>
-              <Text>9:00 am - 6:00 pm</Text>
+              <Text color='white'>Disponible de Lunes a Viernes</Text>
+              <Text color='white'>9:00 am - 6:00 pm</Text>
               <Link href="mailto:contacto@fio.pe">Contacto@fio.pe</Link>
-              <Text>Habla con nuestros asesores</Text>
+              <Text color='white'>Habla con nuestros asesores</Text>
               <VStack py={3}>
           <HStack justify="center" gap={2}>
             <Link className="social-icons">

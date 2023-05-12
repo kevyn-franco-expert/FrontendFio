@@ -17,13 +17,13 @@ export default function Feature({features}){
             fontSize="lg"
             lineHeight="shorter"
             fontWeight="bold"
+            color='black'
             >
             {props.title}
             </chakra.h3>
             <chakra.p
             lineHeight="tall"
-            color="gray.600"
-            _dark={{ color: "gray.400" }}
+            color="black"
             >
             {props.children}
             </chakra.p>

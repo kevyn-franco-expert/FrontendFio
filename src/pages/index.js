@@ -10,6 +10,10 @@ export default function Home() {
   const [calculatorCheck, setCalculatorCheck] = useState(false)
   const [tipsCheck, setTipsCheck] = useState(false)
 
+  const calculatorData = (data) => {
+    console.log(data)
+  };
+
   function handleButtonClick(section) {
     if (section === 'calculator') {
       setCalculatorCheck(true)
@@ -38,7 +42,7 @@ export default function Home() {
           </Center>
           <Center w='100%' maxW={700}>
             <Box boxShadow='md' className="home-box" mt={{base: '10', sm: '1'}} maxW='full' borderWidth='1px' borderRadius='lg' bg="white" color="black" p={{base: '2', sm: '5'}} pt={5}>
-                { !calculatorCheck && <Calculator />}
+                { !calculatorCheck && <Calculator calculatorValues={calculatorData} />}
                 {(calculatorCheck && !tipsCheck) && <Tips features={features}  />}
                 {(calculatorCheck && tipsCheck) && <DocumentType />}
                 <Box className='buttons' pt={8}>

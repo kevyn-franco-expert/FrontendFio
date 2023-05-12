@@ -6,7 +6,7 @@ export default function RadioGroup({nameItem, items, bigger, setValue}) {
     const [radioValue, setRadioValue] = useState(0);
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: nameItem,
-        defaultValue: items[0],
+        defaultValue: null,
         onChange: setValue,
     })
 

@@ -19,7 +19,7 @@ import NextLink from 'next/link'
 import { AiOutlineMenu } from "react-icons/ai";
 
 export default function Header(){
-  const bg = useColorModeValue("#d62732");
+  const bg = "#d62732";
   const mobileNav = useDisclosure();
 
   return (
@@ -70,7 +70,7 @@ export default function Header(){
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
                 fontSize="20px"
-                color="gray.800"
+                color="white"
                 _dark={{ color: "inherit" }}
                 variant="ghost"
                 icon={<AiOutlineMenu />}
@@ -89,12 +89,15 @@ export default function Header(){
                 m={2}
                 bg={bg}
                 spacing={3}
+                zIndex={1000}
+                borderRadius={10}
                 rounded="sm"
                 shadow="sm"
               >
                 <CloseButton
                   aria-label="Close menu"
                   onClick={mobileNav.onClose}
+                  color={'white'}
                 />
 
                 <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">Inicio</Button>
