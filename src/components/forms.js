@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Field, Formik } from 'formik';
+import { Field, Formik, useFormik } from 'formik';
+import { useRouter } from 'next/navigation'
 import { Box,
   AbsoluteCenter,
   Button,
@@ -13,75 +14,135 @@ import { Box,
   Stack,
   Radio, 
   RadioGroup,
-  useDisclosure,
   Divider,
-  Center
+  Center,
+  Text
   } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import Modals from './Modal';
 import * as Yup from 'yup';
+import useAPI from '@/hooks/useAPI';
+import useUbigeo from '@/hooks/useUbigeo';
+import useInputValidators from "@/hooks/useInputValidators";
+import Cookies from 'js-cookie';
 
 
-export default function forms({formType}) {
+export default function forms({formType, url}) {
   const [openModal, setOpenModal] = useState(false);
+  const [fullNameData, setFullNameData] = useState('|');
+  const [formRegisterData, setFormRegisterData] = useState({});
+  const [errorLogin, setErrorLogin] = useState('');
+  const router = useRouter()
+  
+  const SetCookie = (name, value) => {
+    Cookies.set(name, value, {
+      expires: 7,
+    });
+  };
+  
   const onlyNumbers = /^[0-9\b]+$/;
   const onlyCharacters = /^[A-Za-z\s]*$/;
+  const { loading, errorData, postData } = useAPI();
+  const {
+    departaments,
+    provinces,
+    districts,
+    selectedDepartament,
+    setSelectedDepartament,
+    selectedProvince,
+    setSelectedProvince,
+    selectedDistrict,
+    setSelectedDistrict,
+  } = useUbigeo();
 
-  const handleOnlyNumbers = (event) => {
-    const regex = /^[0-9\b]+$/;
-    const value = event.target.value;
-    if (!regex.test(value)) {
-      const filteredValue = value
-        .split('')
-        .filter((char) => regex.test(char))
-        .join('');
-      event.target.value = filteredValue;
+  const {
+    handleOnlyNumbers,
+    handleOnlyCharacters
+  } = useInputValidators();
+
+
+  const logIn = async (values) => {
+    console.log('logged', values)
+    if (Cookies.get('loggedIn')) {
+      router.push('/mi-cuenta')
+    } else {
+      try {
+        const result = await postData(url, values);
+        if (result && result.data) {
+          SetCookie('loggedIn', true);
+          SetCookie('token', result.data.token);
+          SetCookie('origin', result.data.origin);
+          setErrorLogin('')
+          router.push('/mi-cuenta');
+        } else if (result && result.errors) {
+          setErrorLogin(result.errors.detail)
+        }
+        
+      } catch (error) {
+        console.error('Error en la solicitud POST:', error);
+      }
+      router.push('/mi-cuenta')
+    }
+  }
+
+  const handlePost = async (url, data) => {
+    try {
+      const result = await postData(url, data);
+      console.log(result); // Resultado de la API
+    } catch (error) {
+      console.error('Error en la solicitud POST:', error);
     }
   };
 
-  const handleOnlyCharacters = (event) => {
-    const regex = /^[A-Za-z\s]*$/;
-    const value = event.target.value;
-    if (!regex.test(value)) {
-      const filteredValue = value
-        .split('')
-        .filter((char) => regex.test(char))
-        .join('');
-      event.target.value = filteredValue;
+  const handleOnChange = (event) => {
+    setFormRegisterData({
+      fullName: event.target.name === 'fullName' ? event.target.value : '',
+      documentNumber: event.target.name === 'documentNumber' ? event.target.value : '',
+      phone: event.target.name === 'phone' ? event.target.value : '',
+      address: event.target.name === 'address' ? event.target.value : '',
+      optIn: 1,
+      terms: event.target.name === 'terms' ? event.target.checked : '',
+    })
+
+    if (event.target.name === 'department') {
+      setSelectedDepartament(event.target.value);
+    } else if (event.target.name === 'province') {
+      setSelectedProvince(event.target.value);
+    } else if (event.target.name === 'district') {
+      setSelectedDistrict(event.target.value);
     }
+    
   };
+
 
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
     .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
     .required('Campo requerido'),
-    dni: Yup.string()
+    documentNumber: Yup.string()
     .matches(onlyNumbers, 'Solo se permiten numeros')
     .required('Campo requerido'),
     phone: Yup.string()
     .matches(onlyNumbers, 'Solo se permiten numeros')
-    .required('Campo requerido'),
-    department: Yup.string()
-    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
-    .required('Campo requerido'),
-    province: Yup.string()
-    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
-    .required('Campo requerido'),
-    district: Yup.string()
-    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
     .required('Campo requerido'),
     address: Yup.string()
     .required('Campo requerido'),
   });
 
   const validationSchemaBook = Yup.object().shape({
-    fullName: Yup.string()
+    name: Yup.string()
     .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
     .required('Campo requerido'),
-    dni: Yup.string()
+    last_name_father: Yup.string()
+    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
+    .required('Campo requerido'),
+    last_name_mother: Yup.string()
+    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
+    .required('Campo requerido'),
+    document_number: Yup.string()
     .matches(onlyNumbers, 'Solo se permiten numeros')
     .required('Campo requerido'),
-    phone: Yup.string()
+    mobile: Yup.string()
     .matches(onlyNumbers, 'Solo se permiten numeros')
     .required('Campo requerido'),
     email: Yup.string()
@@ -96,24 +157,23 @@ export default function forms({formType}) {
       <Formik
       initialValues={{
         password: '',
-        dni: ''
+        document_number: ''
       }}
-      onSubmit={(values) => {
-        alert(JSON.stringify(values, null, 2));
-      }}
+      onSubmit={logIn}
     >
       {({ handleSubmit, errors, touched, values }) => (
         <form className='formik-form' onSubmit={handleSubmit}>
           <VStack spacing={4} align="flex-start">
-            <FormControl isInvalid={!!errors.dni && touched.dni}>
-              <FormLabel htmlFor="dni"><Flex className={`input-position ${!errors.dni && touched.dni ? 'fill':''}`}>1</Flex> DNI </FormLabel>
+            <FormControl isInvalid={!!errors.document_number && touched.document_number}>
+              <FormLabel htmlFor="document_number"><Flex className={`input-position ${!errors.document_number && touched.document_number ? 'fill':''}`}>1</Flex> DNI </FormLabel>
               <Field
                 as={Input}
-                id="dni"
-                name="dni"
+                id="document_number"
+                name="document_number"
                 maxLength={8}
                 type="tel"
                 onInput={handleOnlyNumbers}
+                autocomplete='off'
                 validate={(value) => {
                   let error;
 
@@ -124,7 +184,7 @@ export default function forms({formType}) {
                   return error;
                 }}
               />
-              <FormErrorMessage>{errors.dni}</FormErrorMessage>
+              <FormErrorMessage>{errors.document_number}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={!!errors.password && touched.password}>
               
@@ -134,11 +194,12 @@ export default function forms({formType}) {
                 id="password"
                 name="password"
                 type="password"
+                autocomplete='new-password'
                 validate={(value) => {
                   let error;
 
-                  if (value.length < 8) {
-                    error = "Debería tener al menos 8 caracteres";
+                  if (value.length < 6) {
+                    error = "Debería tener al menos 6 caracteres";
                   }
 
                   return error;
@@ -152,9 +213,10 @@ export default function forms({formType}) {
             </Center>
             <Box position='relative' w='100%'>
               <AbsoluteCenter my={6}>
-                <Button  minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
+                <Button minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
                   INGRESAR
                 </Button>
+                <Text color='red' align='center' mt={3}>{errorLogin}</Text>
               </AbsoluteCenter>
             </Box>
           </VStack>
@@ -167,23 +229,10 @@ export default function forms({formType}) {
   const FormPreRegister = () => {
     return (
         <Formik
-        initialValues={{
-          fullName: '',
-          dni: '',
-          phone: '',
-          department: '',
-          province: '',
-          district: '',
-          address: ''
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          alert(JSON.stringify(values, null, 2));
-          setOpenModal(true)
-        }}
+        initialValues={formRegisterData}
       >
         {({ handleSubmit, errors, touched, values }) => (
-          <form className='formik-form' onSubmit={handleSubmit}>
+          <form className='formik-form' onChange={handleOnChange} onSubmit={handleSubmit}>
             <Modals fullName={values.fullName} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
             <VStack spacing={4} align="flex-start">
               <FormControl isInvalid={!!errors.fullName && touched.fullName}>
@@ -194,40 +243,22 @@ export default function forms({formType}) {
                   id="fullName"
                   name="fullName"
                   type="text"
-                  onInput={handleOnlyCharacters}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 3) {
-                      error = "Debería tener al menos 3 caracteres";
-                    }
-
-                    return error;
-                  }}
+                  
                 />
                 <FormErrorMessage>{errors.fullName}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.dni && touched.dni}>
+              <FormControl isInvalid={!!errors.documentNumber && touched.documentNumber}>
               
-                <FormLabel htmlFor="dni"><Flex className={`input-position ${!errors.dni && touched.dni ? 'fill':''}`}>2</Flex> DNI </FormLabel>
+                <FormLabel htmlFor="documentNumber"><Flex className={`input-position ${!errors.documentNumber && touched.documentNumber ? 'fill':''}`}>2</Flex> DNI </FormLabel>
                 <Field
                   as={Input}
-                  id="dni"
-                  name="dni"
+                  id="documentNumber"
+                  name="documentNumber"
                   maxLength={8}
                   type="tel"
                   onInput={handleOnlyNumbers}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length !== 8) {
-                      error = "Debería tener 8 caracteres";
-                    }
-
-                    return error;
-                  }}
                 />
-                <FormErrorMessage>{errors.dni}</FormErrorMessage>
+                <FormErrorMessage>{errors.documentNumber}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.phone && touched.phone}>
                 
@@ -239,79 +270,61 @@ export default function forms({formType}) {
                   type="tel"
                   onInput={handleOnlyNumbers}
                   maxLength={9}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 9) {
-                      error = "Debería tener al menos 9 caracteres";
-                    }
-
-                    return error;
-                  }}
                 />
                 <FormErrorMessage>{errors.phone}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.department && touched.department}>
                 
-                <FormLabel htmlFor="department"><Flex className={`input-position ${!errors.department && touched.department ? 'fill':''}`}>4</Flex> Departamento </FormLabel>
-                <Field
-                  as={Input}
-                  id="department"
-                  name="department"
-                  type="text"
-                  onInput={handleOnlyCharacters}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 2) {
-                      error = "Debería tener al menos 3 caracteres";
-                    }
-
-                    return error;
-                  }}
-                />
+                <FormLabel htmlFor="department"><Flex className={`input-position ${selectedDepartament ? 'fill':''}`}>4</Flex> Departamento </FormLabel>
+                <Field 
+                as="select"
+                id="department"
+                name="department"
+                className="select-input"
+                value={selectedDepartament}>
+                  <option value="">Seleccionar departamento</option>
+                  {departaments.map((departamento) => (
+                    <option key={departamento.coddepartamento} value={departamento.coddepartamento}>
+                      {departamento.departamento}
+                    </option>
+                  ))}
+                </Field>
                 <FormErrorMessage>{errors.department}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.province && touched.province}>
                 
                 <FormLabel htmlFor="province"><Flex className={`input-position ${!errors.province && touched.province ? 'fill':''}`}>5</Flex> Provincia </FormLabel>
-                <Field
-                  as={Input}
-                  id="province"
-                  name="province"
-                  type="text"
-                  onInput={handleOnlyCharacters}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 4) {
-                      error = "Debería tener al menos 3 caracteres";
-                    }
-
-                    return error;
-                  }}
-                />
+                <Field 
+                as="select"
+                id="province"
+                name="province"
+                className="select-input"
+                value={selectedProvince}>
+                  <option value="">Seleccionar provincia</option>
+                  {provinces.map((provincia) => (
+                    <option key={provincia.codprovincia} value={provincia.codprovincia}>
+                      {provincia.provincia}
+                    </option>
+                  ))}
+                </Field>
                 <FormErrorMessage>{errors.province}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.district && touched.district}>
               
                 <FormLabel htmlFor="district"><Flex className={`input-position ${!errors.district && touched.district ? 'fill':''}`}>6</Flex> Distrito </FormLabel>
-                <Field
-                  as={Input}
-                  id="district"
-                  name="district"
-                  type="text"
-                  onInput={handleOnlyCharacters}
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 3) {
-                      error = "Debería tener al menos 2 caracteres";
-                    }
-
-                    return error;
-                  }}
-                />
+                 <Field 
+                as="select"
+                id="district"
+                name="district"
+                className="select-input"
+                value={selectedDistrict}>
+                  <option value="">Seleccionar distrito</option>
+                  {districts.map((distrito) => (
+                    <option key={distrito.coddistrito} value={distrito.coddistrito}>
+                      {distrito.distrito}
+                    </option>
+                  ))}
+                </Field>
                 <FormErrorMessage>{errors.district}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.address && touched.address}>
@@ -322,22 +335,13 @@ export default function forms({formType}) {
                   id="address"
                   name="address"
                   type="text"
-                  validate={(value) => {
-                    let error;
-
-                    if (value.length < 4) {
-                      error = "Debería tener al menos 3 caracteres";
-                    }
-
-                    return error;
-                  }}
                 />
                 <FormErrorMessage>{errors.address}</FormErrorMessage>
               </FormControl>
               <Field
                 as={Checkbox}
-                id="conditions"
-                name="conditions"
+                id="terms"
+                name="terms"
                 colorScheme="red"
                 size='lg'
                 my={4}
@@ -349,7 +353,7 @@ export default function forms({formType}) {
               </Center>
               <Box position='relative' w='100%'>
                 <AbsoluteCenter my={6}>
-                  <Button minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
+                  <Button isLoading={loading} minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" isDisabled={!values.terms}>
                     SIGUIENTE <ChevronRightIcon />
                   </Button>
                 </AbsoluteCenter>
@@ -436,30 +440,35 @@ export default function forms({formType}) {
     return (
         <Formik
         initialValues={{
-          fullName: '',
-          dni: '',
-          phone: '',
+          name: '',
+          last_name_father: '',
+          last_name_mother: '',
+          document_number: '',
+          mobile: '',
           email: '',
-          type: '',
-          detailConsumer: '',
-          orderConsumer: ''
+          complaints_type: '',
+          complaints_details: '',
+          consumer_request: ''
         }}
         validationSchema={validationSchemaBook}
-        onSubmit={(values) => {
-          alert(JSON.stringify(values, null, 2));
+        onSubmit={async (values) => {
+          // alert(JSON.stringify(values, null, 2));
+          setOpenModal(true);
+          const result = await postData(url, values);
+          console.log(result);
         }}
       >
         {({ handleSubmit, errors, touched, values, setFieldValue }) => (
           <form className='formik-form' onSubmit={handleSubmit}>
-            <Modals fullName={values.fullName} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
+            <Modals name={values.name} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
             <VStack spacing={4} align="flex-start">
-              <FormControl isInvalid={!!errors.fullName && touched.fullName}>
+              <FormControl isInvalid={!!errors.name && touched.name}>
                 
-                <FormLabel htmlFor="fullName"><Flex className={`input-position ${!errors.fullName && touched.fullName ? 'fill':''}`}>1</Flex> Nombre Completo </FormLabel>
+                <FormLabel htmlFor="name"><Flex className={`input-position ${!errors.name && touched.name ? 'fill':''}`}>1</Flex> Nombre</FormLabel>
                 <Field
                   as={Input}
-                  id="fullName"
-                  name="fullName"
+                  id="name"
+                  name="name"
                   type="text"
                   onInput={handleOnlyCharacters}
                   validate={(value) => {
@@ -472,15 +481,57 @@ export default function forms({formType}) {
                     return error;
                   }}
                 />
-                <FormErrorMessage>{errors.fullName}</FormErrorMessage>
+                <FormErrorMessage>{errors.name}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.dni && touched.dni}>
-              
-                <FormLabel htmlFor="dni"><Flex className={`input-position ${!errors.dni && touched.dni ? 'fill':''}`}>2</Flex> DNI </FormLabel>
+              <FormControl isInvalid={!!errors.last_name_father && touched.last_name_father}>
+                
+                <FormLabel htmlFor="last_name_father"><Flex className={`input-position ${!errors.last_name_father && touched.last_name_father ? 'fill':''}`}>2</Flex> Apellido Paterno</FormLabel>
                 <Field
                   as={Input}
-                  id="dni"
-                  name="dni"
+                  id="last_name_father"
+                  name="last_name_father"
+                  type="text"
+                  onInput={handleOnlyCharacters}
+                  validate={(value) => {
+                    let error;
+
+                    if (value.length < 3) {
+                      error = "Debería tener al menos 3 caracteres";
+                    }
+
+                    return error;
+                  }}
+                />
+                <FormErrorMessage>{errors.last_name_father}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={!!errors.last_name_mother && touched.last_name_mother}>
+                
+                <FormLabel htmlFor="last_name_mother"><Flex className={`input-position ${!errors.last_name_mother && touched.last_name_mother ? 'fill':''}`}>3</Flex> Apellido Materno</FormLabel>
+                <Field
+                  as={Input}
+                  id="last_name_mother"
+                  name="last_name_mother"
+                  type="text"
+                  onInput={handleOnlyCharacters}
+                  validate={(value) => {
+                    let error;
+
+                    if (value.length < 3) {
+                      error = "Debería tener al menos 3 caracteres";
+                    }
+
+                    return error;
+                  }}
+                />
+                <FormErrorMessage>{errors.last_name_mother}</FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={!!errors.document_number && touched.document_number}>
+              
+                <FormLabel htmlFor="document_number"><Flex className={`input-position ${!errors.document_number && touched.document_number ? 'fill':''}`}>4</Flex> DNI </FormLabel>
+                <Field
+                  as={Input}
+                  id="document_number"
+                  name="document_number"
                   maxLength={8}
                   type="tel"
                   onInput={handleOnlyNumbers}
@@ -494,15 +545,15 @@ export default function forms({formType}) {
                     return error;
                   }}
                 />
-                <FormErrorMessage>{errors.dni}</FormErrorMessage>
+                <FormErrorMessage>{errors.document_number}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.phone && touched.phone}>
+              <FormControl isInvalid={!!errors.mobile && touched.mobile}>
                 
-                <FormLabel htmlFor="phone"><Flex className={`input-position ${!errors.phone && touched.phone ? 'fill':''}`}>3</Flex> Celular </FormLabel>
+                <FormLabel htmlFor="mobile"><Flex className={`input-position ${!errors.mobile && touched.mobile ? 'fill':''}`}>5</Flex> Celular </FormLabel>
                 <Field
                   as={Input}
-                  id="phone"
-                  name="phone"
+                  id="mobile"
+                  name="mobile"
                   type="tel"
                   onInput={handleOnlyNumbers}
                   maxLength={9}
@@ -516,11 +567,11 @@ export default function forms({formType}) {
                     return error;
                   }}
                 />
-                <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                <FormErrorMessage>{errors.mobile}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.email && touched.email}>
                 
-                <FormLabel htmlFor="email"><Flex className={`input-position ${!errors.email && touched.email ? 'fill':''}`}>4</Flex> Correo </FormLabel>
+                <FormLabel htmlFor="email"><Flex className={`input-position ${!errors.email && touched.email ? 'fill':''}`}>6</Flex> Correo </FormLabel>
                 <Field
                   as={Input}
                   id="email"
@@ -529,37 +580,37 @@ export default function forms({formType}) {
                 />
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.type && touched.type}>
-                <FormLabel htmlFor="type"><Flex className={`input-position ${!errors.type && touched.type ? 'fill':''}`}>5</Flex> Tipo </FormLabel>
+              <FormControl isInvalid={!!errors.complaints_type && touched.complaints_type}>
+                <FormLabel htmlFor="complaints_type"><Flex className={`input-position ${!errors.complaints_type && touched.complaints_type ? 'fill':''}`}>7</Flex> Tipo </FormLabel>
                 <RadioGroup
-                defaultValue='reclamo' 
-                name="type"
-                onChange={(value) => setFieldValue("type", value)}
+                defaultValue='CLAIM' 
+                name="complaints_type"
+                onChange={(value) => setFieldValue("complaints_type", value)}
                 >
                   <Field
                   as={RadioGroup}
-                  id="email"
-                  name="email"
+                  id="complaints_type"
+                  name="complaints_type"
                   type="text"
                 />
                   <Stack>
-                    <Radio size='lg' value='reclamo' colorScheme='red'>
+                    <Radio size='lg' value='CLAIM' colorScheme='red'>
                       Reclamo
                     </Radio>
-                    <Radio size='lg' value='queja'  colorScheme='red'>
+                    <Radio size='lg' value='COMPLAINTS'  colorScheme='red'>
                       Queja
                     </Radio>
                   </Stack>
                 </RadioGroup>
                 
-                <FormErrorMessage>{errors.type}</FormErrorMessage>
+                <FormErrorMessage>{errors.complaints_type}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.detailConsumer && touched.detailConsumer}>
-                <FormLabel htmlFor="detailConsumer"><Flex className={`input-position ${!errors.detailConsumer && touched.detailConsumer ? 'fill':''}`}>6</Flex> Detalle del consumidor </FormLabel>
+              <FormControl isInvalid={!!errors.complaints_details && touched.complaints_details}>
+                <FormLabel htmlFor="complaints_details"><Flex className={`input-position ${!errors.complaints_details && touched.complaints_details ? 'fill':''}`}>8</Flex> Detalle del consumidor </FormLabel>
                 <Field
                   as={Input}
-                  id="detailConsumer"
-                  name="detailConsumer"
+                  id="complaints_details"
+                  name="complaints_details"
                   type="text"
                   validate={(value) => {
                     let error;
@@ -571,15 +622,15 @@ export default function forms({formType}) {
                     return error;
                   }}
                 />
-                <FormErrorMessage>{errors.detailConsumer}</FormErrorMessage>
+                <FormErrorMessage>{errors.complaints_details}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.orderConsumer && touched.orderConsumer}>
+              <FormControl isInvalid={!!errors.consumer_request && touched.consumer_request}>
               
-                <FormLabel htmlFor="orderConsumer"><Flex className={`input-position ${!errors.orderConsumer && touched.orderConsumer ? 'fill':''}`}>7</Flex> Pedido del consumidor </FormLabel>
+                <FormLabel htmlFor="consumer_request"><Flex className={`input-position ${!errors.consumer_request && touched.consumer_request ? 'fill':''}`}>9</Flex> Pedido del consumidor </FormLabel>
                 <Field
                   as={Input}
-                  id="orderConsumer"
-                  name="orderConsumer"
+                  id="consumer_request"
+                  name="consumer_request"
                   type="text"
                   validate={(value) => {
                     let error;
@@ -591,7 +642,7 @@ export default function forms({formType}) {
                     return error;
                   }}
                 />
-                <FormErrorMessage>{errors.orderConsumer}</FormErrorMessage>
+                <FormErrorMessage>{errors.consumer_request}</FormErrorMessage>
               </FormControl>
               <Center height='50px'>
                 <Divider />

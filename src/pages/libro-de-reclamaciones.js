@@ -15,7 +15,7 @@ export default function formRegistro() {
                     <Divider height={3}/>
                 </Center>
                 <Box w='100%'>
-                    <Forms formType='complaintsBook' />
+                    <Forms url={process.env.NEXT_PUBLIC_API_BOOK_REGISTER} formType='complaintsBook' />
                 </Box>
             </Flex>
         </Container>
