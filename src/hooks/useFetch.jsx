@@ -13,7 +13,7 @@ export function useFetch(url) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(url);
+        const response = await fetch(process.env.NEXT_PUBLIC_BASEURL+url);
         if (!response.ok) {
           throw new Error('Error al obtener los datos');
         }

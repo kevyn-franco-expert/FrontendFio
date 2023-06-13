@@ -3,7 +3,7 @@ const path = require('path')
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['techcrunch.com', 'github.com'],
+    domains: ['staging.fio.pe', 'github.com'],
   },
   sassOptions: {
     fiber: false,

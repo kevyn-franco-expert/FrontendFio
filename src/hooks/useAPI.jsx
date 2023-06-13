@@ -1,20 +1,40 @@
+import { useState } from 'react';
 
-const handleSubmit = async (url, data) => {
+const useAPI = () => {
+  const [loading, setLoading] = useState(false);
+  const [errorData, setErrorData] = useState(null);
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  const postData = async (url, data) => {
+    setLoading(true);
 
-    if (response.ok) {
-      console.log('Success!');
-    } else {
-      console.log('Not successful!');
+    try {
+      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const response = await fetch(urlFetch, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+      } else {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+        // throw new Error('Error en la solicitud POST');
+      }
+    } catch (errorData) {
+      setLoading(false);
+      setErrorData(errorData.message);
+      throw errorData;
     }
-  } catch (error) {
-    console.log(error);
-  }
+  };
+
+  return { loading, errorData, postData };
 };
 
-export default {handleSubmit};
+export default useAPI;
