@@ -30,10 +30,22 @@ h1,h2,h3,h4,h5,h6 {
     }
 }
 
+.t {
+    &-uppercase {
+        text-transform: uppercase;
+    }
+    &-lowercase {
+        text-transform: lowercase;
+    }
+    &-capitalize {
+        text-transform: capitalize;
+    }
+}
 
 .heading-red {
     color: var(--red-color-text)!important;
     font-size: var(--title-size-xxl);
+    text-transform: uppercase;
 }
 
 .text-p {

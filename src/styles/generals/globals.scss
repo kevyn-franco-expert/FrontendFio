@@ -45,6 +45,17 @@
 
 }
 
+.select {
+    &-input {
+        background-color: transparent;
+        border: 0 !important;
+        border-radius: 0 !important;
+        border-bottom: 1px solid var(--gray-color)!important;
+        cursor: pointer;
+        width: 100%;
+    }
+}
+
 .document-types {
     .radio-list {
         .box-radio {

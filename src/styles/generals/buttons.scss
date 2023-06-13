@@ -10,6 +10,7 @@
     transition: .5s;
     position: relative;
     overflow: hidden;
+    text-decoration: none!important;
     cursor: pointer;
     z-index: 1;
     font-weight: 300;
@@ -47,6 +48,7 @@
     }
   
     &:hover {
+      text-decoration: none;
       &::before {
         transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
       }

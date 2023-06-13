@@ -15,7 +15,7 @@ export default function formRegistro() {
                     <Divider height={3}/>
                 </Center>
                 <Box w='100%'>
-                    <Forms formType='login' />
+                    <Forms url='/api/login/' formType='login' />
                 </Box>
             </Flex>
         </Container>

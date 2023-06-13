@@ -1,6 +1,7 @@
 import {
   Box,
   Stack,
+  Skeleton,
   Tab,
   Tabs,
   TabList,
@@ -23,26 +24,39 @@ import SliderComponent from "./SliderComponent";
 export default function Calculator({calculatorValues}) {
   const [sliderValue, setSliderValue] = useState(null);
   const [fieldValue, setFieldValue] = useState(null);
-  const [modeValue, setModeValue] = useState(null);
+  const [modeValue, setModeValue] = useState('monthly');
   const [showTable, setShowTable] = useState(false);
   const [paydayValue, setPaydayValue] = useState(null);
-  
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    const slicePayDay = (paydayValue && paydayValue.includes('/')) ? paydayValue.slice(0,2) : paydayValue;
     const datos = {
       amount: sliderValue, //monto
       mode: modeValue, //monthly or daily
       fields: fieldValue, //cuota
-      payDay: paydayValue, //dia de pago
+      payDay: slicePayDay, //dia de pago
     };
-    calculatorValues(datos);
-  }, [calculatorValues]);
 
-  useEffect(() => {
-      if (fieldValue && paydayValue && sliderValue) {
-        setShowTable(true)
-        // aqui se pondra el fetch para obtener el resultado de los datos elegidos en la calculadora
+    (async () => {
+      try {
+        setLoading(true)
+        if (sliderValue && modeValue && fieldValue && paydayValue) {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}${process.env.NEXT_PUBLIC_API_SCHEDULES}/?fields[amount]=${sliderValue}&fields[mode]=${modeValue}&fields[value]=${fieldValue}&fields[day]=${slicePayDay}&fields[payment]=false`);
+          const data = await res.json();
+          calculatorValues(data);
+          setResult(data);
+          setShowTable(true)
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+        setShowTable(false)
       }
-  }, [fieldValue && paydayValue && sliderValue])
+    
+    })();
+  }, [sliderValue, modeValue, fieldValue, paydayValue]);
+
   return (
     <Box>
       <Stack spacing={2} direction="column">
@@ -102,7 +116,8 @@ export default function Calculator({calculatorValues}) {
         </Box>
       </Stack>
       <Stack>
-        {fieldValue && paydayValue && sliderValue && showTable && (
+        {showTable && loading && <Skeleton mt={10} borderRadius={8} height='250px' />}
+        {fieldValue && paydayValue && sliderValue && showTable && !loading&& (
           <>
             <TableContainer
               mt={10}
@@ -118,8 +133,8 @@ export default function Calculator({calculatorValues}) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {resultCalculator &&
-                    resultCalculator[0].data.map((item, index) => (
+                  {result &&
+                    result.data.map((item, index) => (
                       <Tr key={index}>
                         <Td>{item.attributes.scheduleDate}</Td>
                         <Td isNumeric>{item.attributes.totalAmount}</Td>
@@ -145,64 +160,3 @@ export default function Calculator({calculatorValues}) {
 const months = ["1", "2", "3", "4", "5", "6"];
 
 const payDay = ["05/12/2022", "20/12/2022"];
-
-const resultCalculator = [
-  {
-    data: [
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/06/23",
-          totalAmount: "S/. 272.26",
-          status: "SCHEDULED",
-        },
-      },
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/07/23",
-          totalAmount: "S/. 276.97",
-          status: "SCHEDULED",
-        },
-      },
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/08/23",
-          totalAmount: "S/. 249.59",
-          status: "SCHEDULED",
-        },
-      },
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/09/23",
-          totalAmount: "S/. 216.95",
-          status: "SCHEDULED",
-        },
-      },
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/10/23",
-          totalAmount: "S/. 182.19",
-          status: "SCHEDULED",
-        },
-      },
-      {
-        type: "schedules",
-        id: "None",
-        attributes: {
-          scheduleDate: "05/11/23",
-          totalAmount: "S/. 151.65",
-          status: "SCHEDULED",
-        },
-      },
-    ],
-  },
-];

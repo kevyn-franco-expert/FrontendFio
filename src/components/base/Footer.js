@@ -1,23 +1,26 @@
 import {
-    Box,
-    Flex,
-    HStack,
-    Image,
-    Link,
-    Stack,
-    Text,
-    VStack,
-    Divider,
-    Icon,
-  } from "@chakra-ui/react";
-  import React from "react";
-  import { GrInstagram } from "react-icons/gr";
-  import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
-  import { FiTwitter } from "react-icons/fi";
-  
-  export default function Footer(){
-    return (
-      <Box bg="#c7323e">
+  Box,
+  Flex,
+  HStack,
+  Image,
+  Link,
+  Stack,
+  Text,
+  VStack,
+  Divider,
+  Icon,
+  Container,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { GrInstagram } from "react-icons/gr";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { FiTwitter } from "react-icons/fi";
+
+export default function Footer({data}) {
+
+  return (
+    <Box bg="#c7323e">
+      <Container maxW="8xl">
         <Stack
           direction={{ base: "column", lg: "row" }}
           w="full"
@@ -26,7 +29,7 @@ import {
         >
           <Flex justify="center">
             <Image
-              src="logo.svg"
+              src={data && data.data[0].attributes.image}
               alt="Fio Logo"
               rounded="lg"
               width={{ base: "150px", lg: "200px" }}
@@ -43,15 +46,20 @@ import {
             textAlign={{ base: "center", md: "left" }}
           >
             <Flex justify="start" direction="column">
-              <Text as='b'>Acerca de Fio</Text>
-              <Link>Elige tu Préstamo</Link>
-              <Link>Benefícios</Link>
-              <Link>Preguntas frecuentes</Link>
-              <Link>Libro de Reclamaciones</Link>
+              <Text as="b">Acerca de Fio</Text>
+            {data && data.included.map((about, index) => (
+                <div key={index}>
+                {about.type === 'AboutInfo' && (
+                  <>
+                    <Link key={about.id} href={about.attributes.link} color='white'>{about.attributes.name}</Link>
+                  </>
+                )}
+              </div>  
+              ))}
               <Image
-              width={{ base: "80px", lg: "100px" }}
-              mt={3}
-              src="libro-reclamaciones.svg"
+                width={{ base: "80px", lg: "100px" }}
+                mt={3}
+                src="libro-reclamaciones.svg"
               />
             </Flex>
           </HStack>
@@ -64,54 +72,80 @@ import {
             _dark={{ color: "white" }}
             textAlign={{ base: "center", md: "left" }}
           >
-
             <Flex justify="start" direction="column">
-            <Text as='b'>Contacto</Text>
-              <Text color='white'>Disponible de Lunes a Viernes</Text>
-              <Text color='white'>9:00 am - 6:00 pm</Text>
-              <Link href="mailto:contacto@fio.pe">Contacto@fio.pe</Link>
-              <Text color='white'>Habla con nuestros asesores</Text>
+              {data && data.included.map((contact, index) => (
+                <div key={index}>
+                {contact.type === 'ContactInfo' && (
+                  <>
+                    <Text as="b">{contact.attributes.name}</Text>
+                    <Text color="white">{contact.attributes.scheduleLabel}</Text>
+                    <Text color="white">{contact.attributes.schedule}</Text>
+                    <Link href={`mailto:${contact.attributes.email}`}>{contact.attributes.email}</Link>
+                    <Link href={contact.attributes.redirectLink}>{contact.attributes.redirectName}</Link>
+                  </>
+                )}
+              </div>  
+              ))}
               <VStack py={3}>
-          <HStack justify="center" gap={2}>
-            <Link className="social-icons">
-              <Icon
-                _dark={{ color: "white" }}
-                h="20px"
-                w="20px"
-                as={FaFacebookF}
-              />
-            </Link>
-            <Link className="social-icons">
-              <Icon
-                _dark={{ color: "white" }}
-                h="20px"
-                w="20px"
-                as={FiTwitter}
-              />
-            </Link>
-            <Link className="social-icons">
-              <Icon
-                _dark={{ color: "white" }}
-                h="20px"
-                w="20px"
-                as={GrInstagram}
-              />
-            </Link>
-            <Link className="social-icons">
-              <Icon
-                _dark={{ color: "white" }}
-                h="20px"
-                w="20px"
-                as={FaLinkedinIn}
-              />
-            </Link>
-          </HStack>
-        </VStack>
+                <HStack justify="center" gap={2}>
+                  <Link className="social-icons">
+                    <Icon
+                      _dark={{ color: "white" }}
+                      h="20px"
+                      w="20px"
+                      as={FaFacebookF}
+                    />
+                  </Link>
+                  <Link className="social-icons">
+                    <Icon
+                      _dark={{ color: "white" }}
+                      h="20px"
+                      w="20px"
+                      as={FiTwitter}
+                    />
+                  </Link>
+                  <Link className="social-icons">
+                    <Icon
+                      _dark={{ color: "white" }}
+                      h="20px"
+                      w="20px"
+                      as={GrInstagram}
+                    />
+                  </Link>
+                  <Link className="social-icons">
+                    <Icon
+                      _dark={{ color: "white" }}
+                      h="20px"
+                      w="20px"
+                      as={FaLinkedinIn}
+                    />
+                  </Link>
+                </HStack>
+              </VStack>
             </Flex>
           </HStack>
         </Stack>
-      </Box>
-    );
-  };
-  
-  
+        <Divider orientation="horizontal" />
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          p={4}
+          align="center"
+          justify="space-between"
+          gap={2}
+        >
+          <Flex gap={3}>
+            
+            <Link href={data && data.data[0].attributes.policy} color="white" download>Políticas de Privacidad</Link>
+            <Link href={data && data.data[0].attributes.terms} color="white" download>Términos y Condiciones</Link>
+          </Flex>
+          <Box>
+            <Text color="white" maxW={400}>
+              Capital Tech Latam es una empresa registrada en la UIF de la
+              Superintendencia de Banca, Seguros y AFP
+            </Text>
+          </Box>
+        </Stack>
+      </Container>
+    </Box>
+  );
+}

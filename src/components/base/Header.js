@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 import {
   chakra,
@@ -18,10 +19,23 @@ import {
 import NextLink from 'next/link'
 import { AiOutlineMenu } from "react-icons/ai";
 
-export default function Header(){
+export default function Header() {
+  const [islogged, setIslogged] = useState(null)
   const bg = "#d62732";
   const mobileNav = useDisclosure();
-
+  
+  useEffect(() => {
+    const clientArea = () => {
+      if (Cookies.get("loggedIn")) {
+        setIslogged(true)
+      } else {
+        setIslogged(false)
+      }
+    }
+    clientArea();
+  }, [])
+  
+  
   return (
     <React.Fragment>
       <chakra.header
@@ -62,9 +76,13 @@ export default function Header(){
               <Link as={NextLink} href='/como-funciona'><Button className="nav-li" colorScheme="brand">¿Cómo funciona?</Button></Link>
               <Link as={NextLink} href='/preguntas-frecuentes'><Button className="nav-li" colorScheme="brand">Preguntas Frecuentes</Button></Link>
             </HStack>
-            <button className="btn-outline">
+            {islogged && <Link href='/mi-cuenta' className="btn-outline">
               Área de clientes
-            </button>
+            </Link>}
+
+            {!islogged && <Link href='/login' className="btn-outline">
+              Área de clientes
+            </Link>}
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
@@ -99,12 +117,11 @@ export default function Header(){
                   onClick={mobileNav.onClose}
                   color={'white'}
                 />
-
-                <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">Inicio</Button>
-                <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">Productos</Button>
-                <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">Nosotros</Button>
-                <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">¿Cómo funciona?</Button>
-                <Button w="full" className="nav-li" colorScheme="brand" variant="ghost">Preguntas Frecuentes</Button>
+                <Link onClick={mobileNav.onClose} as={NextLink} href='/'><Button className="nav-li" colorScheme="brand">Inicio</Button></Link>
+                {/* <Link onClick={mobileNav.onClose} as={NextLink} href='/productos'><Button className="nav-li" colorScheme="brand">Productos</Button></Link> */}
+                <Link onClick={mobileNav.onClose} as={NextLink} href='/nosotros'><Button className="nav-li" colorScheme="brand">Nosotros</Button></Link>
+                <Link onClick={mobileNav.onClose} as={NextLink} href='/como-funciona'><Button className="nav-li" colorScheme="brand">¿Cómo funciona?</Button></Link>
+                <Link onClick={mobileNav.onClose} as={NextLink} href='/preguntas-frecuentes'><Button className="nav-li" colorScheme="brand">Preguntas Frecuentes</Button></Link>
               </VStack>
             </Box>
           </HStack>
