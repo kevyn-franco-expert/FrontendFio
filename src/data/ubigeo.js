@@ -1021,7 +1021,7 @@ export const departamentos = [
              "distrito":"Chaclacayo"
           },
           {
-             "coddistrito":"140608",
+             "coddistrito":"150108",
              "distrito":"Chorrillos"
           },
           {

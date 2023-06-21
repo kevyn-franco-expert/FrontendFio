@@ -6,26 +6,23 @@ import {
   FormControl,
   FormLabel,
   Stack,
+  Text,
   Select,
 } from "@chakra-ui/react";
 import Calculator from "./Calculator";
-import useInputValidators from "@/hooks/useInputValidators";
+import InputMask from 'react-input-mask';
+import useBankFormat from "@/hooks/useBankFormat";
 
-export default function formApplication() {
-  const [openModal, setOpenModal] = useState(false);
+export default function formApplication({onFormData, errorsData}) {
   const [calculatorData, setCalculatorData] = useState(null)
-  const [formatAccount, setFormatAccount] = useState("3,10");
+  const [formatBank, setFormatBank] = useState("3,10");  
   const [banks, setBanks] = useState(null);
+  const [bankID, setBankID] = useState(null);
   const [bankSelected, setBankSelected] = useState("");
-  const [input, setInput] = useState("");
   const [numberBank, setNumberBank] = useState(null);
+  const [calculatorValues, setCalculatorValues] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { handleOnlyNumbers } = useInputValidators();
-
-  useEffect(() => {
-    console.log('calculatorData', calculatorData);
-  }, [calculatorData])
-
+  const { formatAccount } = useBankFormat();
   useEffect(() => {
     const fetchBankData = async () => {
       setLoading(true)
@@ -47,21 +44,27 @@ export default function formApplication() {
   }, []);
 
   const handleNumberBankChange = (event) => {
-    const value = event.target.value;
-    // const positions = [3, 7]; // Posiciones de separación deseadas
-    const positions = [formatAccount]; // Posiciones de separación deseadas
-    const regex = new RegExp(`(\\d{${positions.join("}|\\d{")}})`, "g");
-    const formattedValue = value.replace(regex, "$1-");
-    setNumberBank(formattedValue);
+    const value = event.target.value.replaceAll('-','');
+    setNumberBank(value);
   };
 
-  const handleOnSubmit = () => {
-    console.log('submit')
-  }
+  useEffect(() => {
+    const formApp = {
+      calculator: {
+        amount: calculatorValues && calculatorValues.amount || null,
+        payDay: calculatorValues && calculatorValues.payDay || null
+      },
+      typeBank: bankSelected,
+      typeBankID: bankID,
+      bankAccount: numberBank
+    }
+
+    onFormData(formApp);
+  }, [calculatorData,bankSelected, numberBank])
 
   return (
     <>
-    <form onSubmit={handleOnSubmit}>
+    <form>
       <Flex p={4} flexDirection="column" gap={6}>
         <FormControl isRequired>
           <FormLabel>
@@ -72,13 +75,14 @@ export default function formApplication() {
             name="bank"
             className="select-input"
             value={bankSelected}
-            onChange={(e) => {setBankSelected(e.target.value);setFormatAccount(e.target.selectedOptions[0].getAttribute('format'))}}
+            onChange={(e) => {setBankSelected(e.target.value);setFormatBank(e.target.selectedOptions[0].getAttribute('format'));setBankID(e.target.selectedOptions[0].getAttribute('id'));setNumberBank('')}}
           >
             <option value="">Seleccionar Banco</option>
             {banks &&
               banks.data.map((bank) => (
                 <option
                   key={bank.id}
+                  id={bank.id}
                   format={bank.attributes.format}
                   value={bank.attributes.name}
                 >
@@ -86,20 +90,29 @@ export default function formApplication() {
                 </option>
               ))}
           </Select>
+          {errorsData.map((error) => (
+            <>
+              {(error.source.pointer.split('/')[3] === 'bank') ? <Text mt={2} color='red'>{error.detail} </Text> : ''}
+            </>
+          ))}
         </FormControl>
 
         <FormControl isRequired>
           <FormLabel>
             <Flex className={`input-position fill`}>2</Flex> Numero de cuenta
           </FormLabel>
-          <Input
-            name="numberbank"
-            type="tel"
-            className="select-input"
-            value={numberBank}
-            onChange={handleNumberBankChange}
-            maxLength={20}
+          <InputMask 
+          mask={formatAccount(formatBank)}
+          className="select-input"
+          value={numberBank}
+          onChange={handleNumberBankChange}
+          maskChar=" " 
           />
+          {errorsData.map((error) => (
+            <>
+              {error.source.pointer.split('/')[3] === 'number' ? <Text mt={2} color='red'>{error.detail} </Text> : ''}
+            </>
+          ))}
         </FormControl>
 
         <Stack>
@@ -107,8 +120,12 @@ export default function formApplication() {
             <Flex className={`input-position fill`}>3</Flex>
           </FormLabel>
           <Box boxShadow="base" p={6} borderRadius={10}>
-            <Calculator calculatorValues={setCalculatorData}  />
-            
+            <Calculator calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+            {errorsData.map((error) => (
+            <>
+              {(error.source.pointer.split('/')[3] === 'amount') ? <Text mt={2} color='red'>{error.detail} </Text> : ''}
+            </>
+          ))}
           </Box>
         </Stack>
       </Flex>

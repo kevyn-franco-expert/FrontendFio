@@ -72,6 +72,7 @@ export default function forms({formType, url}) {
           SetCookie('loggedIn', true);
           SetCookie('token', result.data.token);
           SetCookie('origin', result.data.origin);
+          SetCookie('client', result.data.client_id);
           setErrorLogin('')
           router.push('/mi-cuenta');
         } else if (result && result.errors) {

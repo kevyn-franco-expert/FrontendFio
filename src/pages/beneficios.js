@@ -2,7 +2,7 @@ import { Container, Flex, Center, Stack, Text, Heading, Button, Box, Divider } f
 import HeadTitle from '@/components/base/HeadTitle';
 import Benefits from '@/components/Benefits';
 
-export default function Home() {
+export default function BenefitsPage() {
 
   return (
     <>

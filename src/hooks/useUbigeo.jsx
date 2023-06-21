@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { departamentos, provincias, distritos } from '@/data/ubigeo';
 
 const useUbigeo = () => {
+  const [ubigeo, setUbigeo] = useState([]);
   const [departaments, setDepartaments] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -11,23 +12,43 @@ const useUbigeo = () => {
 
 
   useEffect(() => {
-    const fetchDepartamentos = () => {
-      try {
-        setDepartaments(departamentos);
-      } catch (error) {
-        console.error('Error al cargar los departamentos:', error);
-      }
-    };
+    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_UBIGEO;
+    try {
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const newDepartments = [];
+            const ubigeoData = data.data;
+            ubigeoData.forEach((ubi) => {
+                if (!ubi.relationships.parent.data) {
+                  newDepartments.push({
+                    id: ubi.id,
+                    departamento: ubi.attributes.name
+                  })
+                }
+            });
 
-    fetchDepartamentos();
-  }, []);
+            setUbigeo(ubigeoData);
+            setDepartaments(newDepartments);
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}, []);
 
   useEffect(() => {
-    const fetchProvinces = () => {
+    const fetchProvinces = async () => {
       try {
-        const filterProvinces = provincias.filter(
-          (province) => selectedDepartament in province);
-        setProvinces(filterProvinces[0][selectedDepartament]);
+        const newProvinces = [];
+        ubigeo.forEach((provi) => {
+          if (provi.relationships.parent.data && provi.relationships.parent.data.id === selectedDepartament) {
+            newProvinces.push({
+              id: provi.id,
+              provincia: provi.attributes.name
+            })
+          }
+        });
+        setProvinces(newProvinces);
       } catch (error) {
         console.error('Error al cargar las provincias:', error);
       }
@@ -43,11 +64,18 @@ const useUbigeo = () => {
   useEffect(() => {
     const fetchDistricts = async () => {
       try {
-        const filterDistricts = distritos.filter(
-          (district) => selectedProvince in district);
-        setDistricts(filterDistricts[0][selectedProvince]);
+        const newDistricts = [];
+        ubigeo.forEach((district) => {
+          if (district.relationships.parent.data && district.relationships.parent.data.id === selectedProvince) {
+            newDistricts.push({
+              id: district.id,
+              distrito: district.attributes.name
+            })
+          }
+        });
+        setDistricts(newDistricts);
       } catch (error) {
-        console.error('Error al cargar los distritos:', error);
+        console.error('Error al cargar las provincias:', error);
       }
     };
 

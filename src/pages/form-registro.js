@@ -11,29 +11,6 @@ import FormsWithUbigeo from "@/components/formsWithUbigeo";
 import React, { useEffect, useState } from "react";
 
 export default function formRegistro() {
-  const [fullNameData, setFullNameData] = useState("");
-  const [emailData, setEmailData] = useState("");
-  const [documentNumberData, setDocumentNumberData] = useState("");
-  const [phoneData, setPhoneData] = useState("");
-  const [addressData, setAddressData] = useState("");
-  const [termsData, setTermsData] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-
-  // const schema = object({
-  //   fullName: string()
-  //     .required("El campo nombre es obligatorio")
-  //     .min(1, "El nombre tiene que tener al menos un carácter")
-  //     .max(100, "El nombre no puede superar los 100 carácteres"),
-  //   DNI: strnumbering().optional(),
-  //   phone: number()
-  //     .required("La edad es obligatoria")
-  //     .positive("La edad tiene que ser positiva")
-  //     .max(90, "La edad no puede superar los 90"),
-  //   email: string()
-  //     .required("El email es obligatorio")
-  //     .email("El email no tiene un formato válido"),
-  //   isChosenOne: boolean(),
-  // });
 
   return (
     <>

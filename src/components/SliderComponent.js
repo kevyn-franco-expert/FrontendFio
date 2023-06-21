@@ -15,7 +15,7 @@ export default function SliderComponent({min, max, type, defaultValue, valueSete
     };
     useEffect(() => {
       valueSeted(sliderValue);
-      console.log(sliderValue);
+      // console.log(sliderValue);
     }, [valueSeted]);
 
     return (

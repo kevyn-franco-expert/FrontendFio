@@ -21,7 +21,7 @@ import RadioGroup from "./RadioGroup";
 import React, { useState, useEffect } from "react";
 import SliderComponent from "./SliderComponent";
 
-export default function Calculator({calculatorValues}) {
+export default function Calculator({calculatorValues, calculatorResult}) {
   const [sliderValue, setSliderValue] = useState(null);
   const [fieldValue, setFieldValue] = useState(null);
   const [modeValue, setModeValue] = useState('monthly');
@@ -38,6 +38,8 @@ export default function Calculator({calculatorValues}) {
       payDay: slicePayDay, //dia de pago
     };
 
+    calculatorResult(datos);
+
     (async () => {
       try {
         setLoading(true)
@@ -50,7 +52,7 @@ export default function Calculator({calculatorValues}) {
           setLoading(false);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         setShowTable(false)
       }
     

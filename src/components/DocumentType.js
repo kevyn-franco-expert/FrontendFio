@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { chakra, Tooltip, FormControl, FormLabel, Input, Flex, Image } from "@chakra-ui/react";
 import RadioGroup from "./RadioGroup";
 import useInputValidators from "@/hooks/useInputValidators";
+import Cookies from "js-cookie";
 
 export default function DocumentType({documentSeted, documentTypeSelected}) {
     const [documentType, setDocumentType] = useState('');
@@ -14,32 +15,10 @@ export default function DocumentType({documentSeted, documentTypeSelected}) {
     const { handleOnlyNumbers } = useInputValidators();
     
     useEffect(() => {
-        try {
-            fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                const ip = data.ip;
-                setIpClient(ip);
-            })
-        } catch (error) {
-            console.error('Error al obtener la dirección IP:', error);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (documentType === 'DNI' && documentTypeValue.length === 8 && digitVerificator) {
+        if (documentTypeValue && documentTypeValue.length >= 8 && documentType) {
             const data = {
-                    document_number: documentTypeValue,
-                    public_ip: ipClient,
-                    verifierNumber: digitVerificator
+                document_number: documentTypeValue              
             }
-            documentSeted(data);
-            documentTypeSelected(documentType);
-        } else if (documentTypeValue && documentTypeValue.length >= 8 && documentType) {
-            const data = {
-                document_number: documentTypeValue,
-                public_ip: ipClient                
-        }
             documentSeted(data);
             documentTypeSelected(documentType);
         } else {
@@ -75,9 +54,6 @@ export default function DocumentType({documentSeted, documentTypeSelected}) {
                 <FormLabel color="#C84044">{documentType}</FormLabel>
                 <Flex flexDirection='row' gap={2}>
                     <Input type="tel" onInput={handleOnlyNumbers} isDisabled={documentType ? false : true} maxLength={documentType === 'DNI' ? 8 : 9} value={documentTypeValue} onChange={handleInputChange} placeholder='Documento de identidad' />
-                    <Tooltip borderRadius={5} label="El digito verificador es el número que se encuentra en la parte superior derecha, al lado de los 8 dígitos de tu dni y separado con un guión." aria-label='A tooltip'>
-                    <Input onInput={handleOnlyNumbers} isDisabled={documentType ? false : true} type="tel" onChange={handleDigitChange} display={documentType === 'DNI' ? 'flex' : 'none'} value={digitVerificator} maxLength={1} placeholder='Dígito' maxW="100px" />
-                    </Tooltip>
                 </Flex>
             </FormControl>
         </Flex>

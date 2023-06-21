@@ -8,7 +8,7 @@ export default function formRegistro() {
     <>
       <HeadTitle title='login' description='Obtén tu línea de efectivo con nosotros' />
       <main>
-        <Container maxW='6xl' pt={{base: 10, md: 50}} pb={{base: 20, md: 100}}> 
+        <Container maxW='6xl' pt={{base: 10, md: 50}} pb={{base: 30, md: 120}}> 
             <Flex justifyContent='center' flexDirection='column' alignItems='center'>
                 <Heading className='title-black' as='h3' size='xl' mb={10}>Login</Heading>
                 <Center  my={5}>

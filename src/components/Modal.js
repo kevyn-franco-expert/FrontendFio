@@ -13,33 +13,31 @@ import {
     Link
   } from '@chakra-ui/react'
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-const Modals = ({ isOpenit, onCloseit, fullName = 'estimado cliente', email = 'tu@correo.com', type = 'thankyou' }) => {
+const Modals = ({ isOpenit, onCloseit, actionBtn, data, type = 'thankyou' }) => {
 
-    if (type === 'pre-register'){
-
+    if (type === 'pre-register') {
         return (
             <>
             <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
                 <ModalOverlay />
                 <ModalContent>
                 <ModalBody>
-                    <Flex p={8} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                    <Flex p={8} borderRadius={10} gap={5} justifyContent='center' flexDirection='column' alignItems='center'> 
                         <Text className='title-red' as='p'>
-                            ¡Felicitaciones {fullName}!
+                            {data.title}
                         </Text>
                         <Center>
                             <Text textAlign='center'>
-                            Te hemos enviado un correo de verificación a: <br />
-                            {email}
+                            {data.description}
                             </Text>
                         </Center>
                         <Center>
                             <Text>
-                            En caso no lo hayas recibido, vuelve a solicitarlo aquí:
+                            {data.subdescription}
                             </Text>
                         </Center>
     
-                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={actionBtn}>
                     Reenviar Correo
                     </Button>
                     <Link
@@ -48,6 +46,97 @@ const Modals = ({ isOpenit, onCloseit, fullName = 'estimado cliente', email = 't
                     >
                     <ChevronLeftIcon /> Regresar al inicio
                     </Link>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'congrats') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    <Flex p={8} borderRadius={10} gap={5} justifyContent='center' flexDirection='column' alignItems='center'> 
+                        <Text className='title-red' as='p'>
+                            {data.title}
+                        </Text>
+                        <Center>
+                            <Text textAlign='center'>
+                            {data.description}
+                            </Text>
+                        </Center>
+                        <Center>
+                            <Text>
+                            {data.subdescription}
+                            </Text>
+                        </Center>
+                    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                        Cerrar
+                    </Button>
+                    <Link
+                    color='gray.500'
+                    href='/'
+                    >
+                    <ChevronLeftIcon /> Regresar al inicio
+                    </Link>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'nonFieldErrors') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    <Flex p={8} borderRadius={10} gap={5} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            <Text className='title-red' as='p' mb={0}>
+                            {data.title}
+                            </Text>
+                        <Center mb={4}>
+                            <Text textAlign='center'>
+                                {data.description}
+                            </Text>
+                        </Center>
+                    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                    Cerrar
+                    </Button>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'error') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    <Flex p={8} borderRadius={10} gap={5} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            <Text className='title-red' as='p' mb={0}>
+                                ¡Lo sentimos!
+                            </Text>
+                        <Center mb={4}>
+                            {data && data.map((msg, index) => (
+                                <Text key={index} textAlign='center'>
+                                    {msg.detail}
+                                </Text>
+                            ))}
+                        </Center>
+                    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                    Cerrar
+                    </Button>
                     </Flex>
                 </ModalBody>
         

@@ -19,16 +19,20 @@ import useInputValidators from "@/hooks/useInputValidators";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import Modals from "@/components/Modal";
 import { StoreContext } from "@/store/StoreProvider";
-import * as Yup from "yup";
+import Cookies from "js-cookie";
+import { useToast } from '@chakra-ui/react'
 
 export default function formRegistro() {
+  const toast = useToast()
   const [fullNameData, setFullNameData] = useState("");
   const [emailData, setEmailData] = useState("");
   const [documentNumberData, setDocumentNumberData] = useState("");
   const [phoneData, setPhoneData] = useState("");
   const [addressData, setAddressData] = useState("");
   const [termsData, setTermsData] = useState("");
-  const [UUID, setUUID] = useState("");
+  const [UUIDData, setUUIDData] = useState("");
+  const [clientID, setClientID] = useState("");
+  const [modalData, setModalData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [store] = useContext(StoreContext)
   const { user } = store;
@@ -48,13 +52,43 @@ export default function formRegistro() {
   const { handleOnlyNumbers, handleOnlyCharacters } = useInputValidators();
 
   useEffect(() => {
-    if(Object.keys(user).length !== 0 && user.constructor === Object) {
-      setFullNameData(user.fullName);
-      setDocumentNumberData(user.documentNumber);
-      setUUID(user.uuid);
-      console.log("clientData", JSON.stringify(user))
+    const scoreData = JSON.parse(Cookies.get('score'));
+    console.log(scoreData);
+    if(scoreData) {
+      setFullNameData(scoreData.attributes.fullName);
+      setDocumentNumberData(scoreData.attributes.documentNumber);
+      setUUIDData(scoreData.attributes.uuid);
+      setClientID(scoreData.id)
+      console.log("clientData", JSON.stringify(scoreData))
     }
+    
   }, [])
+
+  const reSend = async () => {
+    const url = process.env.NEXT_PUBLIC_API_EMAIL;
+    const resend = {
+        uuid: UUIDData,
+        client: Number(clientID),
+        email: emailData
+    }
+
+    try {
+      const result = await postData(url, resend);
+
+      console.log('resendResult', result);
+      if (result.errors) {
+        result.errors.map((error) => {
+          toast({
+            title: error.detail,
+            status: 'error',
+            isClosable: true,
+          })
+        })
+      }
+    } catch (error) {
+      console.error('Error en la solicitud POST:', error);
+    }
+  }
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
@@ -66,27 +100,45 @@ export default function formRegistro() {
       addressData &&
       termsData
     ) {
-        const url = process.env.NEXT_PUBLIC_CLIENTS
+        const url = process.env.NEXT_PUBLIC_API_CLIENTS
+        // const url = '/api/clients/'
         const formData = {
-          data:{
-            attributes: {
-              documentNumber: documentNumberData,
-              uuid:"39ae0a2e-e5ac-41d4-bde0-f9412423d84a",
-              fullName: fullNameData,
+              document_number: documentNumberData,
+              uuid: UUIDData,
+              full_name: fullNameData,
               email: emailData,
               mobile: phoneData,
-              district: selectedDistrict,
+              district: Number(selectedDistrict),
               address: addressData,
-              optIn:"1"
-            },
-            type:"clients"
+              opt_in: 1
         }
-      }
-      postData(url, formData);
       try {
-        const result = await postData(url, data);
-        setOpenModal(true);
-        console.log(result);
+        const result = await postData(url, formData);
+
+        if (result.errors) {
+          result.errors.map((error) => {
+            toast({
+              title: error.detail,
+              status: 'error',
+              isClosable: true,
+            })
+          })
+        }
+
+        const regex = /\{(.*)\}/i;
+        const title = result.meta.message.title;
+        const description = result.meta.message.description;
+        const sub_description = result.meta.message.sub_description;
+
+        if (!result.errors) {
+          const dataModal = {
+            title: title.replace('{full_name}', formData[title.match(regex)[1]]),
+            description: description.replace('{email}', formData[description.match(regex)[1]]),
+            subdescription: sub_description
+          }
+          setModalData(dataModal)
+          setOpenModal(true);
+        }
       } catch (error) {
         console.error('Error en la solicitud POST:', error);
       }
@@ -118,7 +170,7 @@ export default function formRegistro() {
   return (
     <>
       <form className="formik-form" onSubmit={handleOnSubmit}>
-        <Modals type="pre-register" fullName={fullNameData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
+        <Modals type="pre-register" data={modalData} isOpenit={openModal} actionBtn={reSend} onCloseit={() => setOpenModal(false)} />
         <VStack spacing={4} align="flex-start">
           <FormControl>
             <FormLabel></FormLabel>
@@ -134,30 +186,15 @@ export default function formRegistro() {
               value={fullNameData}
               onInput={handleOnlyCharacters}
               onChange={handleInputChange}
-              isDisabled={Object.keys(user).length !== 0 && user.constructor === Object}
+              isDisabled
             />
             {/* <FormErrorMessage>El nombre completo es requerido</FormErrorMessage> */}
           </FormControl>
-          <FormControl>
-            <FormLabel>
-              <Flex
-                className={`input-position ${emailData ? "fill" : ""}`}
-              >
-                2
-              </Flex>
-              Correo
-            </FormLabel>
-            <Input
-              name="email"
-              value={emailData}
-              onChange={handleInputChange}
-              type="tel"
-            />
-          </FormControl>
+          
           <FormControl>
             <FormLabel>
               <Flex className={`input-position ${documentNumberData ? "fill" : ""}`}>
-                3
+                2
               </Flex>
               DNI
             </FormLabel>
@@ -167,7 +204,23 @@ export default function formRegistro() {
               onInput={handleOnlyNumbers}
               onChange={handleInputChange}
               maxLength={8}
-              isDisabled={Object.keys(user).length !== 0 && user.constructor === Object}
+              isDisabled
+              type="tel"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>
+              <Flex
+                className={`input-position ${emailData ? "fill" : ""}`}
+              >
+                3
+              </Flex>
+              Correo
+            </FormLabel>
+            <Input
+              name="email"
+              value={emailData}
+              onChange={handleInputChange}
               type="tel"
             />
           </FormControl>
@@ -209,8 +262,8 @@ export default function formRegistro() {
               <option value="">Seleccionar departamento</option>
               {departaments.map((departamento) => (
                 <option
-                  key={departamento.coddepartamento}
-                  value={departamento.coddepartamento}
+                  key={departamento.id}
+                  value={departamento.id}
                 >
                   {departamento.departamento}
                 </option>
@@ -236,8 +289,8 @@ export default function formRegistro() {
               <option value="">Seleccionar provincia</option>
               {provinces.map((provincia) => (
                 <option
-                  key={provincia.codprovincia}
-                  value={provincia.codprovincia}
+                  key={provincia.id}
+                  value={provincia.id}
                 >
                   {provincia.provincia}
                 </option>
@@ -262,7 +315,7 @@ export default function formRegistro() {
             >
               <option value="">Seleccionar distrito</option>
               {districts.map((distrito) => (
-                <option key={distrito.coddistrito} value={distrito.coddistrito}>
+                <option key={distrito.id} value={distrito.id}>
                   {distrito.distrito}
                 </option>
               ))}

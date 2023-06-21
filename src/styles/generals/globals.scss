@@ -52,7 +52,12 @@
         border-radius: 0 !important;
         border-bottom: 1px solid var(--gray-color)!important;
         cursor: pointer;
+        padding: 6px 10px;
         width: 100%;
+
+        &:active {
+            outline: transparent;
+        }
     }
 }
 
