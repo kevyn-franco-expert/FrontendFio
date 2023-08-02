@@ -15,14 +15,14 @@ import { FiClock, FiCheck } from "react-icons/fi";
 import { ArrowForwardIcon } from '@chakra-ui/icons'
 import Cookies from 'js-cookie';
 
-export default function miCuenta() {
+export default function Tracker({uuid}) {
    const [tracking, setTracking] = useState(null);
    const [loading, setLoading] = useState(false);
 
    useEffect(() => {
-    // const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_TRACKING + Cookies.get('token') + '/'
+    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_TRACKING + uuid + '/'
     setLoading(true)
-    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_TRACKING + '9440af7c-4a8b-44f2-948f-ae0f43343a19/'
+    // const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_TRACKING + '9440af7c-4a8b-44f2-948f-ae0f43343a19/'
     try {
         fetch(url)
         .then(response => response.json())

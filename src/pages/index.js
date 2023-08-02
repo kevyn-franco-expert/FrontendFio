@@ -25,6 +25,8 @@ import Modals from "@/components/Modal";
 export default function Home({ data }) {
   const toast = useToast();
   const [homeData, setHomeData] = useState(data);
+  const [minCalculator, setMinCalculator] = useState(50);
+  const [maxCalculator, setMaxCalculator] = useState(700);
   const [calculatorCheck, setCalculatorCheck] = useState(false);
   const [calculatorData, setCalculatorData] = useState(false);
   const [calculatorValues, setCalculatorValues] = useState(null);
@@ -32,9 +34,9 @@ export default function Home({ data }) {
   const [documentTypeSeted, setDocumentTypeSeted] = useState(false);
   const [recaptcha, setRecaptcha] = useState(false);
   const [recaptchaExpired, setRecaptchaExpired] = useState(false);
-  const [tipsCheck, setTipsCheck] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [modalMsg, setModalMsg] = useState(false);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [store, dispatch] = useContext(StoreContext);
   const { postData } = useAPI();
   const router = useRouter();
@@ -44,6 +46,8 @@ export default function Home({ data }) {
   }, [])
 
   useEffect(() => {
+    setMinCalculator(Number(homeData[0].attributes.minimumAmountWithdrawn))
+    setMaxCalculator(Number(homeData[0].attributes.maximumAmountWithdrawn))
     dispatch({
       type: "userInformation",
       payload: documentSelected,
@@ -60,14 +64,12 @@ export default function Home({ data }) {
   const handleButtonClick = async (section) => {
     if (section === "calculator") {
       setCalculatorCheck(true);
-    } else if (section === "tips") {
-      setCalculatorCheck(true);
-      setTipsCheck(true);
     } else if (
       section === "documentType" &&
       documentTypeSeted &&
       documentTypeSeted === "DNI"
     ) {
+      setLoadingBtn(true)
       const data = await postData(
         process.env.NEXT_PUBLIC_API_SCORES,
         documentSelected
@@ -79,7 +81,7 @@ export default function Home({ data }) {
           type: "userDataSentinel",
           payload: data.data.attributes,
         });
-        Cookies.set("score", JSON.stringify(data.data));
+        Cookies.set("score", JSON.stringify(data.data), { expires: 7 });
         router.push("/form-registro");
       } else if ( 
         data.errors &&
@@ -87,6 +89,7 @@ export default function Home({ data }) {
         (data.errors[0].origin === "account" //Caso 1: Cuando el cliente ya tenga línea de crédito registrada te va a mandar esta estructura
         ) && data.errors[0].status === '200') {
           toast({
+            position:'top-right',
             title: data.errors[0].detail.detail,
             description: "Redireccionando a login...",
             status: "info",
@@ -102,6 +105,7 @@ export default function Home({ data }) {
         data.errors[0].origin === "account" //Caso 2: Cuando el cliente tiene linea de credito pero se le rechazo (no fue aprobada)
         && data.errors[0].status === '404') {
           toast({
+            position:'top-right',
             title: data.errors[0].detail,
             status: "error",
             duration: 3000,
@@ -114,6 +118,7 @@ export default function Home({ data }) {
         !recaptchaExpired &&
         data.meta.origin === 'client') { //Caso 3: Si el DNI ingresado esta asociado a un cliente, te devuelvo un campo meta. si es cliente lo rediriges al login
           toast({
+            position:'top-right',
             title: "Redireccionando a login...",
             status: "info",
             duration: 3000,
@@ -124,13 +129,17 @@ export default function Home({ data }) {
         }, 3100);
       } else if ( 
         data.errors
-        && data.errors[0].status === '400') { //Caso 4: LINEA CREDITO RECHAZADO
+        && data.errors[0].status === '400') { //Caso 4: LINEA CREDITO RECHAZADO - "No califica para una línea de crédito"
           toast({
-            title: data.errors[0].detail.detail,
+            position:'top-right',
+            title: data.errors[0].detail.detail || data.errors[0].detail,
             status: "error",
             duration: 3000,
             isClosable: true,
           });
+          // setTimeout(() => {
+          //   router.push("/login");
+          // }, 3100);
       }
       //end cases
     } else if (
@@ -141,6 +150,7 @@ export default function Home({ data }) {
     ) {
       router.push("/form-registro");
     }
+    setLoadingBtn(false)
   };
   return (
     <>
@@ -157,7 +167,7 @@ export default function Home({ data }) {
         />
         {homeData && (
           <div>
-            <Carousel />
+            <Carousel sliders={homeData[0].attributes.banners} />
             <Container
               maxW="8xl"
               pt={{ base: 2, md: 50 }}
@@ -175,9 +185,10 @@ export default function Home({ data }) {
                     <Heading className="heading-red">
                       {homeData[0].attributes.title}
                     </Heading>
-                    <Text as="p" color="black" pt={5} mt={0}>
+                    <Text as="p" color="black" pt={5} mt={0} pb={6}>
                       {homeData[0].attributes.description}
                     </Text>
+                    <Tips features={homeData[0].attributes.tips} />
                   </Stack>
                 </Center>
                 <Center w="100%" maxW={700}>
@@ -194,12 +205,10 @@ export default function Home({ data }) {
                     pt={5}
                   >
                     {!calculatorCheck && (
-                      <Calculator calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+                      <Calculator min={minCalculator} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
                     )}
-                    {calculatorCheck && !tipsCheck && (
-                      <Tips features={features} />
-                    )}
-                    {calculatorCheck && tipsCheck && (
+
+                    {calculatorCheck && (
                       <>
                         <DocumentType
                           documentSeted={setDocumentSelected}
@@ -226,23 +235,13 @@ export default function Home({ data }) {
                         SOLICITAR PRÉSTAMO
                       </Button>
                       <Button
-                        onClick={() => handleButtonClick("tips")}
-                        display={
-                          calculatorCheck && !tipsCheck ? "flex" : "none"
-                        }
-                        size="lg"
-                        width="full"
-                        colorScheme="blue"
-                      >
-                        CONTINUAR
-                      </Button>
-                      <Button
                         onClick={() => handleButtonClick("documentType")}
                         isDisabled={!recaptcha}
-                        display={calculatorCheck && tipsCheck ? "flex" : "none"}
+                        display={calculatorCheck ? "flex" : "none"}
                         size="lg"
                         width="full"
                         colorScheme="blue"
+                        isLoading={loadingBtn}
                       >
                         SOLICITAR
                       </Button>

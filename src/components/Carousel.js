@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
 
-export default function Carousel(){
+export default function Carousel({sliders = null}) {
+
   const arrowStyles = {
     cursor: "pointer",
     pos: "absolute",
@@ -57,7 +58,19 @@ export default function Carousel(){
     >
       <Flex w="full" overflow="hidden" pos="relative">
         <Flex w="full" {...carouselStyle}>
-          {slides.map((slide, sid) => (
+          {sliders && sliders.map((slide, sid) => (
+            <Box key={`slide-${sid}`} boxSize="full" maxH={400} shadow="md" flex="none">
+              <Image
+                src={process.env.NEXT_PUBLIC_BASEURL + slide.image}
+                alt="carousel image"
+                boxSize="full"
+                backgroundSize="cover"
+                objectFit='cover'
+              />
+            </Box>
+          ))}
+
+          {!sliders && slides.map((slide, sid) => (
             <Box key={`slide-${sid}`} boxSize="full" shadow="md" flex="none">
               <Image
                 src={slide.img}

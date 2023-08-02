@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from "react";
+import { StoreContext } from "@/store/StoreProvider";
 import { Field, Formik, useFormik } from 'formik';
 import { useRouter } from 'next/navigation'
 import { Box,
@@ -16,7 +17,8 @@ import { Box,
   RadioGroup,
   Divider,
   Center,
-  Text
+  Text,
+  Textarea
   } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import Modals from './Modal';
@@ -33,7 +35,9 @@ export default function forms({formType, url}) {
   const [formRegisterData, setFormRegisterData] = useState({});
   const [errorLogin, setErrorLogin] = useState('');
   const router = useRouter()
-  
+  const [store] = useContext(StoreContext)
+  const { section } = store;
+
   const SetCookie = (name, value) => {
     Cookies.set(name, value, {
       expires: 7,
@@ -73,6 +77,20 @@ export default function forms({formType, url}) {
           SetCookie('token', result.data.token);
           SetCookie('origin', result.data.origin);
           SetCookie('client', result.data.client_id);
+          SetCookie('account', result.data.has_account);
+
+          const JsonResult = {
+            token: result.data.token,
+            origin: result.data.origin,
+            client: result.data.client_id,
+            account: result.data.has_account,
+            uuid: result.data.uuid,
+            min: result.data.get_minimum_amount_withdrawn,
+            max: result.data.get_maximum_amount_withdrawn,
+            min_days: result.data.get_minimum_days_withdrawn
+          };
+
+          SetCookie('user-data', JSON.stringify(JsonResult))
           setErrorLogin('')
           router.push('/mi-cuenta');
         } else if (result && result.errors) {
@@ -158,10 +176,11 @@ export default function forms({formType, url}) {
       <Formik
       initialValues={{
         password: '',
-        document_number: ''
+        document_number: section.document_number || ''
       }}
       onSubmit={logIn}
     >
+
       {({ handleSubmit, errors, touched, values }) => (
         <form className='formik-form' onSubmit={handleSubmit}>
           <VStack spacing={4} align="flex-start">
@@ -174,7 +193,7 @@ export default function forms({formType, url}) {
                 maxLength={8}
                 type="tel"
                 onInput={handleOnlyNumbers}
-                autocomplete='off'
+                autoComplete='off'
                 validate={(value) => {
                   let error;
 
@@ -195,7 +214,6 @@ export default function forms({formType, url}) {
                 id="password"
                 name="password"
                 type="password"
-                autocomplete='new-password'
                 validate={(value) => {
                   let error;
 
@@ -214,7 +232,7 @@ export default function forms({formType, url}) {
             </Center>
             <Box position='relative' w='100%'>
               <AbsoluteCenter my={6}>
-                <Button minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
+                <Button isLoading={loading} minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
                   INGRESAR
                 </Button>
                 <Text color='red' align='center' mt={3}>{errorLogin}</Text>
@@ -609,10 +627,11 @@ export default function forms({formType, url}) {
               <FormControl isInvalid={!!errors.complaints_details && touched.complaints_details}>
                 <FormLabel htmlFor="complaints_details"><Flex className={`input-position ${!errors.complaints_details && touched.complaints_details ? 'fill':''}`}>8</Flex> Detalle del consumidor </FormLabel>
                 <Field
-                  as={Input}
+                  as={Textarea}
                   id="complaints_details"
                   name="complaints_details"
-                  type="text"
+                  type="textarea"
+                  className="textarea-form"
                   validate={(value) => {
                     let error;
 
@@ -629,10 +648,11 @@ export default function forms({formType, url}) {
               
                 <FormLabel htmlFor="consumer_request"><Flex className={`input-position ${!errors.consumer_request && touched.consumer_request ? 'fill':''}`}>9</Flex> Pedido del consumidor </FormLabel>
                 <Field
-                  as={Input}
+                  as={Textarea}
                   id="consumer_request"
                   name="consumer_request"
-                  type="text"
+                  type="textarea"
+                  className="textarea-form"
                   validate={(value) => {
                     let error;
 

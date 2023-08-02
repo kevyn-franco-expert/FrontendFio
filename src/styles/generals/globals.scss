@@ -61,6 +61,16 @@
     }
 }
 
+.textarea {
+    &-form {
+        background-color: transparent;
+        border: 0 !important;
+        border-bottom: 1px solid var(--gray-color)!important;
+        border-radius: 0 !important;
+        outline: none;
+    }
+}
+
 .document-types {
     .radio-list {
         .box-radio {

@@ -19,14 +19,16 @@ const useUbigeo = () => {
         .then(data => {
             const newDepartments = [];
             const ubigeoData = data.data;
-            ubigeoData.forEach((ubi) => {
-                if (!ubi.relationships.parent.data) {
-                  newDepartments.push({
-                    id: ubi.id,
-                    departamento: ubi.attributes.name
-                  })
-                }
-            });
+            if (ubigeoData) {
+              ubigeoData.forEach((ubi) => {
+                  if (!ubi.relationships.parent.data) {
+                    newDepartments.push({
+                      id: ubi.id,
+                      departamento: ubi.attributes.name
+                    })
+                  }
+              });
+            }
 
             setUbigeo(ubigeoData);
             setDepartaments(newDepartments);

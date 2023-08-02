@@ -4,11 +4,11 @@ import { chakra, Box, SimpleGrid, Flex, Image } from "@chakra-ui/react";
 export default function Tips({features}){
   const Feature = (props) => {
     return (
-      <Box bg='gray.50' p={3} borderRadius='lg' flexDirection='row' display='flex' gap={5} my={4}>
+      <Box boxShadow='md' bg='gray.50' p={3} borderRadius='lg' flexDirection='row' display='flex' gap={5} my={4}>
         <Image
             width='45px'
             objectFit='contain'
-            src={props.image}
+            src={process.env.NEXT_PUBLIC_BASEURL + props.image}
             alt={'image of ' + props.title}
         />
         <Box>
@@ -70,7 +70,7 @@ export default function Tips({features}){
                 title={feature.title}
                 image={feature.image}
                 >
-                {feature.content}
+                {feature.description}
                 </Feature>
             ))
         }

@@ -13,7 +13,7 @@ import {
     Link
   } from '@chakra-ui/react'
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-const Modals = ({ isOpenit, onCloseit, actionBtn, data, type = 'thankyou' }) => {
+  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou' }) => {
 
     if (type === 'pre-register') {
         return (
@@ -70,19 +70,13 @@ const Modals = ({ isOpenit, onCloseit, actionBtn, data, type = 'thankyou' }) => 
                             </Text>
                         </Center>
                         <Center>
-                            <Text>
+                            <Text color='gray.500'>
                             {data.subdescription}
                             </Text>
                         </Center>
                     <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
                         Cerrar
                     </Button>
-                    <Link
-                    color='gray.500'
-                    href='/'
-                    >
-                    <ChevronLeftIcon /> Regresar al inicio
-                    </Link>
                     </Flex>
                 </ModalBody>
         
@@ -135,6 +129,30 @@ const Modals = ({ isOpenit, onCloseit, actionBtn, data, type = 'thankyou' }) => 
                             ))}
                         </Center>
                     <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                    Cerrar
+                    </Button>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'update-info') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                        <Center>
+                            <Text textAlign='center'>
+                            ¡Se actualizó Satisfactoriamente la información!
+                            </Text>
+                        </Center>
+    
+                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
                     Cerrar
                     </Button>
                     </Flex>

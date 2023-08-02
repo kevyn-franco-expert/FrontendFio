@@ -6,7 +6,7 @@ import {
     SliderMark,
   } from '@chakra-ui/react'
 import React, { useState, useEffect } from "react";
-export default function SliderComponent({min, max, type, defaultValue, valueSeted}) {
+export default function SliderComponent({min, max, type, step, defaultValue, valueSeted}) {
     const [sliderValue, setSliderValue] = useState(defaultValue);
     const labelStyles = {
         mt: "3",
@@ -15,7 +15,6 @@ export default function SliderComponent({min, max, type, defaultValue, valueSete
     };
     useEffect(() => {
       valueSeted(sliderValue);
-      // console.log(sliderValue);
     }, [valueSeted]);
 
     return (
@@ -23,6 +22,7 @@ export default function SliderComponent({min, max, type, defaultValue, valueSete
         <Slider
             min={min}
             max={max}
+            step={step}
             colorScheme="blue"
             defaultValue={defaultValue}
             aria-label="slider-ex-6"

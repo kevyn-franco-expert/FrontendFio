@@ -21,7 +21,7 @@ import RadioGroup from "./RadioGroup";
 import React, { useState, useEffect } from "react";
 import SliderComponent from "./SliderComponent";
 
-export default function Calculator({calculatorValues, calculatorResult}) {
+export default function Calculator({calculatorValues, calculatorResult, min = 50, max = 2000, title = '¿Cuánto dinero necesitas?'}) {
   const [sliderValue, setSliderValue] = useState(null);
   const [fieldValue, setFieldValue] = useState(null);
   const [modeValue, setModeValue] = useState('monthly');
@@ -63,13 +63,13 @@ export default function Calculator({calculatorValues, calculatorResult}) {
     <Box>
       <Stack spacing={2} direction="column">
         <Heading size="sm" color="black">
-          ¿Cuánto dinero necesitas?
+          {title}
         </Heading>
         <Heading size="2xl" pt="4" alignSelf={"center"} color="black">
           s/ {sliderValue}
         </Heading>
         <Box w="100%" p={2} pt={6} pb={2}>
-          <SliderComponent min={250} max={2000} defaultValue={250} type='amount' valueSeted={setSliderValue} />
+          <SliderComponent min={min} max={max} step={50} defaultValue={min} type='amount' valueSeted={setSliderValue} />
         </Box>
         <Box>
         <Tabs  onClick={() => setShowTable(false)} mt={4} align='center'>
@@ -98,7 +98,7 @@ export default function Calculator({calculatorValues, calculatorResult}) {
               <Text color="black" as="p">
                 ¿En cuántas cuotas?
               </Text>
-              <SliderComponent min={7} max={30} defaultValue={fieldValue} type='days' valueSeted={setFieldValue} />
+              <SliderComponent min={7} max={30} step={1} defaultValue={fieldValue} type='days' valueSeted={setFieldValue} />
             </Box>
             </TabPanel>
           </TabPanels>

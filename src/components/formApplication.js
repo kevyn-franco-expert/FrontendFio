@@ -14,13 +14,13 @@ import InputMask from 'react-input-mask';
 import useBankFormat from "@/hooks/useBankFormat";
 
 export default function formApplication({onFormData, errorsData}) {
-  const [calculatorData, setCalculatorData] = useState(null)
+  const [calculatorData, setCalculatorData] = useState('')
   const [formatBank, setFormatBank] = useState("3,10");  
-  const [banks, setBanks] = useState(null);
-  const [bankID, setBankID] = useState(null);
+  const [banks, setBanks] = useState('');
+  const [bankID, setBankID] = useState('');
   const [bankSelected, setBankSelected] = useState("");
-  const [numberBank, setNumberBank] = useState(null);
-  const [calculatorValues, setCalculatorValues] = useState(null);
+  const [numberBank, setNumberBank] = useState('');
+  const [calculatorValues, setCalculatorValues] = useState('');
   const [loading, setLoading] = useState(false);
   const { formatAccount } = useBankFormat();
   useEffect(() => {
