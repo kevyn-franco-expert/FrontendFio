@@ -120,7 +120,7 @@ export default function Header() {
                 <Link onClick={mobileNav.onClose} as={NextLink} href='/'><Button className="nav-li" colorScheme="brand">Inicio</Button></Link>
                 {/* <Link onClick={mobileNav.onClose} as={NextLink} href='/productos'><Button className="nav-li" colorScheme="brand">Productos</Button></Link> */}
                 <Link onClick={mobileNav.onClose} as={NextLink} href='/nosotros'><Button className="nav-li" colorScheme="brand">Nosotros</Button></Link>
-                <Link onClick={mobileNav.onClose} as={NextLink} href='/como-funciona'><Button className="nav-li" colorScheme="brand">¿Cómo funciona?</Button></Link>
+                <Link onClick={mobileNav.onClose} as={NextLink} href='/beneficios'><Button className="nav-li" colorScheme="brand">¿Cómo funciona?</Button></Link>
                 <Link onClick={mobileNav.onClose} as={NextLink} href='/preguntas-frecuentes'><Button className="nav-li" colorScheme="brand">Preguntas Frecuentes</Button></Link>
               </VStack>
             </Box>
