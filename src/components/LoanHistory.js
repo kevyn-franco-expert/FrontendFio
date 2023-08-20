@@ -17,14 +17,14 @@ import {
 import useAPI from "@/hooks/useAPI";
 import Cookies from 'js-cookie';
 
-export default function FormUser() {
+export default function FormUser({data}) {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(null);
 
 
   useEffect(() => {
-    //  const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWN_HISTORY + Cookies.get('token') + '/'
-     const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWN_HISTORY + 'b15ac003-cbfc-4bda-ba0c-a2f9eadf8a67/'
+     const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWN_HISTORY + data.uuid + '/'
+    //  const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWN_HISTORY + 'b15ac003-cbfc-4bda-ba0c-a2f9eadf8a67/'
      setLoading(true)
      try {
          fetch(url)
@@ -62,7 +62,7 @@ export default function FormUser() {
                 <Td>{moment(data.created_at).format("DD/MM/YYYY")}</Td>
                 <Td>{data.due_date}</Td>
                 <Td isNumeric>{data.amount}</Td>
-                <Td color={data.status === 'WITHDRAWN' ? 'yellow.600' : 'green'}>{statusWithdrawn[data.status]}</Td>
+                <Td color={data.status === 'WITHDRAWN' ? 'yellow.600' : data.status === 'PAID' ? 'green' : 'red'}>{statusWithdrawn[data.status]}</Td>
                 <Td isNumeric>{data.paid_capital}</Td>
                 <Td isNumeric>{data.pending_capital}</Td>
               </Tr>
@@ -88,6 +88,7 @@ export default function FormUser() {
 
 
 const statusWithdrawn = {
-  WITHDRAWN: 'Retiro',
-  PAID: 'Pagado'
+  WITHDRAWN: 'Retirado',
+  PAID: 'Pagado',
+  PAST_DUE: 'Atrasado'
 }

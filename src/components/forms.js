@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StoreContext } from "@/store/StoreProvider";
 import { Field, Formik, useFormik } from 'formik';
 import { useRouter } from 'next/navigation'
@@ -38,11 +38,40 @@ export default function forms({formType, url}) {
   const [store] = useContext(StoreContext)
   const { section } = store;
 
+  // useEffect(() => {
+  //   const timeout = 5 * 60 * 1000; // 5 minutes
+  //   let inactivityTimer;
+
+  //   const resetTimer = () => {
+  //     clearTimeout(inactivityTimer);
+  //     inactivityTimer = setTimeout(() => {
+  //       sessionStorage.clear();
+  //       alert('La sesión ha expirado debido a inactividad.');
+  //       SetCookie('user-data', '')
+  //       SetCookie('loggedIn', false);
+  //     }, timeout);
+  //   };
+
+  //   const handleUserActivity = () => {
+  //     console.log('activity reset')
+  //     resetTimer();
+  //   };
+
+  //   window.addEventListener('mousemove', handleUserActivity);
+  //   window.addEventListener('keydown', handleUserActivity);
+
+  //   return () => {
+  //     window.removeEventListener('mousemove', handleUserActivity);
+  //     window.removeEventListener('keydown', handleUserActivity);
+  //   };
+  // }, []);
+
   const SetCookie = (name, value) => {
     Cookies.set(name, value, {
-      expires: 7,
+      expires: 1,
     });
   };
+  
   
   const onlyNumbers = /^[0-9\b]+$/;
   const onlyCharacters = /^[A-Za-z\s]*$/;
@@ -79,6 +108,7 @@ export default function forms({formType, url}) {
           SetCookie('client', result.data.client_id);
           SetCookie('account', result.data.has_account);
 
+
           const JsonResult = {
             token: result.data.token,
             origin: result.data.origin,
@@ -87,10 +117,12 @@ export default function forms({formType, url}) {
             uuid: result.data.uuid,
             min: result.data.get_minimum_amount_withdrawn,
             max: result.data.get_maximum_amount_withdrawn,
-            min_days: result.data.get_minimum_days_withdrawn
+            min_days: result.data.get_minimum_days_withdrawn,
+            account_data: result.data.account_data ? result.data.account_data : null
           };
 
           SetCookie('user-data', JSON.stringify(JsonResult))
+          sessionStorage.setItem("userDataSession", JSON.stringify(JsonResult));
           setErrorLogin('')
           router.push('/mi-cuenta');
         } else if (result && result.errors) {
@@ -217,8 +249,8 @@ export default function forms({formType, url}) {
                 validate={(value) => {
                   let error;
 
-                  if (value.length < 6) {
-                    error = "Debería tener al menos 6 caracteres";
+                  if (value.length < 4) {
+                    error = "Debería tener al menos 5 caracteres";
                   }
 
                   return error;

@@ -10,10 +10,18 @@ import {
     Text,
     Flex,
     Center,
-    Link
+    Link,
+    HStack,
+    PinInput, 
+    PinInputField
   } from '@chakra-ui/react'
+  import Calculator from "./Calculator";
+  import React, { useState, useEffect } from "react";
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou' }) => {
+  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false }) => {
+      const [calculatorData, setCalculatorData] = useState('')
+      const [calculatorValues, setCalculatorValues] = useState('')
+      const [pinData, setPinData] = useState('')
 
     if (type === 'pre-register') {
         return (
@@ -156,6 +164,107 @@ import {
                     Cerrar
                     </Button>
                     </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'calculator') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                        <Center>
+                            {data && <Calculator noChanges={data.no_change} min={data.capital_pending} max={data.capital_pending} title={data.title} payment_day={data.payment_day} defaultValueSlider={data.capital_pending}  calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />}
+                            {!data && <Calculator calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />}
+                        </Center>
+    
+                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                            Cerrar
+                        </Button>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'pin') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    {!sendit && 
+                        <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            {data && <>
+                                <Text className='title-red' as='p' mb={0}>
+                                {data.title ? data.title : 'Ingrese su código de 6 dígitos'}
+                                </Text>
+                                <Center>
+                                    <Text textAlign='center'>
+                                    {data && 
+                                    <>
+                                        {data.content ? data.content : 'Ingresa el código que fue enviado a tu whatsapp para realizar la transferencia'}
+                                    </>
+                                    }
+                                        
+                                    </Text>
+                                </Center>
+                            </>}
+                            {!data && 
+                            <>
+                                <Text className='title-red' as='p' mb={0}>
+                                    Ingrese su código de 6 dígitos
+                                </Text>
+                                <Center>
+                                    <Text textAlign='center'>
+                                    Ingresa el código que fue enviado a tu whatsapp para realizar la transferencia
+                                    </Text>
+                                </Center>
+                            </>
+                            }
+                            <Center>
+                                <HStack>
+                                    <PinInput type='number' onChange={setPinData}>
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                    </PinInput>
+                                </HStack>
+                            </Center>
+                            <Text display={isError ? '' : 'none'} color='red' textAlign='center'>
+                                {(isError && typeof isError !== 'boolean') ? isError : 'El campo Código es obligatorio'}
+                            </Text>
+                            <Button isDisabled={pinData.length < 6} size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={() => actionBtn(pinData)}>
+                                Validar
+                            </Button>
+                        </Flex>
+                    }
+
+                    {sendit && 
+                        <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            <Text className='title-red' as='p' mb={0}>
+                                ¡Felicitaciones!
+                            </Text>
+                            <Center>
+                                <Text textAlign='center'>
+                                    Estamos completando su transferencia, le enviaremos un Whatsapp confirmando el depósito.
+                                </Text>
+                            </Center>
+                            <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                                Cerrar
+                            </Button>
+                        </Flex>
+                    }
                 </ModalBody>
         
                 </ModalContent>

@@ -4,7 +4,7 @@ const useAPI = () => {
   const [loading, setLoading] = useState(false);
   const [errorData, setErrorData] = useState(null);
 
-  const postData = async (url, data) => {
+  const postData = async (url, data, token) => {
     setLoading(true);
 
     try {
@@ -13,6 +13,7 @@ const useAPI = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': token ? `Token ${token}` : null
         },
         body: JSON.stringify(data),
       });
@@ -33,8 +34,62 @@ const useAPI = () => {
       throw errorData;
     }
   };
+  
+  const getData = async (url) => {
+    setLoading(true);
 
-  return { loading, errorData, postData };
+    try {
+      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const response = await fetch(urlFetch);
+
+      if (response.ok) {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+      } else {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+        // throw new Error('Error en la solicitud POST');
+      }
+    } catch (errorData) {
+      setLoading(false);
+      setErrorData(errorData.message);
+      throw errorData;
+    }
+  };
+
+  const patchData = async (url) => {
+    setLoading(true);
+
+    try {
+      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const response = await fetch(urlFetch, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Token ${token}` : null
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+      } else {
+        const result = await response.json();
+        setLoading(false);
+        return result;
+        // throw new Error('Error en la solicitud POST');
+      }
+    } catch (errorData) {
+      setLoading(false);
+      setErrorData(errorData.message);
+      throw errorData;
+    }
+  };
+
+  return { loading, errorData, postData, getData, patchData };
 };
 
 export default useAPI;

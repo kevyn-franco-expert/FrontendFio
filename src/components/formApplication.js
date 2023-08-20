@@ -56,7 +56,8 @@ export default function formApplication({onFormData, errorsData}) {
       },
       typeBank: bankSelected,
       typeBankID: bankID,
-      bankAccount: numberBank
+      bankAccount: numberBank,
+      quotes: calculatorValues.fields
     }
 
     onFormData(formApp);

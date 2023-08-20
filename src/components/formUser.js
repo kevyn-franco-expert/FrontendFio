@@ -8,12 +8,11 @@ import {
   Container,
   useToast
 } from "@chakra-ui/react";
-import Cookies from 'js-cookie';
 import useInputValidators from "@/hooks/useInputValidators";
 import useAPI from "@/hooks/useAPI";
 import Modals from "@/components/Modal";
 
-export default function FormUser() {
+export default function FormUser({uuid}) {
   const [openModal, setOpenModal] = useState(false);
   const [phoneData, setPhoneData] = useState("");
   const [emailData, setEmailData] = useState("");
@@ -32,7 +31,7 @@ export default function FormUser() {
   }, [phoneData,emailData])
   
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_INFO_CLIENT + Cookies.get('token') + '/'
+    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_INFO_CLIENT + uuid + '/'
     setLoading(true)
     try {
         fetch(url)
@@ -67,7 +66,7 @@ export default function FormUser() {
         const url = process.env.NEXT_PUBLIC_API_UPDATE_INFO_CLIENT
         const formData = 
         {
-            uuid: Cookies.get('token'), 
+            uuid: uuid, 
             mobile: phoneData, 
             email: emailData
         }

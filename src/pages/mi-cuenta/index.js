@@ -28,6 +28,7 @@ import useAPI from '@/hooks/useAPI';
 import Modals from "@/components/Modal";
 import RequestNewDisbursement from '@/components/requestNewDisbursement';
 import LoanHistory from '@/components/LoanHistory';
+import Cronograma from '@/components/Cronograma';
 
 export default function miCuenta() {
   const router = useRouter();
@@ -44,9 +45,18 @@ export default function miCuenta() {
   const [modalData, setModalData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loginResponseData, setLoginResponseData] = useState([]);
+  const [openModalPin, setOpenModalPin] = useState(false);
+  const [ifError, setIfError] = useState(false);
+  const [ifSendIt, setIfSendIt] = useState(false);
   const { postData } = useAPI();
+
   useEffect(() => {
-    setLoginResponseData(JSON.parse(Cookies.get('user-data')));
+    if (Cookies.get('user-data')) {
+      setLoginResponseData(JSON.parse(Cookies.get('user-data')));
+      console.log(JSON.parse(Cookies.get('user-data')))
+    } else {
+      handleCloseSesion();
+    }
     setHasAccount(Cookies.get("account") === 'true');
     if (origin && origin.includes("user")) {
       setApplication(false);
@@ -55,7 +65,70 @@ export default function miCuenta() {
     }
     setLoading(false);
 
+    //session
+
+    const timeout = 1 * 60 * 1000; // 5 minutes
+    let inactivityTimer;
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      console.log('inactivityTimer:' + inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        sessionStorage.clear();
+        alert('La sesión ha expirado debido a inactividad.');
+        SetCookie('user-data', '')
+        SetCookie('loggedIn', false);
+      }, timeout);
+    };
+
+    const SetCookie = (name, value) => {
+      Cookies.set(name, value, {
+        expires: 1,
+      });
+    };
+
+    // const handleUserActivity = () => {
+    //   console.log('activity reset')
+    //   resetTimer();
+    // };
+
+    // window.addEventListener('mousemove', handleUserActivity);
+    // window.addEventListener('keydown', handleUserActivity);
+
+    // return () => {
+    //   window.removeEventListener('mousemove', handleUserActivity);
+    //   window.removeEventListener('keydown', handleUserActivity);
+    // };
+
   }, []);
+
+  const validatePin = async () => {
+    setLoading(true)
+    try {
+      const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWALS + loginResponseData.account_data.id + '/confirmation/'
+      const response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.status !== 200) {
+        setIfError(`Error ${response.status}`)
+        setLoading(false);
+        return;
+      }
+      const validationData = await response.json();
+      if (validationData) {
+        console.log(JSON.stringify(validationData));
+        setIfSendIt(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const handleRequest = async () => {
     const url = process.env.NEXT_PUBLIC_API_ACCOUNTS;
@@ -66,7 +139,8 @@ export default function miCuenta() {
           number: formData.bankAccount,
           payment_day: Number(formData.calculator.payDay),
           uuid: loginResponseData.uuid,
-          client: Cookies.get("client")
+          client: Cookies.get("client"),
+          quotes: formData.quotes
         };
 
     try {
@@ -102,8 +176,8 @@ export default function miCuenta() {
                 }
             })
         }
-        Cookies.set("account", true, { expires: 7 })
-        setHasAccount(true);
+        // Cookies.set("account", true, { expires: 7 })
+        // setHasAccount(true);
         
       } catch (error) {
         console.error('Error en la solicitud POST:', error);
@@ -120,12 +194,14 @@ export default function miCuenta() {
     Cookies.remove("token");
     Cookies.remove("account");
     Cookies.remove("client");
+    Cookies.remove("user-data");
     router.push("/login");
   };
 
   return (
     <>
       <Modals type={modalType} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
+      <Modals sendit={ifSendIt} isError={ifError} type='pin' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <HeadTitle
         title="Mi cuenta"
         description="Obtén tu línea de efectivo con nosotros"
@@ -165,20 +241,26 @@ export default function miCuenta() {
                       Solicitar nuevo desembolso
                     </Tab>
                     <Tab isDisabled={application}>Historial de préstamos</Tab>
+                    <Tab isDisabled={application}>Cronograma de pagos</Tab>
                     
                   </>
                 )}
               </TabList>
               {!loading && (
-                <Button
-                  onClick={handleCloseSesion}
-                  leftIcon={<FiLogOut />}
-                  mt={10}
-                  colorScheme="red"
-                  variant="ghost"
-                >
-                  Cerrar sesión
-                </Button>
+                <>
+                 <Button display={application ? 'none' : ''} mt={8} colorScheme="red"  onClick={() => setOpenModalPin(true)}>
+                      Completar retiros pendientes
+                  </Button>
+                  <Button
+                    onClick={handleCloseSesion}
+                    leftIcon={<FiLogOut />}
+                    mt={10}
+                    colorScheme="red"
+                    variant="ghost"
+                  >
+                    Cerrar sesión
+                  </Button>
+                </>
               )}
             </GridItem>
             <GridItem
@@ -222,18 +304,20 @@ export default function miCuenta() {
                     </TabPanels>
                   )}
                   <TabPanel>
-                    <FormUser />
+                    <FormUser uuid={loginResponseData.uuid} />
                   </TabPanel>
                   {!hasAccount && (origin === 'client') &&
                       <TabPanel>No hay seguimiento registrado..</TabPanel>
                     }
                   {hasAccount && (origin === 'client') &&
                   <TabPanel>
-                    <Tracker uuid={loginResponseData.uuid} />
+                    {/* <Tracker uuid={loginResponseData.uuid} /> */}
+                    <p>tracker</p>
                   </TabPanel>
                   }
-                  <TabPanel><RequestNewDisbursement /></TabPanel>
-                  <TabPanel><LoanHistory /></TabPanel>
+                  <TabPanel><RequestNewDisbursement data={loginResponseData} /></TabPanel>
+                  <TabPanel><LoanHistory data={loginResponseData} /></TabPanel>
+                  <TabPanel><Cronograma data={loginResponseData} /></TabPanel>
                 </TabPanels>
               )}
             </GridItem>
