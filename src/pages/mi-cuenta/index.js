@@ -29,6 +29,7 @@ import Modals from "@/components/Modal";
 import RequestNewDisbursement from '@/components/requestNewDisbursement';
 import LoanHistory from '@/components/LoanHistory';
 import Cronograma from '@/components/Cronograma';
+import NoContent from '@/components/NoContent';
 
 export default function miCuenta() {
   const router = useRouter();
@@ -45,15 +46,19 @@ export default function miCuenta() {
   const [modalData, setModalData] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loginResponseData, setLoginResponseData] = useState([]);
+  const [accountInformationData, setAccountInformationData] = useState(null);
   const [openModalPin, setOpenModalPin] = useState(false);
   const [ifError, setIfError] = useState(false);
   const [ifSendIt, setIfSendIt] = useState(false);
-  const { postData } = useAPI();
+  const { postData, getData } = useAPI();
 
   useEffect(() => {
     if (Cookies.get('user-data')) {
       setLoginResponseData(JSON.parse(Cookies.get('user-data')));
-      console.log(JSON.parse(Cookies.get('user-data')))
+      const urlUserInfo = JSON.parse(Cookies.get('user-data'));
+      handleGetUserData(urlUserInfo.account_data.account_info);
+      
+      
     } else {
       handleCloseSesion();
     }
@@ -63,8 +68,7 @@ export default function miCuenta() {
     } else {
       setApplication(true);
     }
-    setLoading(false);
-
+    setLoading(false);    
     //session
 
     const timeout = 1 * 60 * 1000; // 5 minutes
@@ -129,6 +133,10 @@ export default function miCuenta() {
     }
   };
 
+  const handleGetUserData = async (url) => {
+    const result = await getData(url); 
+    setAccountInformationData(result.data.attributes);
+  }
 
   const handleRequest = async () => {
     const url = process.env.NEXT_PUBLIC_API_ACCOUNTS;
@@ -248,9 +256,11 @@ export default function miCuenta() {
               </TabList>
               {!loading && (
                 <>
-                 <Button display={application ? 'none' : ''} mt={8} colorScheme="red"  onClick={() => setOpenModalPin(true)}>
-                      Completar retiros pendientes
-                  </Button>
+                  {accountInformationData && accountInformationData.submittedWithdrawals.length > 0 &&
+                    <Button display={application ? 'none' : ''} mt={8} colorScheme="red"  onClick={() => setOpenModalPin(true)}>
+                        Completar retiros pendientes
+                    </Button>
+                  }
                   <Button
                     onClick={handleCloseSesion}
                     leftIcon={<FiLogOut />}
@@ -286,8 +296,9 @@ export default function miCuenta() {
                 <TabPanels>
                   {!loading && (application && !hasAccount) && (
                     <TabPanels>
+                      {loginResponseData && loginResponseData.email_validated && 
                       <TabPanel>
-                        <FormApplication errorsData={errorLists} onFormData={setFormData} />
+                        <FormApplication loginData={loginResponseData} errorsData={errorLists} onFormData={setFormData} />
                         <FormControl>
                             <Checkbox
                             id="contract"
@@ -301,6 +312,12 @@ export default function miCuenta() {
                             </Checkbox>
                         </FormControl>
                       </TabPanel>
+                      }
+                      {loginResponseData && !loginResponseData.email_validated && 
+                      <TabPanel>
+                        <NoContent />
+                      </TabPanel>
+                      }
                     </TabPanels>
                   )}
                   <TabPanel>
@@ -311,18 +328,17 @@ export default function miCuenta() {
                     }
                   {hasAccount && (origin === 'client') &&
                   <TabPanel>
-                    {/* <Tracker uuid={loginResponseData.uuid} /> */}
-                    <p>tracker</p>
+                    <Tracker uuid={loginResponseData.uuid} />
                   </TabPanel>
                   }
-                  <TabPanel><RequestNewDisbursement data={loginResponseData} /></TabPanel>
-                  <TabPanel><LoanHistory data={loginResponseData} /></TabPanel>
-                  <TabPanel><Cronograma data={loginResponseData} /></TabPanel>
+                  <TabPanel>{hasAccount && <RequestNewDisbursement data={loginResponseData} />}</TabPanel>
+                  <TabPanel>{hasAccount && <LoanHistory data={loginResponseData} />}</TabPanel>
+                  <TabPanel>{hasAccount && <Cronograma data={loginResponseData} />}</TabPanel>
                 </TabPanels>
               )}
             </GridItem>
             <GridItem colStart={2} gap={4}>
-              {(application && !hasAccount) && (
+              {(application && !hasAccount && loginResponseData.email_validated) && (
                 <Button isDisabled={!contract && formData} onClick={handleRequest} colorScheme="blue">
                   SOLICITAR PRÉSTAMO
                 </Button>

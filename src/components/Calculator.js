@@ -47,8 +47,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
     if (payment_day) {
       setPaydayValueFormat(payment_day)
     } else {
-      const slicePay = (paydayValue && paydayValue.includes('/')) ? paydayValue.slice(0,2) : paydayValue;
-      setPaydayValueFormat(slicePay)
+      setPaydayValueFormat((paydayValue && paydayValue.includes('/')) ? paydayValue.slice(0,2) : paydayValue)
     }
   
     const datos = {
@@ -57,7 +56,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
       fields: fieldValue, //cuota
       payDay: paydayValueFormat, //dia de pago
     };
-    console.log(datos)
+    // console.log(datos)
 
     calculatorResult(datos);
 
@@ -80,7 +79,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
     })();
 
     // console.log('paydayValue ', paydayValue);
-  }, [sliderValue, modeValue, fieldValue, paydayValue]);
+  }, [sliderValue, modeValue, fieldValue, paydayValue, paydayValueFormat]);
 
   return (
     <Box>
@@ -197,4 +196,9 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
 const date = new Date();
 const months = ["1", "2", "3", "4", "5", "6"];
 // const payDay = [`05/10/2022`, `20/10/2022`];
-const payDay = [`05/${date.getMonth() + 1}/${date.getFullYear()}`, `20/${date.getMonth() + 1}/${date.getFullYear()}`];
+if (date.getMonth() === 11) {
+
+} else {
+
+}
+const payDay = [`05/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`, `20/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`];

@@ -73,19 +73,10 @@ export default function Cronograma({data}) {
               </Tr>
             ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Fecha Programada</Th>
-                <Th>Monto de Cuota</Th>
-              </Tr>
-            </Tfoot>
           </Table>
         </TableContainer>
         {!history && <Text m={6}>No hay cronograma de pagos...</Text>}
 
-        <Center height='50px'>
-          <Divider orientation='horizontal' />
-        </Center>
         <Center>
           <Button onClick={() => setOpenModal(true)} mt={8} variant='outline' isLoading={loading} colorScheme="blue">
               SIMULA EL PAGO DE TU DEUDA

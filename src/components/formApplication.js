@@ -13,7 +13,7 @@ import Calculator from "./Calculator";
 import InputMask from 'react-input-mask';
 import useBankFormat from "@/hooks/useBankFormat";
 
-export default function formApplication({onFormData, errorsData}) {
+export default function formApplication({onFormData, errorsData, loginData = null}) {
   const [calculatorData, setCalculatorData] = useState('')
   const [formatBank, setFormatBank] = useState("3,10");  
   const [banks, setBanks] = useState('');
@@ -121,7 +121,7 @@ export default function formApplication({onFormData, errorsData}) {
             <Flex className={`input-position fill`}>3</Flex>
           </FormLabel>
           <Box boxShadow="base" p={6} borderRadius={10}>
-            <Calculator calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+            <Calculator min={loginData.min} max={loginData.max} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
             {errorsData.map((error) => (
             <>
               {(error.source.pointer.split('/')[3] === 'amount') ? <Text mt={2} color='red'>{error.detail} </Text> : ''}

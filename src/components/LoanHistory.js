@@ -68,16 +68,6 @@ export default function FormUser({data}) {
               </Tr>
             ))}
             </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>Fecha solicitud del préstamo</Th>
-                <Th>Fecha vencimiento del prestamo</Th>
-                <Th>Monto solicitado</Th>
-                <Th>Estado</Th>
-                <Th>Capital Pagado</Th>
-                <Th>Capital Pendiente</Th>
-              </Tr>
-            </Tfoot>
           </Table>
         </TableContainer>
         {!history && <Text m={6}>No hay historial de préstamo...</Text>}

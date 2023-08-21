@@ -99,7 +99,7 @@ export default function requestNewDisbursement({data}) {
         <Text>Saldo disponible: <Badge colorScheme='green'>S/ {data.max}</Badge></Text><br/>
         <Text>Saldo Pendiente de pago: <Badge colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text>
         <Calculator payment_day={data.account_data.payment_day} defaultValueSlider={data.account_data.capital_available} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
-        <Button mt={8} isDisabled={!canDisbursement} onClick={() => setOpenModalPin(true)} isLoading={loading} colorScheme="blue">
+        <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">
             Solicitar nuevo Préstamo
         </Button>
       </Container>
