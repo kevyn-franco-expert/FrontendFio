@@ -280,7 +280,24 @@ export default function miCuenta() {
                   </>
                 )}
               </TabList>
-              
+               {!loading && (
+                <>
+                  {(accountInformationData && !accountInformationData.errors) && accountInformationData.submittedWithdrawals.length > 0 &&
+                    <Button display={application ? 'none' : ''} mt={8} colorScheme="red"  onClick={() => setOpenModalPin(true)}>
+                        Completar retiros pendientes
+                    </Button>
+                  }
+                  <Button
+                    onClick={handleCloseSesion}
+                    leftIcon={<FiLogOut />}
+                    mt={10}
+                    colorScheme="red"
+                    variant="ghost"
+                  >
+                    Cerrar sesión
+                  </Button>
+                </>
+              )}
             </GridItem>
             <GridItem
               borderRadius={20}
@@ -330,14 +347,14 @@ export default function miCuenta() {
                     </TabPanels>
                   )}
                   <TabPanel>
-                    <FormUser uuid={loginResponseData.uuid} />
+                    <FormUser uuid={loginResponseData && loginResponseData.uuid} />
                   </TabPanel>
                   {!hasAccount && (origin === 'client') &&
                       <TabPanel>No hay seguimiento registrado..</TabPanel>
                     }
                   {hasAccount && (origin === 'client') &&
                   <TabPanel>
-                    <Tracker uuid={loginResponseData.uuid} />
+                    <Tracker uuid={loginResponseData && loginResponseData.uuid} />
                   </TabPanel>
                   }
                   <TabPanel>{hasAccount && <RequestNewDisbursement data={loginResponseData} />}</TabPanel>
