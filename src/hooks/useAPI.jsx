@@ -8,7 +8,7 @@ const useAPI = () => {
     setLoading(true);
 
     try {
-      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const urlFetch = url.includes('http') ? url : process.env.NEXT_PUBLIC_BASEURL + url;
       const response = await fetch(urlFetch, {
         method: 'POST',
         headers: {
@@ -39,7 +39,7 @@ const useAPI = () => {
     setLoading(true);
 
     try {
-      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const urlFetch = url.includes('http') ? url : process.env.NEXT_PUBLIC_BASEURL + url;
       const response = await fetch(urlFetch);
 
       if (response.ok) {
@@ -63,7 +63,7 @@ const useAPI = () => {
     setLoading(true);
 
     try {
-      const urlFetch = process.env.NEXT_PUBLIC_BASEURL + url;
+      const urlFetch = url.includes('http') ? url : process.env.NEXT_PUBLIC_BASEURL + url;
       const response = await fetch(urlFetch, {
         method: 'PATCH',
         headers: {
