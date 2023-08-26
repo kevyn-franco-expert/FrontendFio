@@ -159,8 +159,8 @@ export default function miCuenta() {
           setErrorLists([])
           const regex = /\{(.*)\}/i;
           const dataModal = {
-            title: result.meta[title.match(regex)[1]] ? title.replace('{full_name}', result.meta[title.match(regex)[1]]) : title,
-            description: result.meta[description.match(regex)[1]] ? description.replace('{email}', result.meta[description.match(regex)[1]]) : description,
+            title: result.meta.title,
+            description: result.meta.description,
             subdescription: result.meta.subDescription
             // title: '¡Felicitaciones!',
             // description: 'Muchas gracias por la informacion, estamos validando tu pedido',
