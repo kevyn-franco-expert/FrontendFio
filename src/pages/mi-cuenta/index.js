@@ -157,6 +157,7 @@ export default function miCuenta() {
         const result = await postData(url, formReq);
         if (result && result.data) {
           setErrorLists([])
+          const regex = /\{(.*)\}/i;
           const dataModal = {
             title: result.meta[title.match(regex)[1]] ? title.replace('{full_name}', result.meta[title.match(regex)[1]]) : title,
             description: result.meta[description.match(regex)[1]] ? description.replace('{email}', result.meta[description.match(regex)[1]]) : description,
