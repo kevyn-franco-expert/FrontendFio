@@ -134,8 +134,10 @@ export default function miCuenta() {
   };
 
   const handleGetUserData = async (url) => {
-    const result = await getData(url); 
-    setAccountInformationData(result.data.attributes);
+    if (url) {
+      const result = await getData(url); 
+      setAccountInformationData(result.data.attributes);
+    }
   }
 
   const handleRequest = async () => {
