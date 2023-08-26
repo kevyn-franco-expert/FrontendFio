@@ -59,8 +59,11 @@ export default function requestNewDisbursement({data}) {
       }
       const result = await postData(url, disbursement, data.token);
       console.log(result); // Resultado de la API
-      setIfSendIt(true);
-      setOpenModalPin(true);
+      if (!result.errors) {
+        setIfSendIt(true);
+        setOpenModalPin(true);
+        setCanDisbursement(true)
+      }
     } catch (error) {
       console.error('Error en la solicitud POST:', error);
     }

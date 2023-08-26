@@ -92,7 +92,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
         </Heading>
         {(!noChanges) && 
           <Box w="100%" p={2} pt={6} pb={2}>
-              <SliderComponent min={min} max={max} step={50} defaultValue={defaultValueSlider ? defaultValueSlider : min} type='amount' valueSeted={setSliderValue} />
+              <SliderComponent min={min} max={defaultValueSlider ? defaultValueSlider : max} step={50} defaultValue={defaultValueSlider ? defaultValueSlider : min} type='amount' valueSeted={setSliderValue} />
           </Box>
         }
         <Box>

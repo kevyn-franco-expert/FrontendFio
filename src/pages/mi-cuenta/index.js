@@ -47,12 +47,16 @@ export default function miCuenta() {
   const [openModal, setOpenModal] = useState(false);
   const [loginResponseData, setLoginResponseData] = useState([]);
   const [accountInformationData, setAccountInformationData] = useState(null);
+  const [ifDisbursementIsTrue, setIfDisbursementIsTrue] = useState(false);
+  const [scheduleUrl, setScheduleUrl] = useState(null);
   const [openModalPin, setOpenModalPin] = useState(false);
   const [ifError, setIfError] = useState(false);
   const [ifSendIt, setIfSendIt] = useState(false);
   const { postData, getData } = useAPI();
 
   useEffect(() => {
+    setIfDisbursementIsTrue()
+    console.log('origin',origin)
     handleGetValidateData();
     if (Cookies.get('user-data')) {
       setLoginResponseData(JSON.parse(Cookies.get('user-data')));
@@ -112,7 +116,8 @@ export default function miCuenta() {
   const validatePin = async () => {
     setLoading(true)
     try {
-      const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWALS + loginResponseData.account_data.id + '/confirmation/'
+      
+      const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWALS + accountInformationData.submittedWithdrawals[0].id + '/confirmation/'
       const response = await fetch(url, {
         method: 'PATCH',
         headers: {
@@ -148,7 +153,12 @@ export default function miCuenta() {
         console.log(result);
         userInfo['account_data'] = result.data.account_data;
         userInfo['email_validated'] = result.data.email_validated;
+        userInfo['max'] = result.data.get_maximum_amount_withdrawn;
+        if (result.data.origin === 'user') {
+          userInfo['token'] = result.data.token;
+        }
         Cookies.set('user-data', JSON.stringify(userInfo))
+        Cookies.set('origin', result.data.origin)
     } catch (error) {
       console.error('Error en la solicitud POST:', error);
     }
@@ -159,6 +169,9 @@ export default function miCuenta() {
       const result = await getData(url); 
       if (result && !result.errors) {
         setAccountInformationData(result.data.attributes);
+        if (result.data.relationships) {
+          setScheduleUrl(result.data.relationships.scheduleSet.links.self);
+        }
       }
     }
   }
@@ -272,7 +285,7 @@ export default function miCuenta() {
                     {hasAccount && (origin === 'client') &&
                       <Tab> Seguimiento solicitud desembolso </Tab>
                     }
-                    <Tab isDisabled={application && origin !== 'user'}>
+                    <Tab isDisabled={accountInformationData && accountInformationData.submittedWithdrawals.length > 0 || (application && origin !== 'user')}>
                       Solicitar nuevo desembolso
                     </Tab>
                     <Tab isDisabled={application && origin !== 'user'}>Historial de préstamos</Tab>
@@ -360,7 +373,7 @@ export default function miCuenta() {
                   }
                   <TabPanel>{hasAccount && <RequestNewDisbursement data={loginResponseData} />}</TabPanel>
                   <TabPanel>{hasAccount && <LoanHistory data={loginResponseData} />}</TabPanel>
-                  <TabPanel>{hasAccount && <Cronograma data={loginResponseData} />}</TabPanel>
+                  <TabPanel>{hasAccount && <Cronograma scheduleData={scheduleUrl} data={loginResponseData} />}</TabPanel>
                 </TabPanels>
               )}
             </GridItem>

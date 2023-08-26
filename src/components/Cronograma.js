@@ -21,7 +21,7 @@ import {
 import useAPI from "@/hooks/useAPI";
 import Modals from "@/components/Modal";
 
-export default function Cronograma({data}) {
+export default function Cronograma({data, scheduleData}) {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(null);
   const [modalData, setModalData] = useState(null);
@@ -36,16 +36,42 @@ export default function Cronograma({data}) {
       payment_day: data.account_data.payment_day,
       no_change: true
     })
-    console.log('modalData',modalData)
-     const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_WITHDRAWN_HISTORY + data.uuid + '/'
      setLoading(true)
      try {
-         fetch(url)
-         .then(response => response.json())
-         .then(info => {
-          setHistory((info.data.withdrawals && info.data.withdrawals.length > 0) ? info.data.withdrawals : null);
-          setLoading(false)
-         })
+      setTimeout(() => {
+        // const url = el.attributes.totalAmount.split('S/. ')[1]
+        if (scheduleData) {
+          fetch(scheduleData)
+          .then(response => response.json())
+          .then(info => {
+          const miDeuda = info.data.reduce((acc, currentValue) => {
+          const elementExist = acc.find(el => el.attributes.scheduleDate === currentValue.attributes.scheduleDate);
+
+          if (elementExist) {
+            return acc.map((el) => {
+              if (el.attributes.scheduleDate === currentValue.attributes.scheduleDate) {
+                return {
+                  ...el,
+                  attributes: {
+                    totalAmount: 'S/. ' + (Number(el.attributes.totalAmount.split('S/. ')[1]) + Number(currentValue.attributes.totalAmount.split('S/. ')[1])),
+                    scheduleDate: el.attributes.scheduleDate
+                  }
+                }
+              }
+        
+              return el;
+            });
+          }
+          
+            return [...acc, currentValue];
+          }, []);
+          
+          console.log(miDeuda);
+          setHistory(miDeuda);
+           setLoading(false)
+          })
+        }
+      }, 5000);
      } catch (error) {
          console.error(error);
      }
@@ -67,9 +93,10 @@ export default function Cronograma({data}) {
             </Thead>
             <Tbody>
             {history && history.map((data, idx) => (
+              
               <Tr key={`${idx}-history`}>
-                <Td>{moment(data.created_at).format("DD/MM/YYYY")}</Td>
-                <Td>{data.due_date}</Td>
+                <Td>{data.attributes.scheduleDate}</Td>
+                <Td>{data.totalAmount ? 'S/. ' + data.totalAmount : data.attributes.totalAmount}</Td>
               </Tr>
             ))}
             </Tbody>
