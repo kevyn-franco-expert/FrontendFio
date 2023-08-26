@@ -272,11 +272,11 @@ export default function miCuenta() {
                     {hasAccount && (origin === 'client') &&
                       <Tab> Seguimiento solicitud desembolso </Tab>
                     }
-                    <Tab isDisabled={application}>
+                    <Tab isDisabled={application && origin !== 'user'}>
                       Solicitar nuevo desembolso
                     </Tab>
-                    <Tab isDisabled={application}>Historial de préstamos</Tab>
-                    <Tab isDisabled={application}>Cronograma de pagos</Tab>
+                    <Tab isDisabled={application && origin !== 'user'}>Historial de préstamos</Tab>
+                    <Tab isDisabled={application && origin !== 'user'}>Cronograma de pagos</Tab>
                     
                   </>
                 )}

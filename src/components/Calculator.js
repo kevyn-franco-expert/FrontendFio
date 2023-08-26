@@ -28,7 +28,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
   const [modeValue, setModeValue] = useState('monthly');
   const [showTable, setShowTable] = useState(false);
   const [paydayValue, setPaydayValue] = useState(null);
-  const [paydayValueFormat, setPaydayValueFormat] = useState(null);
+  const [paydayValueFormat, setPaydayValueFormat] = useState(20);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   
@@ -63,7 +63,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
     (async () => {
       try {
         setLoading(true)
-        if (sliderValue && modeValue && fieldValue && paydayValue) {
+        if (sliderValue && modeValue && fieldValue && paydayValueFormat) {
           const res = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}${process.env.NEXT_PUBLIC_API_SCHEDULES}/?fields[amount]=${sliderValue}&fields[mode]=${modeValue}&fields[value]=${fieldValue}&fields[day]=${paydayValueFormat}&fields[payment]=false`);
           const data = await res.json();
           calculatorValues(data);
