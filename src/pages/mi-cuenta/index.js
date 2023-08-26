@@ -158,9 +158,9 @@ export default function miCuenta() {
         if (result && result.data) {
           setErrorLists([])
           const dataModal = {
-            title: formData[title.match(regex)[1]] ? title.replace('{full_name}', formData[title.match(regex)[1]]) : title,
-            description: formData[description.match(regex)[1]] ? description.replace('{email}', formData[description.match(regex)[1]]) : description,
-            subdescription: sub_description
+            title: result.meta[title.match(regex)[1]] ? title.replace('{full_name}', result.meta[title.match(regex)[1]]) : title,
+            description: result.meta[description.match(regex)[1]] ? description.replace('{email}', result.meta[description.match(regex)[1]]) : description,
+            subdescription: result.meta.subDescription
             // title: '¡Felicitaciones!',
             // description: 'Muchas gracias por la informacion, estamos validando tu pedido',
             // subdescription: 'Te estaremos contactando por correo una vez validada la información.'
@@ -169,7 +169,7 @@ export default function miCuenta() {
           setModalData(dataModal);
           setOpenModal(true);
           setApplication(false);
-          Cookies.set("account", true, { expires: 7 })
+          Cookies.set("account", true, { expires: 1 })
           setHasAccount(true);
           setTabIndex(1)
         } else if (result && result.errors) {
