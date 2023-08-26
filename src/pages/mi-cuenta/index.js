@@ -147,6 +147,7 @@ export default function miCuenta() {
         const result = await postData(url, dataUser);
         console.log(result);
         userInfo['account_data'] = result.data.account_data;
+        userInfo['email_validated'] = result.data.email_validated;
         Cookies.set('user-data', JSON.stringify(userInfo))
     } catch (error) {
       console.error('Error en la solicitud POST:', error);
