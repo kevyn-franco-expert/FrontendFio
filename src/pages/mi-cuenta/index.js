@@ -53,10 +53,13 @@ export default function miCuenta() {
   const { postData, getData } = useAPI();
 
   useEffect(() => {
+    handleGetValidateData();
     if (Cookies.get('user-data')) {
       setLoginResponseData(JSON.parse(Cookies.get('user-data')));
       const urlUserInfo = JSON.parse(Cookies.get('user-data'));
-      handleGetUserData(urlUserInfo.account_data.account_info);
+      if (urlUserInfo.account_data.account_info) {
+        handleGetUserData(urlUserInfo.account_data.account_info);
+      }
       
       
     } else {
@@ -133,10 +136,29 @@ export default function miCuenta() {
     }
   };
 
+  const handleGetValidateData = async () => {
+      const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_VALIDATE_ACCOUNT;
+      const userInfo = JSON.parse(Cookies.get('user-data'));
+      const dataUser = {
+        document_number : userInfo.dni
+      };
+
+    try {
+        const result = await postData(url, dataUser);
+        console.log(result);
+        userInfo['account_data'] = result.data.account_data;
+        Cookies.set('user-data', JSON.stringify(userInfo))
+    } catch (error) {
+      console.error('Error en la solicitud POST:', error);
+    }
+  }
+
   const handleGetUserData = async (url) => {
     if (url) {
       const result = await getData(url); 
-      setAccountInformationData(result.data.attributes);
+      if (result && !result.errors) {
+        setAccountInformationData(result.data.attributes);
+      }
     }
   }
 
@@ -171,6 +193,7 @@ export default function miCuenta() {
           setOpenModal(true);
           setApplication(false);
           Cookies.set("account", true, { expires: 1 })
+          handleGetValidateData();
           setHasAccount(true);
           setTabIndex(1)
         } else if (result && result.errors) {
@@ -257,24 +280,7 @@ export default function miCuenta() {
                   </>
                 )}
               </TabList>
-              {!loading && (
-                <>
-                  {accountInformationData && accountInformationData.submittedWithdrawals.length > 0 &&
-                    <Button display={application ? 'none' : ''} mt={8} colorScheme="red"  onClick={() => setOpenModalPin(true)}>
-                        Completar retiros pendientes
-                    </Button>
-                  }
-                  <Button
-                    onClick={handleCloseSesion}
-                    leftIcon={<FiLogOut />}
-                    mt={10}
-                    colorScheme="red"
-                    variant="ghost"
-                  >
-                    Cerrar sesión
-                  </Button>
-                </>
-              )}
+              
             </GridItem>
             <GridItem
               borderRadius={20}

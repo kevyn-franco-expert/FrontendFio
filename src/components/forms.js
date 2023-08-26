@@ -119,7 +119,8 @@ export default function forms({formType, url}) {
             max: result.data.get_maximum_amount_withdrawn,
             min_days: result.data.get_minimum_days_withdrawn,
             account_data: result.data.account_data ? result.data.account_data : null,
-            email_validated: result.data.email_validated
+            email_validated: result.data.email_validated,
+            dni: values.document_number
           };
 
           SetCookie('user-data', JSON.stringify(JsonResult))

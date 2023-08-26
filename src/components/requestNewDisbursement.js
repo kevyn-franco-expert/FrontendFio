@@ -40,10 +40,10 @@ export default function requestNewDisbursement({data}) {
     
     
   const accountInfo = async () => {
-    if (data) {
+    if (data && Object.keys(data.account_data).length) {
       const accountInformation = await getData(data.account_data.account_info)
 
-      if (accountInformation.data.attributes.submittedWithdrawals.length === 0 && data.account_data.can_withdraw) {
+      if (!accountInformation.errors && accountInformation.data.attributes.submittedWithdrawals.length === 0 && data.account_data.can_withdraw) {
         setCanDisbursement(true)
       }
     }
