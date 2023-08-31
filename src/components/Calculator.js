@@ -47,7 +47,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
     if (payment_day) {
       setPaydayValueFormat(payment_day)
     } else {
-      setPaydayValueFormat((paydayValue && paydayValue.includes('/')) ? paydayValue.slice(0,2) : paydayValue)
+      setPaydayValueFormat((paydayValue) ? paydayValue.slice(0,2) : paydayValue)
     }
   
     const datos = {
@@ -117,7 +117,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
             </Box>
             </TabPanel>
             <TabPanel>
-            <Box pt={10} className="asd" minW={{base: '100%', md: '540px'}}>
+            <Box pt={10} minW={{base: '100%', md: '540px'}}>
               {/* Cuotas mes */}
               <Text color="black" as="p">
                 ¿En cuántas cuotas?
@@ -201,4 +201,5 @@ if (date.getMonth() === 11) {
 } else {
 
 }
-const payDay = [`05/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`, `20/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`];
+// const payDay = [`05/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`, `20/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`];
+const payDay = [`05`, `20`];

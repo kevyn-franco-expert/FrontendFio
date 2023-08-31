@@ -253,11 +253,91 @@ import {
                     {sendit && 
                         <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
                             <Text className='title-red' as='p' mb={0}>
+                                ¡Un paso más!
+                            </Text>
+                            <Center>
+                                <Text textAlign='center'>
+                                    Te hemos enviado un código de confirmación a tu Whatsapp. <br />
+                                    Ingrésalo desde tu Área de Clientes
+                                </Text>
+                            </Center>
+                            <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                                Cerrar
+                            </Button>
+                        </Flex>
+                    }
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
+    } else if (type === 'pin-complete') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalBody>
+                    {!sendit && 
+                        <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            {data && <>
+                                <Text className='title-red' as='p' mb={0}>
+                                {data.title ? data.title : 'Ingrese su código de 6 dígitos'}
+                                </Text>
+                                <Center>
+                                    <Text textAlign='center'>
+                                    {data && 
+                                    <>
+                                        {data.content ? data.content : 'Ingresa el código que fue enviado a tu whatsapp para realizar la transferencia'}
+                                    </>
+                                    }
+                                        
+                                    </Text>
+                                </Center>
+                            </>}
+                            {!data && 
+                            <>
+                                <Text className='title-red' as='p' mb={0}>
+                                    Ingrese su código de 6 dígitos
+                                </Text>
+                                <Center>
+                                    <Text textAlign='center'>
+                                    Ingresa el código que fue enviado a tu whatsapp para realizar la transferencia
+                                    </Text>
+                                </Center>
+                            </>
+                            }
+                            <Center>
+                                <HStack>
+                                    <PinInput type='number' onChange={setPinData}>
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                        <PinInputField />
+                                    </PinInput>
+                                </HStack>
+                            </Center>
+                            <Text display={isError ? '' : 'none'} color='red' textAlign='center'>
+                                {(isError && typeof isError !== 'boolean') ? isError : 'El campo Código es obligatorio'}
+                            </Text>
+                            <Button isDisabled={pinData.length < 6} size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={() => actionBtn(pinData)}>
+                                Validar
+                            </Button>
+                        </Flex>
+                    }
+
+                    {sendit && 
+                        <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
+                            <Text className='title-red' as='p' mb={0}>
                                 ¡Felicitaciones!
                             </Text>
                             <Center>
                                 <Text textAlign='center'>
-                                    Estamos completando su transferencia, le enviaremos un Whatsapp confirmando el depósito.
+                                    Estamos procesando tu solicitud<br />
+                                    Te notificaremos por Whatsapp cuando se haga efectivo el desembolso
                                 </Text>
                             </Center>
                             <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>

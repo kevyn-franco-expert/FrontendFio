@@ -13,15 +13,12 @@ import {
   Button,
   TableContainer,
   Text,
-  Flex,
-  Spacer,
-  Divider,
   Center
 } from "@chakra-ui/react";
 import useAPI from "@/hooks/useAPI";
 import Modals from "@/components/Modal";
 
-export default function Cronograma({data, scheduleData}) {
+export default function Cronograma({data, scheduleData, totalPay = 0}) {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(null);
   const [modalData, setModalData] = useState(null);
@@ -30,21 +27,16 @@ export default function Cronograma({data, scheduleData}) {
   useEffect(() => {
     setModalData({
       title:'Tu capital pendiente de pago es:',
-      capital_pending: data.account_data.capital_pending,
-      min: data.account_data.capital_pending,
-      max: data.account_data.capital_pending,
+      capital_pending: totalPay,
+      min: totalPay,
+      max: totalPay,
       payment_day: data.account_data.payment_day,
       no_change: true
     })
      setLoading(true)
      try {
-      setTimeout(() => {
-        // const url = el.attributes.totalAmount.split('S/. ')[1]
         if (scheduleData) {
-          fetch(scheduleData)
-          .then(response => response.json())
-          .then(info => {
-          const miDeuda = info.data.reduce((acc, currentValue) => {
+          const miDeuda = scheduleData.data.reduce((acc, currentValue) => {
           const elementExist = acc.find(el => el.attributes.scheduleDate === currentValue.attributes.scheduleDate);
 
           if (elementExist) {
@@ -69,13 +61,11 @@ export default function Cronograma({data, scheduleData}) {
           console.log(miDeuda);
           setHistory(miDeuda);
            setLoading(false)
-          })
         }
-      }, 5000);
      } catch (error) {
          console.error(error);
      }
-  }, [])
+  }, [scheduleData, totalPay])
   
   return (
     <>
@@ -103,7 +93,6 @@ export default function Cronograma({data, scheduleData}) {
           </Table>
         </TableContainer>
         {!history && <Text m={6}>No hay cronograma de pagos...</Text>}
-
         <Center>
           <Button onClick={() => setOpenModal(true)} mt={8} variant='outline' isLoading={loading} colorScheme="blue">
               SIMULA EL PAGO DE TU DEUDA

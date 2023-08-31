@@ -99,7 +99,7 @@ export default function requestNewDisbursement({data}) {
       <Modals type="update-info" isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} data={openModalData} type='pin' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <Container maxW="8xl">
-        <Text>Saldo disponible: <Badge colorScheme='green'>S/ {data.max}</Badge></Text><br/>
+        <Text>Saldo disponible: <Badge colorScheme='green'>S/ {data.account_data.capital_available}</Badge></Text><br/>
         <Text>Saldo Pendiente de pago: <Badge colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text>
         <Calculator payment_day={data.account_data.payment_day} defaultValueSlider={data.account_data.capital_available} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
         <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">

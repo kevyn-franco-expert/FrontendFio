@@ -33,7 +33,7 @@ export default function RadioCard(props) {
             {props.children} <CheckIcon />
           </Text>
           <Text fontSize='xs' display={subtitle ? '' : 'none'}>
-            el {day} de cada mes
+            de cada mes
           </Text>
         </Box>
       </Box>
