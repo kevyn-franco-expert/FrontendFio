@@ -10,7 +10,7 @@ import {
   Tr,
   Th,
   Td,
-  Button,
+  Badge,
   TableContainer,
   Text,
   Center
@@ -70,8 +70,11 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
   return (
     <>
       <Container maxW="8xl">
-        <Heading size="sm" color="black">
+        {/* <Heading size="sm" color="black">
             Cronograma de pagos
+        </Heading> */}
+        <Heading size="sm" color="black">
+            <Text>Tu deuda al día de hoy es:  <Badge fontSize='lg' pt={1} colorScheme='red'>S/ {totalPay}</Badge></Text>
         </Heading>
         <TableContainer display={history && history.length ? '' : 'none'} mt={8}>
           <Table variant="simple">
@@ -93,11 +96,11 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
           </Table>
         </TableContainer>
         {!history && <Text m={6}>No hay cronograma de pagos...</Text>}
-        <Center>
+        {/* <Center>
           <Button onClick={() => setOpenModal(true)} mt={8} variant='outline' isLoading={loading} colorScheme="blue">
               SIMULA EL PAGO DE TU DEUDA
           </Button>
-        </Center>
+        </Center> */}
       </Container>
       <Modals type='calculator' data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
     </>
