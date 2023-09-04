@@ -47,6 +47,7 @@ export default function miCuenta() {
   const [openModal, setOpenModal] = useState(false);
   const [loginResponseData, setLoginResponseData] = useState([]);
   const [accountInformationData, setAccountInformationData] = useState(null);
+  const [validationData, setValidationData] = useState(null);
   const [ifDisbursementIsTrue, setIfDisbursementIsTrue] = useState(false);
   const [scheduleUrl, setScheduleUrl] = useState(null);
   const [openModalPin, setOpenModalPin] = useState(false);
@@ -125,6 +126,7 @@ export default function miCuenta() {
   
 
   const refreshpage = () => {
+    console.log('refreshing page..')
     location.reload()
   }
 
@@ -166,6 +168,7 @@ export default function miCuenta() {
 
     try {
         const result = await postData(url, dataUser);
+        setValidationData(result.data);
         console.log(result);
         userInfo['account_data'] = result.data.account_data;
         userInfo['email_validated'] = result.data.email_validated;
@@ -226,13 +229,14 @@ export default function miCuenta() {
           setOpenModal(true);
           setApplication(false);
           Cookies.set("account", true, { expires: 1 })
+          Cookies.set('origin', 'client')
           handleGetValidateData();
           setHasAccount(true);
           setTabIndex(1)
-
-          setTimeout(() => {
-            refreshpage();
-          }, 4000);
+          handleGetUserData(loginResponseData.account_data.account_info);
+          // setTimeout(() => {
+          //   refreshpage();
+          // }, 4000);
         } else if (result && result.errors) {
             setErrorLists(result.errors)
             result.errors.forEach((error) => {
@@ -268,6 +272,7 @@ export default function miCuenta() {
 
   return (
     <>
+      <Modals actionBtn={refreshpage} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals type={modalType} actionBtn={refreshpage} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} isError={ifError} type='pin-complete' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <HeadTitle
@@ -306,13 +311,14 @@ export default function miCuenta() {
                       <Tab> Seguimiento solicitud desembolso </Tab>
                     }
                     <Tab isDisabled={accountInformationData && accountInformationData.submittedWithdrawals.length > 0 
-                      || accountInformationData && accountInformationData.available === 0 
+                      || accountInformationData && accountInformationData.available === 0
+                      || validationData && validationData.token === ''
                       || (application && origin !== 'user')
                       || ifDisbursementIsTrue}>
                       Solicitar nuevo desembolso
                     </Tab>
-                    <Tab isDisabled={application && origin !== 'user'}>Historial de préstamos</Tab>
-                    <Tab isDisabled={application && origin !== 'user'}>Cronograma de pagos</Tab>
+                    <Tab isDisabled={validationData && validationData.token === '' || application && origin !== 'user'}>Historial de préstamos</Tab>
+                    <Tab isDisabled={validationData && validationData.token === '' || application && origin !== 'user'}>Cronograma de pagos</Tab>
                   </>
                 )}
               </TabList>

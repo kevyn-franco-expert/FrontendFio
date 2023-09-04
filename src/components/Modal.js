@@ -18,7 +18,7 @@ import {
   import Calculator from "./Calculator";
   import React, { useState, useEffect } from "react";
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false }) => {
+  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false, overlayClick}) => {
       const [calculatorData, setCalculatorData] = useState('')
       const [calculatorValues, setCalculatorValues] = useState('')
       const [pinData, setPinData] = useState('')
@@ -354,10 +354,10 @@ import {
     } else {
         return (
             <>
-            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit} className='modalcomple'>
                 <ModalOverlay />
                 <ModalContent>
-                <ModalBody>
+                <ModalBody className='body'>
                     <Flex p={4} borderRadius={10} gap={10} justifyContent='center' flexDirection='column' alignItems='center'> 
                         <Text className='title-red' as='p'>
                             ¡Se realizó el registro con éxito!
@@ -368,7 +368,7 @@ import {
                             </Text>
                         </Center>
     
-                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={actionBtn}>
                     Cerrar
                     </Button>
                     </Flex>

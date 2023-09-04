@@ -26,7 +26,7 @@ export default function Layout({children}) {
           {children}
         <Footer data={footerData} />
         <div
-          class="fb-customerchat"
+          className="fb-customerchat"
           attribution="setup_tool"
           page_id="212500676154188"
           theme_color="#c7323e"
