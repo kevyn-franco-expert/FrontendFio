@@ -63,8 +63,13 @@ export default function miCuenta() {
       handleCloseSesion();
     }
 
-    if(origin === 'user') {
+    if (origin === 'user') {
       setTabIndex(0)
+    } else if (origin === 'client' && !application) {
+      setTabIndex(0)
+    }
+    else if (origin === 'client' && application) {
+      setTabIndex(1)
     }
 
     setHasAccount(Cookies.get("account") === 'true');
@@ -120,7 +125,7 @@ export default function miCuenta() {
   
 
   const refreshpage = () => {
-    router.reload();
+    location.reload()
   }
 
   const validatePin = async () => {
@@ -224,6 +229,10 @@ export default function miCuenta() {
           handleGetValidateData();
           setHasAccount(true);
           setTabIndex(1)
+
+          setTimeout(() => {
+            refreshpage();
+          }, 4000);
         } else if (result && result.errors) {
             setErrorLists(result.errors)
             result.errors.forEach((error) => {
@@ -259,7 +268,7 @@ export default function miCuenta() {
 
   return (
     <>
-      <Modals type={modalType} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
+      <Modals type={modalType} actionBtn={refreshpage} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} isError={ifError} type='pin-complete' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <HeadTitle
         title="Mi cuenta"
