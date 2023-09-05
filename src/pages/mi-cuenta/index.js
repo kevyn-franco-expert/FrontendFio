@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { FiLogOut } from "react-icons/fi";
 import FormUser from "@/components/formUser";
 import useAPI from '@/hooks/useAPI';
+import useSessionTimer from '@/hooks/useSessionTimer';
 import Modals from "@/components/Modal";
 import RequestNewDisbursement from '@/components/requestNewDisbursement';
 import LoanHistory from '@/components/LoanHistory';
@@ -54,6 +55,7 @@ export default function miCuenta() {
   const [ifError, setIfError] = useState(false);
   const [ifSendIt, setIfSendIt] = useState(false);
   const { postData, getData } = useAPI();
+  const { sessionTimer } = useSessionTimer();
 
   useEffect(() => {
     console.log('origin',origin)
@@ -79,42 +81,8 @@ export default function miCuenta() {
     } else {
       setApplication(true);
     }
-    setLoading(false);    
-    //session
-
-    const timeout = 1 * 60 * 1000; // 5 minutes
-    let inactivityTimer;
-
-    const resetTimer = () => {
-      clearTimeout(inactivityTimer);
-      console.log('inactivityTimer:' + inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        sessionStorage.clear();
-        alert('La sesión ha expirado debido a inactividad.');
-        SetCookie('user-data', '')
-        SetCookie('loggedIn', false);
-      }, timeout);
-    };
-
-    const SetCookie = (name, value) => {
-      Cookies.set(name, value, {
-        expires: 1,
-      });
-    };
-
-    // const handleUserActivity = () => {
-    //   console.log('activity reset')
-    //   resetTimer();
-    // };
-
-    // window.addEventListener('mousemove', handleUserActivity);
-    // window.addEventListener('keydown', handleUserActivity);
-
-    // return () => {
-    //   window.removeEventListener('mousemove', handleUserActivity);
-    //   window.removeEventListener('keydown', handleUserActivity);
-    // };
-
+    setLoading(false);
+    sessionTimer();
   }, []);
 
   useEffect(() => {
@@ -154,6 +122,7 @@ export default function miCuenta() {
         setLoading(false);
         setIfDisbursementIsTrue(false);
       }
+      handleGetUserData(loginResponseData.account_data.account_info);
     } catch (error) {
       console.error(error);
     }
@@ -272,8 +241,7 @@ export default function miCuenta() {
 
   return (
     <>
-      <Modals actionBtn={refreshpage} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
-      <Modals type={modalType} actionBtn={refreshpage} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
+      <Modals type={modalType} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} isError={ifError} type='pin-complete' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <HeadTitle
         title="Mi cuenta"
@@ -314,7 +282,8 @@ export default function miCuenta() {
                       || accountInformationData && accountInformationData.available === 0
                       || validationData && validationData.token === ''
                       || (application && origin !== 'user')
-                      || ifDisbursementIsTrue}>
+                      || accountInformationData && !accountInformationData.canWithdraw
+                      || ifDisbursementIsTrue }>
                       Solicitar nuevo desembolso
                     </Tab>
                     <Tab isDisabled={validationData && validationData.token === '' || application && origin !== 'user'}>Historial de préstamos</Tab>
@@ -399,7 +368,7 @@ export default function miCuenta() {
                     <Tracker uuid={loginResponseData && loginResponseData.uuid} />
                   </TabPanel>
                   }
-                  <TabPanel>{hasAccount && <RequestNewDisbursement data={loginResponseData} />}</TabPanel>
+                  <TabPanel>{hasAccount && <RequestNewDisbursement updateUserData={()=> {handleGetUserData(loginResponseData.account_data.account_info); setTabIndex(0)}} data={loginResponseData} />}</TabPanel>
                   <TabPanel>{hasAccount && <LoanHistory data={loginResponseData} />}</TabPanel>
                   <TabPanel>{hasAccount && <Cronograma scheduleData={scheduleUrl} data={loginResponseData} totalPay={accountInformationData && accountInformationData.payToday.total} />}</TabPanel>
                 </TabPanels>

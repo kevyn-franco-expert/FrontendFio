@@ -45,7 +45,7 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
                 return {
                   ...el,
                   attributes: {
-                    totalAmount: 'S/. ' + (Number(el.attributes.totalAmount.split('S/. ')[1]) + Number(currentValue.attributes.totalAmount.split('S/. ')[1])),
+                    totalAmount: 'S/. ' + (Number(el.attributes.totalAmount.split('S/. ')[1]) + Number(currentValue.attributes.totalAmount.split('S/. ')[1])).toFixed(2),
                     scheduleDate: el.attributes.scheduleDate
                   }
                 }

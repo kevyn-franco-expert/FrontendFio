@@ -10,7 +10,7 @@ import Modals from "@/components/Modal";
 import Calculator from "./Calculator";
 import Cookies from "js-cookie";
 
-export default function requestNewDisbursement({data}) {
+export default function requestNewDisbursement({data, updateUserData}) {
     const [calculatorData, setCalculatorData] = useState(null)
     const [calculatorValues, setCalculatorValues] = useState(null);
     const [openModal, setOpenModal] = useState(false);
@@ -63,6 +63,7 @@ export default function requestNewDisbursement({data}) {
         setIfSendIt(true);
         setOpenModalPin(true);
         setCanDisbursement(true)
+        updateUserData();
       }
     } catch (error) {
       console.error('Error en la solicitud POST:', error);

@@ -248,6 +248,7 @@ export default function forms({formType, url}) {
                 id="password"
                 name="password"
                 type="password"
+                autoComplete="new-password"
                 validate={(value) => {
                   let error;
 
