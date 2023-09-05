@@ -368,7 +368,7 @@ export default function miCuenta() {
                     <Tracker uuid={loginResponseData && loginResponseData.uuid} />
                   </TabPanel>
                   }
-                  <TabPanel>{hasAccount && <RequestNewDisbursement updateUserData={()=> {handleGetUserData(loginResponseData.account_data.account_info); setTabIndex(0)}} data={loginResponseData} />}</TabPanel>
+                  <TabPanel>{hasAccount && <RequestNewDisbursement firstDayFive={loginResponseData.firstDayFive} firstDayTwenty={loginResponseData.firstDayTwenty} updateUserData={()=> {handleGetUserData(loginResponseData.account_data.account_info); setTabIndex(0)}} data={loginResponseData} />}</TabPanel>
                   <TabPanel>{hasAccount && <LoanHistory data={loginResponseData} />}</TabPanel>
                   <TabPanel>{hasAccount && <Cronograma scheduleData={scheduleUrl} data={loginResponseData} totalPay={accountInformationData && accountInformationData.payToday.total} />}</TabPanel>
                 </TabPanels>

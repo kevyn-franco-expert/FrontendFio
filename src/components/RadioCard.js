@@ -1,6 +1,6 @@
 import { Box, useRadio, Text } from '@chakra-ui/react'
 import { CheckIcon } from '@chakra-ui/icons'
-
+import moment from "moment";
 
 export default function RadioCard(props) {
     const { getInputProps, getRadioProps } = useRadio(props)
@@ -30,10 +30,10 @@ export default function RadioCard(props) {
           className='month-selected'
         >
           <Text as='b' fontSize='lg'>
-            {props.children} <CheckIcon />
+            {props.children && props.children.includes('-') ? moment(props.children).format("DD/MM/YYYY") : props.children} <CheckIcon />
           </Text>
           <Text fontSize='xs' display={subtitle ? '' : 'none'}>
-            de cada mes
+           Los {props.children.split('-')[2]} de cada mes
           </Text>
         </Box>
       </Box>

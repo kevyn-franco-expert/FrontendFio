@@ -10,7 +10,7 @@ import Modals from "@/components/Modal";
 import Calculator from "./Calculator";
 import Cookies from "js-cookie";
 
-export default function requestNewDisbursement({data, updateUserData}) {
+export default function requestNewDisbursement({data, updateUserData, firstDayFive, firstDayTwenty}) {
     const [calculatorData, setCalculatorData] = useState(null)
     const [calculatorValues, setCalculatorValues] = useState(null);
     const [openModal, setOpenModal] = useState(false);
@@ -102,7 +102,7 @@ export default function requestNewDisbursement({data, updateUserData}) {
       <Container maxW="8xl">
         <Text>Saldo disponible: <Badge fontSize='lg' pt={1}  colorScheme='green'>S/ {data.account_data.capital_available}</Badge></Text><br/>
         <Text>Saldo Pendiente de pago: <Badge fontSize='lg' pt={1}  colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text>
-        <Calculator payment_day={data.account_data.payment_day} defaultValueSlider={data.account_data.capital_available} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+        <Calculator dayFive={firstDayFive} daytwenty={firstDayTwenty}  payment_day={data.account_data.payment_day} defaultValueSlider={data.account_data.capital_available} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
         <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">
             Solicitar nuevo Préstamo
         </Button>

@@ -33,6 +33,7 @@ const useSessionTimer = () => {
             if (tiempoInicial === 0) {
                 clearInterval(temporizador);
                 SetCookie('user-data', '')
+                SetCookie('id-account', '')
                 SetCookie('loggedIn', false);
                 toast({
                     position:'bottom-right',

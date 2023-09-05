@@ -38,34 +38,6 @@ export default function forms({formType, url}) {
   const [store] = useContext(StoreContext)
   const { section } = store;
 
-  // useEffect(() => {
-  //   const timeout = 5 * 60 * 1000; // 5 minutes
-  //   let inactivityTimer;
-
-  //   const resetTimer = () => {
-  //     clearTimeout(inactivityTimer);
-  //     inactivityTimer = setTimeout(() => {
-  //       sessionStorage.clear();
-  //       alert('La sesión ha expirado debido a inactividad.');
-  //       SetCookie('user-data', '')
-  //       SetCookie('loggedIn', false);
-  //     }, timeout);
-  //   };
-
-  //   const handleUserActivity = () => {
-  //     console.log('activity reset')
-  //     resetTimer();
-  //   };
-
-  //   window.addEventListener('mousemove', handleUserActivity);
-  //   window.addEventListener('keydown', handleUserActivity);
-
-  //   return () => {
-  //     window.removeEventListener('mousemove', handleUserActivity);
-  //     window.removeEventListener('keydown', handleUserActivity);
-  //   };
-  // }, []);
-
   const SetCookie = (name, value) => {
     Cookies.set(name, value, {
       expires: 1,
@@ -120,7 +92,9 @@ export default function forms({formType, url}) {
             min_days: result.data.get_minimum_days_withdrawn,
             account_data: result.data.account_data ? result.data.account_data : null,
             email_validated: result.data.email_validated,
-            dni: values.document_number
+            dni: values.document_number,
+            firstDayFive: result.data.first_day_five,
+            firstDayTwenty: result.data.first_day_twenty
           };
 
           SetCookie('user-data', JSON.stringify(JsonResult))

@@ -22,7 +22,7 @@ import RadioGroup from "./RadioGroup";
 import React, { useState, useEffect } from "react";
 import SliderComponent from "./SliderComponent";
 
-export default function Calculator({defaultValueSlider, noChanges = false, payment_day, calculatorValues, calculatorResult, min = 50, max = 2000, title = '¿Cuánto dinero necesitas?'}) {
+export default function Calculator({defaultValueSlider, noChanges = false, payment_day, calculatorValues, calculatorResult, min = 50, max = 2000, title = '¿Cuánto dinero necesitas?', dayFive = '2023-10-05', daytwenty = '2023-10-20'}) {
   const [sliderValue, setSliderValue] = useState(null);
   const [fieldValue, setFieldValue] = useState(null);
   const [modeValue, setModeValue] = useState('monthly');
@@ -31,6 +31,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
   const [paydayValueFormat, setPaydayValueFormat] = useState(20);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const payDay = [dayFive, daytwenty];
   
   useEffect(() => {
     if (payment_day) {
@@ -193,13 +194,4 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
 }
 
 
-const date = new Date();
 const months = ["1", "2", "3", "4", "5", "6"];
-// const payDay = [`05/10/2022`, `20/10/2022`];
-if (date.getMonth() === 11) {
-
-} else {
-
-}
-// const payDay = [`05/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`, `20/${date.getMonth() === 11 ? date.getMonth() + 1 : (date.getMonth() + 2)}/${date.getFullYear()}`];
-const payDay = [`05`, `20`];

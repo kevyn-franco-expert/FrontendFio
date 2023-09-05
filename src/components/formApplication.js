@@ -121,7 +121,7 @@ export default function formApplication({onFormData, errorsData, loginData = nul
             <Flex className={`input-position fill`}>3</Flex>
           </FormLabel>
           <Box boxShadow="base" p={6} borderRadius={10}>
-            <Calculator min={loginData.min} max={loginData.max} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+            <Calculator dayFive={loginData.firstDayFive} daytwenty={loginData.firstDayTwenty} min={loginData.min} max={loginData.max} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
             {errorsData.map((error) => (
             <>
               {(error.source.pointer.split('/')[3] === 'amount') ? <Text mt={2} color='red'>{error.detail} </Text> : ''}
