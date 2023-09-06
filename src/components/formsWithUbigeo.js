@@ -53,13 +53,13 @@ export default function formRegistro() {
 
   useEffect(() => {
     const scoreData = JSON.parse(Cookies.get('score'));
-    console.log(scoreData);
+    // console.log(scoreData);
     if(scoreData) {
       setFullNameData(scoreData.attributes.fullName);
       setDocumentNumberData(scoreData.attributes.documentNumber);
       setUUIDData(scoreData.attributes.uuid);
       setClientID(scoreData.id)
-      console.log("clientData", JSON.stringify(scoreData))
+      // console.log("clientData", JSON.stringify(scoreData))
     }
     
   }, [])
@@ -75,7 +75,7 @@ export default function formRegistro() {
     try {
       const result = await postData(url, resend);
 
-      console.log('resendResult', result);
+      // console.log('resendResult', result);
       if (result.errors) {
         result.errors.map((error) => {
           toast({

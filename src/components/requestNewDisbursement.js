@@ -29,7 +29,7 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
     
 
     useEffect(() => {
-      console.log(data)
+      // console.log(data)
       const PinContent = {
         title: 'Solo un paso más',
         content: 'Tu solicitud esta pendiente de confirmación. Ingresa el codigo enviado a tu Celular'
@@ -58,7 +58,7 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
             quotes: Number(calculatorValues.fields)
       }
       const result = await postData(url, disbursement, data.token);
-      console.log(result); // Resultado de la API
+      // console.log(result); // Resultado de la API
       if (!result.errors) {
         setIfSendIt(true);
         setOpenModalPin(true);
@@ -83,10 +83,6 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
       }
       const validationData = await response.json();
       if (validationData) {
-        console.log(JSON.stringify(validationData));
-        const userData = Cookies.get('user-data');
-        // userData['account_data']['can_withdraw'] = false
-        // SetCookie('user-data', userData);
         setIfSendIt(true);
         setLoading(false);
       }

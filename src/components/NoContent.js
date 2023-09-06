@@ -2,33 +2,33 @@ import React from "react";
 import {
   Heading,
   Container,
-  Highlight,
+  Image,
   Center,
   HStack,
-  Flex
+  Flex,
+  Text
 } from "@chakra-ui/react";
-import { CloseIcon } from '@chakra-ui/icons'
 
 export default function FormUser({data}) {
 
   return (
     <>
       <Container maxW="8xl">
-        <Flex placeContent='center' alignItems='center' gap='2' flexDirection='column' h='300px'>
-            <Center mb={10}>
-                <HStack bg='red' maxW='fit-content' p={2} borderRadius='100%'>
-                    <CloseIcon fontSize={50} p={2} color='white' />
+        <Flex placeContent='center' alignItems='center' gap='2' flexDirection='column' h={{base: '400px', sm: '300px'}}>
+            <Center mt={{base:5, sm: 16}}>
+                <HStack maxW='200px' p={2} borderRadius='100%'>
+                    <Image src='no-email.png' />
                 </HStack>
             </Center>
             <Center>
-                <Heading size='md' m={6}>
-                    <Highlight
-                        query='Email'
-                        styles={{ px: '4', py: '2', rounded: 'full', bg: 'red', color: 'white' }}
-                    >
-                        Deberás validar tu Email antes de completar esta solicitud
-                    </Highlight>
-                </Heading>
+              <Heading size='xl' m={3}>
+                      Ups..
+              </Heading>
+            </Center>
+            <Center>
+              <Text size='sm' m={6}>
+                  Deberás validar tu <b>Email</b> antes de completar esta solicitud
+              </Text>
             </Center>
         </Flex>
       </Container>

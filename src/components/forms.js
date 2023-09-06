@@ -67,7 +67,7 @@ export default function forms({formType, url}) {
 
 
   const logIn = async (values) => {
-    console.log('logged', values)
+    // console.log('logged', values)
     if (Cookies.get('loggedIn')) {
       router.push('/mi-cuenta')
     } else {
@@ -79,7 +79,6 @@ export default function forms({formType, url}) {
           SetCookie('origin', result.data.origin);
           SetCookie('client', result.data.client_id);
           SetCookie('account', result.data.has_account);
-
 
           const JsonResult = {
             token: result.data.token,
@@ -112,15 +111,6 @@ export default function forms({formType, url}) {
     }
   }
 
-  const handlePost = async (url, data) => {
-    try {
-      const result = await postData(url, data);
-      console.log(result); // Resultado de la API
-    } catch (error) {
-      console.error('Error en la solicitud POST:', error);
-    }
-  };
-
   const handleOnChange = (event) => {
     setFormRegisterData({
       fullName: event.target.name === 'fullName' ? event.target.value : '',
@@ -140,21 +130,6 @@ export default function forms({formType, url}) {
     }
     
   };
-
-
-  const validationSchema = Yup.object().shape({
-    fullName: Yup.string()
-    .matches(onlyCharacters, 'Solo se permiten caracteres y espacios')
-    .required('Campo requerido'),
-    documentNumber: Yup.string()
-    .matches(onlyNumbers, 'Solo se permiten numeros')
-    .required('Campo requerido'),
-    phone: Yup.string()
-    .matches(onlyNumbers, 'Solo se permiten numeros')
-    .required('Campo requerido'),
-    address: Yup.string()
-    .required('Campo requerido'),
-  });
 
   const validationSchemaBook = Yup.object().shape({
     name: Yup.string()

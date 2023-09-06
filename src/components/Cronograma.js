@@ -58,7 +58,6 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
             return [...acc, currentValue];
           }, []);
           
-          console.log(miDeuda);
           setHistory(miDeuda);
            setLoading(false)
         }

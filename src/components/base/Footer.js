@@ -80,7 +80,7 @@ export default function Footer({data}) {
                     <Text as="b">{contact.attributes.name}</Text>
                     <Text color="white">{contact.attributes.scheduleLabel}</Text>
                     <Text color="white">{contact.attributes.schedule}</Text>
-                    <Link href={`mailto:${contact.attributes.email}`}>{contact.attributes.email}</Link>
+                    <Link href={`mailto:${contact.attributes.email}`}>{contact.attributes.email}</Link> <br/>
                     <Link href={contact.attributes.redirectLink}>{contact.attributes.redirectName}</Link>
                   </>
                 )}

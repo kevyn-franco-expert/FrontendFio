@@ -58,7 +58,6 @@ export default function miCuenta() {
   const { sessionTimer } = useSessionTimer();
 
   useEffect(() => {
-    console.log('origin',origin)
     handleGetValidateData();
     if (Cookies.get('user-data')) {
       setLoginResponseData(JSON.parse(Cookies.get('user-data')));
@@ -82,19 +81,18 @@ export default function miCuenta() {
       setApplication(true);
     }
     setLoading(false);
-    sessionTimer();
+    // sessionTimer();
   }, []);
 
   useEffect(() => {
     if (loginResponseData.length !== 0 && loginResponseData.account_data.account_info) {
       handleGetUserData(loginResponseData.account_data.account_info);
-      console.log('loginResponseData', loginResponseData)
+      // console.log('loginResponseData', loginResponseData)
     }
   }, [loginResponseData])
   
 
   const refreshpage = () => {
-    console.log('refreshing page..')
     location.reload()
   }
 
@@ -117,7 +115,7 @@ export default function miCuenta() {
       }
       const validationData = await response.json();
       if (validationData) {
-        console.log(JSON.stringify(validationData));
+        // console.log(JSON.stringify(validationData));
         setIfSendIt(true);
         setLoading(false);
         setIfDisbursementIsTrue(false);
@@ -138,7 +136,7 @@ export default function miCuenta() {
     try {
         const result = await postData(url, dataUser);
         setValidationData(result.data);
-        console.log(result);
+        // console.log(result);
         userInfo['account_data'] = result.data.account_data;
         userInfo['email_validated'] = result.data.email_validated;
         userInfo['max'] = result.data.get_maximum_amount_withdrawn;
@@ -158,7 +156,7 @@ export default function miCuenta() {
       const result = await getData(url); 
       if (result && !result.errors) {
         setAccountInformationData(result.data.attributes);
-        console.log('accountInformationData', result.data.attributes)
+        // console.log('accountInformationData', result.data.attributes)
         if (result.data.relationships) {
           const scheduleInfo = await getData(result.data.relationships.scheduleSet.links.self); 
           setScheduleUrl(scheduleInfo);

@@ -48,16 +48,15 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
     if (payment_day) {
       setPaydayValueFormat(payment_day)
     } else {
-      setPaydayValueFormat((paydayValue) ? paydayValue.slice(0,2) : paydayValue)
+      setPaydayValueFormat((paydayValue) ? paydayValue.split('-')[2] : paydayValue)
     }
-  
+
     const datos = {
       amount: sliderValue, //monto
       mode: modeValue, //monthly or daily
       fields: fieldValue, //cuota
       payDay: paydayValueFormat, //dia de pago
     };
-    // console.log(datos)
 
     calculatorResult(datos);
 
@@ -73,13 +72,11 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
           setLoading(false);
         }
       } catch (err) {
-        // console.log(err);
         setShowTable(false)
       }
     
     })();
 
-    // console.log('paydayValue ', paydayValue);
   }, [sliderValue, modeValue, fieldValue, paydayValue, paydayValueFormat]);
 
   return (
