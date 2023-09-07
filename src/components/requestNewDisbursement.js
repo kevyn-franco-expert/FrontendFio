@@ -10,7 +10,7 @@ import Modals from "@/components/Modal";
 import Calculator from "./Calculator";
 import Cookies from "js-cookie";
 
-export default function requestNewDisbursement({data, updateUserData, firstDayFive, firstDayTwenty}) {
+export default function requestNewDisbursement({data, updateUserData, firstDayFive, firstDayTwenty, capitalRequested = 0}) {
     const [calculatorData, setCalculatorData] = useState(null)
     const [calculatorValues, setCalculatorValues] = useState(null);
     const [openModal, setOpenModal] = useState(false);
@@ -18,8 +18,9 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
     const [openModalPin, setOpenModalPin] = useState(false);
     const [openModalData, setOpenModalData] = useState(null);
     const [ifSendIt, setIfSendIt] = useState(false);
+    const [realCapital, setRealCapital] = useState(0);
     const [canDisbursement, setCanDisbursement] = useState(false);
-    const { errorData, postData, getData } = useAPI();
+    const { postData, getData } = useAPI();
 
     const SetCookie = (name, value) => {
       Cookies.set(name, value, {
@@ -29,6 +30,15 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
     
 
     useEffect(() => {
+      if (capitalRequested !== 0) {
+        const result = Number(data.account_data.capital_available) - Number(capitalRequested)
+        setRealCapital(result.toFixed(0))
+      } else {
+        setRealCapital(data.account_data.capital_available)
+      }
+    }, [capitalRequested, data])
+    
+    useEffect(() => {
       // console.log(data)
       const PinContent = {
         title: 'Solo un paso más',
@@ -37,7 +47,6 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
       setOpenModalData(PinContent);
       accountInfo();
     }, [])
-    
     
   const accountInfo = async () => {
     if (data && Object.keys(data.account_data).length) {
@@ -96,9 +105,9 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
       <Modals type="update-info" isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} data={openModalData} type='pin' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <Container maxW="8xl">
-        <Text>Saldo disponible: <Badge fontSize='lg' pt={1}  colorScheme='green'>S/ {data.account_data.capital_available}</Badge></Text><br/>
+        <Text>Saldo disponible: <Badge fontSize='lg' pt={1}  colorScheme='green'>S/ {realCapital}</Badge></Text><br/>
         <Text>Saldo Pendiente de pago: <Badge fontSize='lg' pt={1}  colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text>
-        <Calculator dayFive={firstDayFive} daytwenty={firstDayTwenty}  payment_day={data.account_data.payment_day} defaultValueSlider={data.account_data.capital_available} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+        <Calculator dayFive={firstDayFive} daytwenty={firstDayTwenty}  payment_day={data.account_data.payment_day} defaultValueSlider={realCapital} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
         <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">
             Solicitar nuevo Préstamo
         </Button>

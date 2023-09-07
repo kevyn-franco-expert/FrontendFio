@@ -63,8 +63,8 @@ export default function FormUser({data}) {
                 <Td>{data.due_date}</Td>
                 <Td isNumeric>{data.amount}</Td>
                 <Td color={data.status === 'WITHDRAWN' ? 'yellow.600' : data.status === 'PAID' ? 'green' : 'red'}>{statusWithdrawn[data.status]}</Td>
-                <Td isNumeric>{data.paid_capital}</Td>
-                <Td isNumeric>{data.pending_capital}</Td>
+                <Td isNumeric>{data.paid_capital.toFixed(2)}</Td>
+                <Td isNumeric>{data.pending_capital.toFixed(2)}</Td>
               </Tr>
             ))}
             </Tbody>
