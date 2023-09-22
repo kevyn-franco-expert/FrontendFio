@@ -33,6 +33,8 @@ export default function formRegistro() {
   const [UUIDData, setUUIDData] = useState("");
   const [clientID, setClientID] = useState("");
   const [modalData, setModalData] = useState({});
+  const [careersChoices, setCareersChoices] = useState([]);
+  const [careerSelected, setCareerSelected] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [store] = useContext(StoreContext)
   const { user } = store;
@@ -61,9 +63,18 @@ export default function formRegistro() {
       setClientID(scoreData.id)
       // console.log("clientData", JSON.stringify(scoreData))
     }
+    careers();
     
   }, [])
 
+  const careers = async () => {
+    const url =
+    process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_HOME;
+    const res = await fetch(url);
+    const home = await res.json();
+    const { data } = home;
+    setCareersChoices(data[0].attributes.careers);
+  }
   const reSend = async () => {
     const url = process.env.NEXT_PUBLIC_API_EMAIL;
     const resend = {
@@ -110,6 +121,7 @@ export default function formRegistro() {
               mobile: phoneData,
               district: Number(selectedDistrict),
               address: addressData,
+              career: careerSelected,
               opt_in: 1
         }
       try {
@@ -126,9 +138,9 @@ export default function formRegistro() {
         }
 
         const regex = /\{(.*)\}/i;
-        const title = result.meta.message.title;
-        const description = result.meta.message.description;
-        const sub_description = result.meta.message.sub_description;
+        const title = !result.errors ? result.meta.message.title : '';
+        const description = !result.errors ? result.meta.message.description : '';
+        const sub_description = !result.errors ? result.meta.message.sub_description : '';
 
         if (!result.errors) {
           const dataModal = {
@@ -141,9 +153,19 @@ export default function formRegistro() {
         }
       } catch (error) {
         console.error('Error en la solicitud POST:', error);
+        toast({
+          title: 'Error Interno, intente más tarde',
+          status: 'error',
+          isClosable: true,
+        })
       }
     }
   };
+
+  const goHome = () => {
+    window.location.href = "/"
+    console.log('redireccionando a home...')
+  }
 
   const handleInputChange = (event) => {
     if (event.target.name === "department") {
@@ -170,7 +192,7 @@ export default function formRegistro() {
   return (
     <>
       <form className="formik-form" onSubmit={handleOnSubmit}>
-        <Modals type="pre-register" data={modalData} isOpenit={openModal} actionBtn={reSend} onCloseit={() => setOpenModal(false)} />
+        <Modals overlayClick={goHome} type="pre-register" data={modalData} isOpenit={openModal} actionBtn={reSend} onCloseit={() => setOpenModal(false)} />
         <VStack spacing={4} align="flex-start">
           <FormControl>
             <FormLabel></FormLabel>
@@ -339,10 +361,35 @@ export default function formRegistro() {
             />
           </FormControl>
           <FormControl>
+            <FormLabel htmlFor="career">
+              <Flex
+                className={`input-position ${careerSelected ? "fill" : ""}`}
+              >
+                9
+              </Flex>
+              Profesión
+            </FormLabel>
+            <Select
+              id="career"
+              name="career"
+              className="select-input"
+              value={careerSelected}
+              onChange={(e) => setCareerSelected(e.target.value)}
+            >
+              <option value="">Seleccionar Profesión</option>
+              {careersChoices && careersChoices.map((career, index) => (
+                <option key={index} value={career}>
+                  {career}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
             <Checkbox
               id="terms"
               name="terms"
               colorScheme="red"
+              borderColor='#e2474b'
               size="lg"
               my={4}
               onChange={handleInputChange}

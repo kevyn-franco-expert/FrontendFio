@@ -6,7 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
+  Divider,
   Tr,
   Th,
   Td,
@@ -20,6 +20,7 @@ import Cookies from 'js-cookie';
 export default function FormUser({data}) {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState(null);
+  const [payments, setPayments] = useState(null);
 
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function FormUser({data}) {
          .then(response => response.json())
          .then(data => {
              setHistory(data.data.withdrawals);
+             setPayments(data.data.payments);
          })
      } catch (error) {
          console.error(error);
@@ -61,10 +63,37 @@ export default function FormUser({data}) {
               <Tr key={`${idx}-history`}>
                 <Td>{moment(data.created_at).format("DD/MM/YYYY")}</Td>
                 <Td>{data.due_date}</Td>
-                <Td isNumeric>{data.amount}</Td>
+                <Td isNumeric>S/. {data.amount}</Td>
                 <Td color={data.status === 'WITHDRAWN' ? 'yellow.600' : data.status === 'PAID' ? 'green' : 'red'}>{statusWithdrawn[data.status]}</Td>
                 <Td isNumeric>{data.paid_capital.toFixed(2)}</Td>
                 <Td isNumeric>{data.pending_capital.toFixed(2)}</Td>
+              </Tr>
+            ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <Divider my={10} />
+
+        <Heading mt={10} size="sm" color="black">
+            Pagos realizados
+        </Heading>
+        <TableContainer mt={8}>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Banco</Th>
+                <Th>Fecha transacción</Th>
+                <Th textAlign='center'>Monto</Th>
+                <Th textAlign='center'>Numero de transacción</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+            {payments && payments.map((data, idx) => (
+              <Tr key={`${idx}-history`}>
+                <Td>{data.bank}</Td>
+                <Td>{moment(data.transaction_date).format("DD/MM/YYYY")}</Td>
+                <Td isNumeric>S/. {data.amount}</Td>
+                <Td textAlign='center'>{data.transaction_number}</Td>
               </Tr>
             ))}
             </Tbody>

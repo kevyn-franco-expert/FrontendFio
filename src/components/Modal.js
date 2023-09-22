@@ -13,15 +13,26 @@ import {
     Link,
     HStack,
     PinInput, 
-    PinInputField
+    PinInputField,
+    useOutsideClick 
   } from '@chakra-ui/react'
   import Calculator from "./Calculator";
   import React, { useState, useEffect } from "react";
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false, overlayClick}) => {
+  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false, overlayClick = null}) => {
       const [calculatorData, setCalculatorData] = useState('')
       const [calculatorValues, setCalculatorValues] = useState('')
       const [pinData, setPinData] = useState('')
+    //   const ref = React.useRef()
+
+    //   useOutsideClick({
+    //     ref: ref,
+    //     handler: () => {
+    //         if (overlayClick) {
+    //             overlayClick()
+    //         }
+    //     }
+    //   })
 
     if (type === 'pre-register') {
         return (

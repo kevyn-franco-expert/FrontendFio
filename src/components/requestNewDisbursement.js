@@ -107,7 +107,7 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
       <Container maxW="8xl">
         <Text>Saldo disponible: <Badge fontSize='lg' pt={1}  colorScheme='green'>S/ {realCapital}</Badge></Text><br/>
         <Text>Saldo Pendiente de pago: <Badge fontSize='lg' pt={1}  colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text>
-        {data.account_data.capital_requested !== 0 && <Text>Monto solicitado pendiente de aprobacion: <Badge fontSize='lg' pt={1}  colorScheme='yellow'>S/ {data.account_data.capital_requested}</Badge></Text>}
+        <Text display={data.account_data.capital_requested ? '' : 'none'}>Monto solicitado pendiente de aprobacion: <Badge fontSize='lg' pt={1}  colorScheme='yellow'>S/ {data.account_data.capital_requested}</Badge></Text>
         <Calculator dayFive={firstDayFive} daytwenty={firstDayTwenty}  payment_day={data.account_data.payment_day} defaultValueSlider={realCapital} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
         <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">
             Solicitar nuevo Préstamo
