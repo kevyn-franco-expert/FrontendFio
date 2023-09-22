@@ -55,7 +55,7 @@ export default function Tips({features}){
             color="gray.600"
             _dark={{ color: "gray.400" }}
             >
-            Lorem  ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            Lo que se necesita para solicitar un préstamo FIO es lo siguiente:
             </chakra.p>
       <SimpleGrid
         columns={1}

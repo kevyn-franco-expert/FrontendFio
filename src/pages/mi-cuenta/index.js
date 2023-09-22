@@ -91,11 +91,6 @@ export default function miCuenta() {
     }
   }, [loginResponseData])
   
-
-  const refreshpage = () => {
-    location.reload()
-  }
-
   const validatePin = async () => {
     setLoading(true)
     try {
@@ -128,12 +123,13 @@ export default function miCuenta() {
 
   const handleGetValidateData = async () => {
       const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_VALIDATE_ACCOUNT;
-      const userInfo = JSON.parse(Cookies.get('user-data'));
+      const userInfo = Cookies.get('user-data') ? JSON.parse(Cookies.get('user-data')) : null;
       const dataUser = {
-        document_number : userInfo.dni
+        document_number : userInfo ? userInfo.dni : null
       };
 
     try {
+      if (userInfo) {
         const result = await postData(url, dataUser);
         setValidationData(result.data);
         // console.log(result);
@@ -146,6 +142,9 @@ export default function miCuenta() {
         Cookies.set('user-data', JSON.stringify(userInfo))
         Cookies.set('origin', result.data.origin)
         Cookies.set('id-account', result.data.account_data.id)
+      } else {
+        router.push('/login')
+      }
     } catch (error) {
       console.error('Error en la solicitud POST:', error);
     }
@@ -234,7 +233,16 @@ export default function miCuenta() {
     Cookies.remove("account");
     Cookies.remove("client");
     Cookies.remove("user-data");
-    router.push("/login");
+    toast({
+      position:'bottom-right',
+      title: 'Se ha cerrado la sesión',
+      description: "Redireccionando a login...",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    // router.push("/login");
+    window.location.href = "/login"
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { chakra, Box, SimpleGrid, Flex, Image } from "@chakra-ui/react";
 
-export default function Benefits({benefits}){
+export default function Benefits({benefits, cols = 3}){
   const Benefit = (props) => {
     return (
       <Box p={3} borderRadius='lg' flexDirection={{base: 'row', md: 'column'}} display='flex' alignItems='center' justifyContent='start' gap={{base: 3, md: 4}} my={4}>
@@ -37,7 +37,7 @@ export default function Benefits({benefits}){
       zIndex={2}
     >
       <SimpleGrid
-        columns={{base: 1, md: 3}}
+        columns={{base: 1, md: cols}}
         px={2}
         py={3}
         mx="auto"

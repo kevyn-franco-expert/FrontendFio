@@ -2,13 +2,14 @@ import { NextResponse, NextRequest } from "next/server";
 
 export default function middleware(req) {
     const verify = req.cookies.get('loggedIn');
+    const userData = req.cookies.get('user-data');
     const score = req.cookies.get('score');
     const url = req.url;
     if (verify && url.includes('/login')) {
         return NextResponse.redirect(process.env.NEXT_PUBLIC_MIDDLEWARE_BASEURL + '/mi-cuenta')
     }
 
-    if (!verify && url.includes('/mi-cuenta')) {
+    if (!verify && url.includes('/mi-cuenta') || !userData && url.includes('/mi-cuenta')) {
         return NextResponse.redirect(process.env.NEXT_PUBLIC_MIDDLEWARE_BASEURL + '/login')
     }
 

@@ -177,12 +177,19 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
               </Table>
             </TableContainer>
             <Text color='gray'>
-              *Los intereses cobrados son por un día. 
+              * Los montos que visualiza están calculados en base a la fecha que se realiza la simulación
             </Text>
             <Text color='gray'>
-            **Adelanta tus pagos sin
+              ** Considerar horario de atención para su solicitud de 9:00 am a 6:00 pm
+            </Text>
+            {/* <Text color='gray'>
+              ***Los intereses cobrados son por un día. 
+            </Text>
+            <Text color='gray'>
+              ****Adelanta tus pagos sin
               costo extra y ahorra dinero.
             </Text>
+             */}
           </>
         )}
       </Stack>

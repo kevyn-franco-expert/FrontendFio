@@ -31,23 +31,25 @@ export default function FormUser({uuid}) {
   }, [phoneData,emailData])
   
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_INFO_CLIENT + uuid + '/'
-    setLoading(true)
-    try {
-        fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-              const info = data.data.data;
-              setInfoClient(info);
-              setFullname(info.name + ' ' + info.last_name_father + ' ' + info.last_name_mother)
-              setPhoneData(info.mobile)
-              setEmailData(info.email)
-            }
-            setLoading(false)
-        })
-    } catch (error) {
-        console.error(error);
+    if (uuid) {
+      const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_INFO_CLIENT + uuid + '/'
+      setLoading(true)
+      try {
+          fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              if (data) {
+                const info = data.data.data;
+                setInfoClient(info);
+                setFullname(info.name + ' ' + info.last_name_father + ' ' + info.last_name_mother)
+                setPhoneData(info.mobile)
+                setEmailData(info.email)
+              }
+              setLoading(false)
+          })
+      } catch (error) {
+          console.error(error);
+      }
     }
 }, []);
 

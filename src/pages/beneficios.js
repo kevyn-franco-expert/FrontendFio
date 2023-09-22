@@ -22,11 +22,11 @@ export default function BenefitsPage() {
                 <Heading className='title-highlight blue' as='h1' size='2xl' mb={10}>¿CÓMO FUNCIONA?</Heading>
 
                 <Text as='p' textAlign='center' px={5} mb={10}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fug
+                  Obtén tu préstamo 100% online teniendo en cuenta los siguientes pasos
                 </Text>
                 <Flex justifyContent='center' alignItems='center' flexWrap='wrap' gap={5}>
-                    <Box maxW='xl' display={{base: 'none', md: 'flex'}} className='line-trought'></Box>
-                    <Benefits benefits={howWorks} />
+                    <Box maxW='3xl' display={{base: 'none', md: 'flex'}} className='line-trought'></Box>
+                    <Benefits cols={4} benefits={howWorks} />
                 </Flex>
             </Container>
         </Box>
@@ -58,6 +58,10 @@ const howWorks = [
     {
       image: 'registro.jpg',
       content: 'Registra tus datos'
+    },
+    {
+      image: 'facial-recognition.png',
+      content: 'Reconocimiento Facial'
     },
     {
       image: 'check.jpg',

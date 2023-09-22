@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { GrInstagram } from "react-icons/gr";
-import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
 import { FiTwitter } from "react-icons/fi";
 
 export default function Footer({data}) {
@@ -88,7 +88,7 @@ export default function Footer({data}) {
               ))}
               <VStack py={3}>
                 <HStack justify="center" gap={2}>
-                  <Link className="social-icons">
+                  <Link href='https://www.facebook.com/Fioprestamos/' className="social-icons">
                     <Icon
                       _dark={{ color: "white" }}
                       h="20px"
@@ -96,7 +96,7 @@ export default function Footer({data}) {
                       as={FaFacebookF}
                     />
                   </Link>
-                  <Link className="social-icons">
+                  <Link href="https://twitter.com/FioPrestamos" className="social-icons">
                     <Icon
                       _dark={{ color: "white" }}
                       h="20px"
@@ -104,7 +104,7 @@ export default function Footer({data}) {
                       as={FiTwitter}
                     />
                   </Link>
-                  <Link className="social-icons">
+                  <Link href='https://www.instagram.com/fio.prestamos' className="social-icons">
                     <Icon
                       _dark={{ color: "white" }}
                       h="20px"
@@ -112,14 +112,21 @@ export default function Footer({data}) {
                       as={GrInstagram}
                     />
                   </Link>
-                  <Link className="social-icons">
+                  
+                  {data && data.included.map((contact, index) => (
+                <Box display={contact.type !== 'ContactInfo' ? 'none' : '' } key={index}>
+                {contact.type === 'ContactInfo' && (
+                  <Link href={contact.attributes.redirectLink} className="social-icons">
                     <Icon
                       _dark={{ color: "white" }}
                       h="20px"
                       w="20px"
-                      as={FaLinkedinIn}
+                      as={FaWhatsapp}
                     />
                   </Link>
+                )}
+                </Box>
+                  ))}
                 </HStack>
               </VStack>
             </Flex>
@@ -140,7 +147,7 @@ export default function Footer({data}) {
           </Flex>
           <Box>
             <Text color="white" maxW={400}>
-              Capital Tech Latam es una empresa registrada en la UIF de la
+              FIO PERÚ es una empresa registrada en la UIF de la
               Superintendencia de Banca, Seguros y AFP
             </Text>
           </Box>

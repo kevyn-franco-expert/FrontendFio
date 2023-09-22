@@ -8,21 +8,15 @@ const useSessionTimer = () => {
     const toast = useToast();
     const sessionTimer = () => {
     // Establecemos el tiempo inicial en segundos
-    let tiempoInicial = 5 * 60; // 5 minutos
+    let tiempoInicial = 1 * 60; // 1 minuto
 
     // Creamos una variable para el temporizador
     let temporizador;
 
-    const SetCookie = (name, value) => {
-      Cookies.set(name, value, {
-        expires: 1,
-      });
-    };
-
     // Función para reiniciar el temporizador
     const reiniciarTemporizador = () => {
         clearInterval(temporizador);
-        tiempoInicial = 5 * 60;
+        tiempoInicial = 1 * 60;
         iniciarTemporizador();
     }
 
@@ -30,11 +24,15 @@ const useSessionTimer = () => {
     const iniciarTemporizador = () => {
         temporizador = setInterval(() => {
             tiempoInicial--;
+            console.log(tiempoInicial)
             if (tiempoInicial === 0) {
                 clearInterval(temporizador);
-                SetCookie('user-data', '')
-                SetCookie('id-account', '')
-                SetCookie('loggedIn', false);
+                Cookies.remove("loggedIn");
+                Cookies.remove("origin");
+                Cookies.remove("token");
+                Cookies.remove("account");
+                Cookies.remove("client");
+                Cookies.remove("user-data");
                 toast({
                     position:'bottom-right',
                     title: 'Se ha cerrado la sesión',
@@ -44,6 +42,7 @@ const useSessionTimer = () => {
                     isClosable: true,
                 });
                 router.push('/login')
+                // window.location.href = "/login"
             }
         }, 1000);
     }
