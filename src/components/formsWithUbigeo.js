@@ -38,6 +38,7 @@ export default function formRegistro() {
   const [openModal, setOpenModal] = useState(false);
   const [store] = useContext(StoreContext)
   const { user } = store;
+ 
   const {
     departaments,
     provinces,

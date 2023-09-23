@@ -13,33 +13,22 @@ import {
     Link,
     HStack,
     PinInput, 
-    PinInputField,
-    useOutsideClick 
+    PinInputField
   } from '@chakra-ui/react'
   import Calculator from "./Calculator";
-  import React, { useState, useEffect } from "react";
+  import React, { useState } from "react";
   import { ChevronLeftIcon } from '@chakra-ui/icons'
-  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false, overlayClick = null}) => {
+  const Modals = ({ isOpenit, onCloseit, actionBtn, data = null, type = 'thankyou', sendit = false, isError = false, overlayClick = null, ref}) => {
       const [calculatorData, setCalculatorData] = useState('')
       const [calculatorValues, setCalculatorValues] = useState('')
       const [pinData, setPinData] = useState('')
-    //   const ref = React.useRef()
-
-    //   useOutsideClick({
-    //     ref: ref,
-    //     handler: () => {
-    //         if (overlayClick) {
-    //             overlayClick()
-    //         }
-    //     }
-    //   })
 
     if (type === 'pre-register') {
         return (
             <>
-            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+            <Modal closeOnOverlayClick={false} isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent className='modal-click-outside'>
                 <ModalBody>
                     <Flex p={8} borderRadius={10} gap={5} justifyContent='center' flexDirection='column' alignItems='center'> 
                         <Text className='title-red' as='p'>
@@ -75,7 +64,7 @@ import {
     } else if (type === 'congrats') {
         return (
             <>
-            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
+            <Modal closeOnOverlayClick={false} isOpen={isOpenit} size={'xl'} onClose={onCloseit}>
                 <ModalOverlay />
                 <ModalContent>
                 <ModalBody>
