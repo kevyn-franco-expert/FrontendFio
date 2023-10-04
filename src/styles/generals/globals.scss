@@ -1,3 +1,9 @@
+.radio-list-fix{
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    max-width: 100% !important;
+}
 .radio-list {
     gap: 10px;
     margin-top: 10px;
@@ -16,7 +22,7 @@
                 gap: 1px;
                 padding: 5px!important;
             }
-    
+
             svg {
                 background-color: var(--gray-color);
                 border-radius: 100%;
@@ -31,7 +37,7 @@
             }
         }
     }
-    
+
     &.bigger {
         .month {
             &-selected {

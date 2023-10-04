@@ -82,7 +82,7 @@ import {
                             {data.subdescription}
                             </Text>
                         </Center>
-                    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={actionBtn}>
+                    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
                         Cerrar
                     </Button>
                     </Flex>

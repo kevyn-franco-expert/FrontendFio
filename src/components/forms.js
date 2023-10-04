@@ -221,6 +221,9 @@ export default function forms({formType, url}) {
                 <Text color='red' align='center' mt={3}>{errorLogin}</Text>
               </AbsoluteCenter>
             </Box>
+            <Center height='50px'>
+              <Divider />
+            </Center>
           </VStack>
         </form>
       )}
