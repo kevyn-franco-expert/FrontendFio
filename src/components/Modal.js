@@ -45,9 +45,9 @@ import {
                             </Text>
                         </Center>
     
-                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={actionBtn}>
-                    Reenviar Correo
-                    </Button>
+                    {/*    <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={actionBtn}>*/}
+                    {/*Reenviar Correo*/}
+                    {/*</Button>*/}
                     <Link
                     color='gray.500'
                     href='/'
