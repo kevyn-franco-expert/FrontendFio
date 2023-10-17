@@ -6,14 +6,12 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   Badge,
   TableContainer,
-  Text,
-  Center
+  Text
 } from "@chakra-ui/react";
 import useAPI from "@/hooks/useAPI";
 import Modals from "@/components/Modal";
@@ -46,7 +44,8 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
                   ...el,
                   attributes: {
                     totalAmount: 'S/. ' + (Number(el.attributes.totalAmount.split('S/. ')[1]) + Number(currentValue.attributes.totalAmount.split('S/. ')[1])).toFixed(2),
-                    scheduleDate: el.attributes.scheduleDate
+                    scheduleDate: el.attributes.scheduleDate,
+                    status: el.attributes.status
                   }
                 }
               }
@@ -86,7 +85,7 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
             <Tbody>
             {history && history.map((data, idx) => (
               
-              <Tr key={`${idx}-history`}>
+              <Tr display={data.attributes.status === 'PAID' ? 'none' : ''} key={`${idx}-history`}>
                 <Td>{data.attributes.scheduleDate}</Td>
                 <Td>{data.totalAmount ? 'S/. ' + data.totalAmount : data.attributes.totalAmount}</Td>
               </Tr>

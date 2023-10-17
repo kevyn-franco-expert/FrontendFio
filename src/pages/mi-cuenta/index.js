@@ -284,8 +284,9 @@ export default function miCuenta() {
                     {hasAccount && (origin === 'client') &&
                       <Tab> Seguimiento solicitud desembolso </Tab>
                     }
+
                     <Tab isDisabled={accountInformationData && accountInformationData.submittedWithdrawals.length > 0 
-                      || accountInformationData && accountInformationData.available === 0
+                      || validationData && validationData.capital_available === 0
                       || validationData && validationData.token === ''
                       || (application && origin !== 'user')
                       || accountInformationData && !accountInformationData.canWithdraw

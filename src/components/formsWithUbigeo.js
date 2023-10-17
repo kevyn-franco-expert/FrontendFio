@@ -63,6 +63,8 @@ export default function formRegistro() {
       setUUIDData(scoreData.attributes.uuid);
       setClientID(scoreData.id)
       // console.log("clientData", JSON.stringify(scoreData))
+    } else {
+      goHome();
     }
     careers();
     
@@ -151,6 +153,7 @@ export default function formRegistro() {
           }
           setModalData(dataModal)
           setOpenModal(true);
+          Cookies.remove('score');
         }
       } catch (error) {
         console.error('Error en la solicitud POST:', error);
@@ -196,7 +199,6 @@ export default function formRegistro() {
         <Modals overlayClick={goHome} type="pre-register" data={modalData} isOpenit={openModal} actionBtn={reSend} onCloseit={() => setOpenModal(false)} />
         <VStack spacing={4} align="flex-start">
           <FormControl>
-            <FormLabel></FormLabel>
             <FormLabel htmlFor="fullName">
               <Flex className={`input-position ${fullNameData ? "fill" : ""}`}>
                 1

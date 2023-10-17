@@ -58,15 +58,16 @@ export default function Footer({data}) {
               ))}
               <Image
                 width={{ base: "80px", lg: "100px" }}
+                m={{ base: "0 auto", lg: "inherit" }}
                 mt={3}
                 src="libro-reclamaciones.svg"
               />
             </Flex>
           </HStack>
           <HStack
-            alignItems="start"
+            alignItems={{base:"center", md: "start"}}
             flex={3}
-            justify="end"
+            justify={{base:"center", md:"end"}}
             fontSize={{ base: "12px", md: "16px" }}
             color="white"
             _dark={{ color: "white" }}
