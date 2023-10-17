@@ -22,7 +22,7 @@ import RadioGroup from "./RadioGroup";
 import React, { useState, useEffect } from "react";
 import SliderComponent from "./SliderComponent";
 
-export default function Calculator({defaultValueSlider, noChanges = false, payment_day, calculatorValues, calculatorResult, min = 50, max = 2000, title = '¿Cuánto dinero necesitas?', dayFive = '2023-10-05', daytwenty = '2023-10-20'}) {
+export default function Calculator({location = null, defaultValueSlider, noChanges = false, payment_day, calculatorValues, calculatorResult, min = 50, max = 2000, title = '¿Cuánto dinero necesitas?', dayFive = '2023-10-05', daytwenty = '2023-10-20'}) {
   const [sliderValue, setSliderValue] = useState(null);
   const [fieldValue, setFieldValue] = useState(null);
   const [modeValue, setModeValue] = useState('monthly');
@@ -40,6 +40,8 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
 
     if (defaultValueSlider) {
       setSliderValue(defaultValueSlider);
+    } else if (location === 'home'){
+      setSliderValue(min);
     }
   }, [])
   
@@ -150,7 +152,7 @@ export default function Calculator({defaultValueSlider, noChanges = false, payme
       </Stack>
       <Stack>
         {showTable && loading && <Skeleton mt={10} borderRadius={8} height='250px' />}
-        {fieldValue && paydayValue && sliderValue && showTable && !loading&& (
+        {fieldValue && paydayValue && sliderValue && showTable && !loading && (
           <>
             <TableContainer
               mt={10}

@@ -205,7 +205,7 @@ export default function Home({ data }) {
                     pt={5}
                   >
                     {!calculatorCheck && (
-                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} min={minCalculator} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} location='home' min={minCalculator} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
                     )}
 
                     {calculatorCheck && (

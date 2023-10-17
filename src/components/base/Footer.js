@@ -27,7 +27,7 @@ export default function Footer({data}) {
           justify="space-between"
           p={10}
         >
-          <Flex justify="center">
+          <Flex justify={{base:"start", lg:"center"}}>
             <Image
               src={data && data.data[0].attributes.image}
               alt="Fio Logo"
@@ -40,10 +40,10 @@ export default function Footer({data}) {
           <HStack
             alignItems="start"
             flex={1}
-            justify="space-around"
-            fontSize={{ base: "12px", md: "16px" }}
+            justify={{base:"start", lg:"space-around"}}
+            fontSize={{ base: "16px", lg: "16px" }}
             color="white"
-            textAlign={{ base: "center", md: "left" }}
+            textAlign="left"
           >
             <Flex justify="start" direction="column">
               <Text as="b">Acerca de Fio</Text>
@@ -58,20 +58,20 @@ export default function Footer({data}) {
               ))}
               <Image
                 width={{ base: "80px", lg: "100px" }}
-                m={{ base: "0 auto", lg: "inherit" }}
                 mt={3}
+                mb={{base:'25px', lg:'0px'}}
                 src="libro-reclamaciones.svg"
               />
             </Flex>
           </HStack>
           <HStack
-            alignItems={{base:"center", md: "start"}}
+            alignItems={{base:"start", lg: "start"}}
             flex={3}
-            justify={{base:"center", md:"end"}}
-            fontSize={{ base: "12px", md: "16px" }}
+            justify={{base:"start", lg:"end"}}
+            fontSize={{ base: "16px", lg: "16px" }}
             color="white"
             _dark={{ color: "white" }}
-            textAlign={{ base: "center", md: "left" }}
+            textAlign='left'
           >
             <Flex justify="start" direction="column">
               {data && data.included.map((contact, index) => (
@@ -135,7 +135,7 @@ export default function Footer({data}) {
         </Stack>
         <Divider orientation="horizontal" />
         <Stack
-          direction={{ base: "column", md: "row" }}
+          direction={{ base: "column", lg: "row" }}
           p={4}
           align="center"
           justify="space-between"
