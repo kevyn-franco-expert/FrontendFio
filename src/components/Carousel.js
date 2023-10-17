@@ -33,7 +33,7 @@ export default function Carousel({sliders = null}) {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slidesCount = slides.length;
+  const slidesCount = sliders ? sliders.length : slides.length;
 
   const prevSlide = () => {
     setCurrentSlide((s) => (s === 0 ? slidesCount - 1 : s - 1));

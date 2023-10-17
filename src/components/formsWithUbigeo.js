@@ -244,7 +244,7 @@ export default function formRegistro() {
               name="email"
               value={emailData}
               onChange={handleInputChange}
-              type="tel"
+              type="text"
             />
           </FormControl>
           <FormControl>

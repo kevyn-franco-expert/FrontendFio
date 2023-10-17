@@ -18,7 +18,8 @@ import { Box,
   Divider,
   Center,
   Text,
-  Textarea
+  Textarea,
+  useToast
   } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import Modals from './Modal';
@@ -30,20 +31,16 @@ import Cookies from 'js-cookie';
 
 
 export default function forms({formType, url}) {
+  const toast = useToast()
   const [openModal, setOpenModal] = useState(false);
-  const [fullNameData, setFullNameData] = useState('|');
   const [formRegisterData, setFormRegisterData] = useState({});
-  const [errorLogin, setErrorLogin] = useState('');
   const router = useRouter()
   const [store] = useContext(StoreContext)
-  const { section } = store;
-
   const SetCookie = (name, value) => {
     Cookies.set(name, value, {
       expires: 1,
     });
   };
-  
   
   const onlyNumbers = /^[0-9\b]+$/;
   const onlyCharacters = /^[A-Za-z\s]*$/;
@@ -64,52 +61,6 @@ export default function forms({formType, url}) {
     handleOnlyNumbers,
     handleOnlyCharacters
   } = useInputValidators();
-
-
-  const logIn = async (values) => {
-    // console.log('logged', values)
-    if (Cookies.get('loggedIn')) {
-      router.push('/mi-cuenta')
-    } else {
-      try {
-        const result = await postData(url, values);
-        if (result && result.data) {
-          SetCookie('loggedIn', true);
-          SetCookie('token', result.data.token);
-          SetCookie('origin', result.data.origin);
-          SetCookie('client', result.data.client_id);
-          SetCookie('account', result.data.has_account);
-
-          const JsonResult = {
-            token: result.data.token,
-            origin: result.data.origin,
-            client: result.data.client_id,
-            account: result.data.has_account,
-            uuid: result.data.uuid,
-            min: result.data.get_minimum_amount_withdrawn,
-            max: result.data.get_maximum_amount_withdrawn,
-            min_days: result.data.get_minimum_days_withdrawn,
-            account_data: result.data.account_data ? result.data.account_data : null,
-            email_validated: result.data.email_validated,
-            dni: values.document_number,
-            firstDayFive: result.data.first_day_five,
-            firstDayTwenty: result.data.first_day_twenty
-          };
-
-          SetCookie('user-data', JSON.stringify(JsonResult))
-          sessionStorage.setItem("userDataSession", JSON.stringify(JsonResult));
-          setErrorLogin('')
-          router.push('/mi-cuenta');
-        } else if (result && result.errors) {
-          setErrorLogin(result.errors.detail)
-        }
-        
-      } catch (error) {
-        console.error('Error en la solicitud POST:', error);
-      }
-      router.push('/mi-cuenta')
-    }
-  }
 
   const handleOnChange = (event) => {
     setFormRegisterData({
@@ -153,83 +104,6 @@ export default function forms({formType, url}) {
   });
 
   //forms
-
-  const LoginForm = () => {
-    return (
-      <Formik
-      initialValues={{
-        password: '',
-        document_number: section.document_number || ''
-      }}
-      onSubmit={logIn}
-    >
-
-      {({ handleSubmit, errors, touched, values }) => (
-        <form className='formik-form' onSubmit={handleSubmit}>
-          <VStack spacing={4} align="flex-start">
-            <FormControl isInvalid={!!errors.document_number && touched.document_number}>
-              <FormLabel htmlFor="document_number"><Flex className={`input-position ${!errors.document_number && touched.document_number ? 'fill':''}`}>1</Flex> DNI </FormLabel>
-              <Field
-                as={Input}
-                id="document_number"
-                name="document_number"
-                maxLength={8}
-                type="tel"
-                onInput={handleOnlyNumbers}
-                autoComplete='off'
-                validate={(value) => {
-                  let error;
-
-                  if (value.length !== 8) {
-                    error = "Debería tener 8 caracteres";
-                  }
-
-                  return error;
-                }}
-              />
-              <FormErrorMessage>{errors.document_number}</FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={!!errors.password && touched.password}>
-              
-              <FormLabel htmlFor="password"><Flex className={`input-position ${!errors.password && touched.password ? 'fill':''}`}>2</Flex> Ingresa contraseña * </FormLabel>
-              <Field
-                as={Input}
-                id="password"
-                name="password"
-                type="password"
-                validate={(value) => {
-                  let error;
-
-                  if (value.length < 4) {
-                    error = "Debería tener al menos 5 caracteres";
-                  }
-
-                  return error;
-                }}
-              />
-              <FormErrorMessage>{errors.password}</FormErrorMessage>
-            </FormControl>
-            
-            <Center height='50px'>
-              <Divider />
-            </Center>
-            <Box position='relative' w='100%'>
-              <AbsoluteCenter my={6}>
-                <Button isLoading={loading} minW={{base: '80%', sm: '80%', md: '500px'}} type="submit" colorScheme="blue" >
-                  INGRESAR
-                </Button>
-                <Text color='red' align='center' mt={3}>{errorLogin}</Text>
-              </AbsoluteCenter>
-            </Box>
-            <Center height='50px'>
-              <Divider />
-            </Center>
-          </VStack>
-        </form>
-      )}
-    </Formik>
-  )
-  };
 
   const FormPreRegister = () => {
     return (
@@ -458,8 +332,17 @@ export default function forms({formType, url}) {
         validationSchema={validationSchemaBook}
         onSubmit={async (values) => {
           // alert(JSON.stringify(values, null, 2));
-          setOpenModal(true);
           const result = await postData(url, values);
+          if (!result.errors) {
+            setOpenModal(true);
+          } else {
+            toast({
+              title: "Error",
+              description: "Por el momento el servicio se encuentra en mantenimiento, puede contactarse con alguno de nuestros operadores a través de nuestra línea de soporte",
+              status: 'error',
+              isClosable: true,
+            })
+          }
           console.log(result);
         }}
       >
@@ -682,7 +565,7 @@ export default function forms({formType, url}) {
   
   const RenderForm = () => {
     if (formType === 'login') {
-      return <LoginForm />
+      return <LoginFormNoFormik />
     } else if (formType === 'preRegister') {
       return <FormPreRegister />
     } else if (formType === 'complaintsBook') {

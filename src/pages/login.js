@@ -1,6 +1,6 @@
 import { Container, Heading, Box, Divider, Flex, Center } from '@chakra-ui/react'
 import HeadTitle from '@/components/base/HeadTitle';
-import Forms from '@/components/forms';
+import FormLogin from '@/components/formLogin';
 
 
 export default function formRegistro() {
@@ -15,7 +15,7 @@ export default function formRegistro() {
                     <Divider height={3}/>
                 </Center>
                 <Box w='100%'>
-                    <Forms url='/api/login/' formType='login' />
+                    <FormLogin url='/api/login/' formType='login' />
                 </Box>
             </Flex>
         </Container>
