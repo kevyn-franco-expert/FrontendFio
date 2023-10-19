@@ -325,7 +325,7 @@ export default function forms({formType, url}) {
           document_number: '',
           mobile: '',
           email: '',
-          complaints_type: '',
+          complaints_type: 'CLAIM',
           complaints_details: '',
           consumer_request: ''
         }}
