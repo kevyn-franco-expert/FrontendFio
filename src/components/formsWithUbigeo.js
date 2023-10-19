@@ -11,6 +11,7 @@ import {
   VStack,
   AbsoluteCenter,
   Button,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState, useContext } from "react";
 import useUbigeo from "@/hooks/useUbigeo";
@@ -38,6 +39,11 @@ export default function formRegistro() {
   const [openModal, setOpenModal] = useState(false);
   const [store] = useContext(StoreContext)
   const { user } = store;
+
+  const [isLargerThan800] = useMediaQuery('(min-width: 800px)', {
+    ssr: true,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  })
  
   const {
     departaments,
@@ -96,6 +102,7 @@ export default function formRegistro() {
             title: error.detail,
             status: 'error',
             isClosable: true,
+            position: isLargerThan800 ? 'bottom' : 'top-right',
           })
         })
       }
@@ -136,6 +143,7 @@ export default function formRegistro() {
               title: error.detail,
               status: 'error',
               isClosable: true,
+              position: isLargerThan800 ? 'bottom' : 'top-right',
             })
           })
         }

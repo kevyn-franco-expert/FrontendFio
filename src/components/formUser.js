@@ -40,10 +40,12 @@ export default function FormUser({uuid}) {
           .then(data => {
               if (data) {
                 const info = data.data.data;
-                setInfoClient(info);
-                setFullname(info.name + ' ' + info.last_name_father + ' ' + info.last_name_mother)
-                setPhoneData(info.mobile)
-                setEmailData(info.email)
+                if (info) {
+                  setInfoClient(info);
+                  setFullname(info.name + ' ' + info.last_name_father + ' ' + info.last_name_mother)
+                  setPhoneData(info.mobile)
+                  setEmailData(info.email)
+                }
               }
               setLoading(false)
           })
@@ -117,7 +119,7 @@ export default function FormUser({uuid}) {
               <Input
                 type="text"
                 name="address"
-                value={infoClient.address || ''}
+                value={infoClient && infoClient.address || ''}
                 isDisabled
               />
             </FormControl>
@@ -129,7 +131,7 @@ export default function FormUser({uuid}) {
               <Input
                 type="text"
                 name="department"
-                value={infoClient.department || ''}
+                value={infoClient && infoClient.department || ''}
                 isDisabled
               />
             </FormControl>
@@ -141,7 +143,7 @@ export default function FormUser({uuid}) {
               <Input
                 type="text"
                 name="province"
-                value={infoClient.province || ''}
+                value={infoClient && infoClient.province || ''}
                 isDisabled
               />
             </FormControl>
@@ -153,7 +155,7 @@ export default function FormUser({uuid}) {
               <Input
                 type="text"
                 name="district"
-                value={infoClient.district || ''}
+                value={infoClient && infoClient.district || ''}
                 isDisabled
               />
             </FormControl>

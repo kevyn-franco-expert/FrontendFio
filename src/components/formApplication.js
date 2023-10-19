@@ -108,6 +108,7 @@ export default function formApplication({onFormData, errorsData, loginData = nul
           value={numberBank}
           onChange={handleNumberBankChange}
           maskChar=" " 
+          type="tel"
           />
           {errorsData.map((error) => (
             <>

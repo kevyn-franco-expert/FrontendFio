@@ -41,6 +41,10 @@ export default function Calculator({location = null, defaultValueSlider, noChang
     if (defaultValueSlider) {
       setSliderValue(defaultValueSlider);
     }
+
+    if (location === 'home'){
+      setSliderValue(min);
+    }
   }, [])
   
 
@@ -76,10 +80,6 @@ export default function Calculator({location = null, defaultValueSlider, noChang
       }
     
     })();
-
-    if (location === 'home'){
-      setSliderValue(min);
-    }
 
   }, [sliderValue, modeValue, fieldValue, paydayValue, paydayValueFormat]);
 

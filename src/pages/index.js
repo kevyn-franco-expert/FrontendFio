@@ -25,7 +25,7 @@ import Modals from "@/components/Modal";
 export default function Home({ data }) {
   const toast = useToast();
   const [homeData, setHomeData] = useState(data);
-  const [minCalculator, setMinCalculator] = useState(50);
+  const [minCalculator, setMinCalculator] = useState(500);
   const [maxCalculator, setMaxCalculator] = useState(700);
   const [calculatorCheck, setCalculatorCheck] = useState(false);
   const [calculatorData, setCalculatorData] = useState(false);
@@ -44,10 +44,12 @@ export default function Home({ data }) {
 
   useEffect(() => {
     Cookies.remove('score')
+    setTimeout(() => {
+      setMinCalculator(Number(homeData[0].attributes.firstMinimumAmountWithdrawn))
+    }, 2000);
   }, [])
 
   useEffect(() => {
-    setMinCalculator(Number(homeData[0].attributes.minimumAmountWithdrawn))
     setMaxCalculator(Number(homeData[0].attributes.maximumAmountWithdrawn))
     dispatch({
       type: "userInformation",
@@ -210,7 +212,7 @@ export default function Home({ data }) {
                     ref={ref}
                   >
                     {!calculatorCheck && (
-                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} location='home' min={homeData[0].attributes.firstMinimumAmountWithdrawn} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} location='home' min={minCalculator} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
                     )}
 
                     {calculatorCheck && (
