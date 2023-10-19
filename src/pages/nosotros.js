@@ -26,7 +26,6 @@ export default function Nosotros({data}) {
           <Img 
           objectFit='cover'
           src={about.attributes.banner}
-          fallbackSrc='banner-3.jpg'
           width='100%'
           maxW='2000px'
           height={{base: '200px', md: '430px'}}
