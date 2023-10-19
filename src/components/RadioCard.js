@@ -29,7 +29,7 @@ export default function RadioCard(props) {
           py={3}
           className='month-selected'
         >
-          <Text as='b' fontSize='lg'>
+          <Text as='b' fontSize={{base: '13px', md: 'lg'}}>
             {props.children && props.children.includes('-') ? moment(props.children).format("DD/MM/YYYY") : props.children} <CheckIcon />
           </Text>
           <Text fontSize='xs' display={subtitle ? '' : 'none'}>

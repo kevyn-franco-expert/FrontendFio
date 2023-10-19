@@ -74,7 +74,8 @@ export default function formLogin() {
             email_validated: result.data.email_validated,
             dni: dniValue,
             firstDayFive: result.data.first_day_five,
-            firstDayTwenty: result.data.first_day_twenty
+            firstDayTwenty: result.data.first_day_twenty,
+            firstMinimumAmountWithdrawn: result.data.get_first_minimum_amount_withdrawn
           };
 
           SetCookie('user-data', JSON.stringify(JsonResult))

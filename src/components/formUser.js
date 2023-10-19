@@ -97,9 +97,9 @@ export default function FormUser({uuid}) {
       <Modals type={modalType} data={modalData} isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Container maxW="8xl">
         <form onSubmit={handleOnSubmit}>
-          <Flex p={4} flexDirection="column" gap={6}>
+          <Flex p={4} pl={{base: 0, md: 4}} flexDirection="column" gap={6}>
             <FormControl isRequired>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position fill`}>1</Flex> Nombre Completo
               </FormLabel>
               <Input
@@ -110,7 +110,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position fill`}>2</Flex>
                 Dirección
               </FormLabel>
@@ -122,7 +122,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position fill`}>3</Flex>
                 Departamento
               </FormLabel>
@@ -134,7 +134,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position fill`}>4</Flex>
                 Provincia
               </FormLabel>
@@ -146,7 +146,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position fill`}>5</Flex>
                 Distrito
               </FormLabel>
@@ -158,7 +158,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position ${phoneData ? "fill" : ""}`}>
                   6
                 </Flex>
@@ -174,7 +174,7 @@ export default function FormUser({uuid}) {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>
+              <FormLabel className="label-align">
                 <Flex className={`input-position ${emailData ? "fill" : ""}`}>
                   7
                 </Flex>

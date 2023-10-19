@@ -56,8 +56,8 @@ export default function Tracker({uuid}) {
             {!loading && tracking && tracking.step.map((track) => (
                 <Box key={track.order} my={4}>
                     <Flex bg={track.check ? 'green.200' : 'gray.200'}  borderRadius={10} px={4} minWidth={{base:'100%', md:'max-content'}} alignItems='center' gap='2'>
-                        <Box pb='2'>
-                            <FormLabel position='relative' top={2}>
+                        <Box display={{base: 'flex', md: 'grid'}} justifyContent={{base:'space-between', md: 'initial'}} pt={{base: 3, md: 0}} pb={{base: 3, md: 2}} alignItems='center'>
+                            <FormLabel display={{base: 'flex', md: 'initial'}} justifyContent={{base:'space-between', md: 'initial'}} alignContent='center' alignItems='center' p={{base: 1, md: 0}} position='relative' top={{base: 1, md: 2}}>
                                     <Flex className={`input-position fill`}>
                                     {track.order}
                                     </Flex> 

@@ -13,7 +13,7 @@ export default function RadioGroup({nameItem, items, bigger, setValue}) {
     const group = getRootProps()        
 
     return (
-        <HStack className={`radio-list-fix radio-list ${bigger ? 'bigger' : ''}`} justify='space-between' {...group}>
+        <HStack className={`radio-list-fix radio-list ${bigger ? 'bigger' : 'normal'}`} justify='space-between' {...group}>
             {items && items.map((value) => {
                 const radio = getRadioProps({ value })
                 return (

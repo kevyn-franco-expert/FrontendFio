@@ -105,9 +105,9 @@ export default function requestNewDisbursement({data, updateUserData, firstDayFi
       <Modals type="update-info" isOpenit={openModal} onCloseit={() => setOpenModal(false)} />
       <Modals sendit={ifSendIt} data={openModalData} type='pin' isOpenit={openModalPin} actionBtn={validatePin} onCloseit={() => setOpenModalPin(false)} />
       <Container maxW="8xl">
-        <Text>Saldo disponible: <Badge fontSize='lg' pt={1}  colorScheme='green'>S/ {realCapital}</Badge></Text><br/>
-        <Text>Saldo Pendiente de pago: <Badge fontSize='lg' pt={1}  colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text><br/>
-        <Text display={data.account_data.capital_requested ? '' : 'none'}>Monto solicitado pendiente de aprobacion: <Badge fontSize='lg' pt={1}  colorScheme='yellow'>S/ {data.account_data.capital_requested}</Badge></Text>
+        <Text flexDirection={{base:'column', md:'row'}} display='flex' gap={2} >Saldo disponible: <Badge w='fit-content' fontSize='lg' pt={{base: 1, md: 0}}  colorScheme='green'>S/ {realCapital}</Badge></Text><br/>
+        <Text flexDirection={{base:'column', md:'row'}} display='flex' gap={2}>Saldo Pendiente de pago: <Badge w='fit-content' fontSize='lg' pt={{base: 1, md: 0}}  colorScheme='red'>S/ {data.account_data.capital_pending}</Badge></Text><br/>
+        <Text flexDirection={{base:'column', md:'row'}}  display={data.account_data.capital_requested ? 'flex' : 'none'} gap={2}>Monto solicitado pendiente de aprobacion: <Badge w='fit-content' fontSize='lg' pt={{base: 1, md: 0}}  colorScheme='yellow'>S/ {data.account_data.capital_requested}</Badge></Text>
         <Calculator dayFive={firstDayFive} daytwenty={firstDayTwenty}  payment_day={data.account_data.payment_day} defaultValueSlider={realCapital} min={data.min} max={data.max} title='' calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
         <Button mt={8} isDisabled={!canDisbursement} onClick={handlePost} isLoading={loading} colorScheme="blue">
             Solicitar nuevo Préstamo

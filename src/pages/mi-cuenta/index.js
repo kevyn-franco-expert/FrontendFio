@@ -263,6 +263,7 @@ export default function miCuenta() {
               bg="white"
             >
               <Text className="title-account">Mi cuenta</Text>
+
               <TabList className="my-account-tab">
                 {loading && (
                   <>

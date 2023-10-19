@@ -72,10 +72,10 @@ export default function Cronograma({data, scheduleData, totalPay = 0}) {
             Cronograma de pagos
         </Heading> */}
         <Heading size="sm" color="black">
-            <Text>Tu deuda al día de hoy es:  <Badge fontSize='lg' pt={1} colorScheme='red'>S/ {totalPay}</Badge></Text>
+            <Text flexDirection={{base:'column', md:'row'}} display='flex' gap={2}>Tu deuda al día de hoy es:  <Badge w='fit-content' fontSize='lg' pt={{base: 1, md: 0}}  colorScheme='red'>S/ {totalPay}</Badge></Text>
         </Heading>
         <TableContainer display={history && history.length ? '' : 'none'} mt={8}>
-          <Table variant="simple">
+          <Table border='1px solid #ddd' variant="simple">
             <Thead>
               <Tr>
                 <Th>Fecha Programada</Th>

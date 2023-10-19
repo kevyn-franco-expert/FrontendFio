@@ -47,7 +47,7 @@ export default function FormUser({data}) {
             Mi historial de prestamos
         </Heading>
         <TableContainer mt={8}>
-          <Table variant="simple">
+          <Table border='1px solid #ddd' variant="simple">
             <Thead>
               <Tr>
                 <Th>Fecha solicitud del préstamo</Th>
@@ -78,7 +78,7 @@ export default function FormUser({data}) {
             Pagos realizados
         </Heading>
         <TableContainer mt={8}>
-          <Table variant="simple">
+          <Table border='1px solid #ddd' variant="simple">
             <Thead>
               <Tr>
                 <Th>Banco</Th>

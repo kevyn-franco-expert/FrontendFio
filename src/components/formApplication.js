@@ -68,7 +68,7 @@ export default function formApplication({onFormData, errorsData, loginData = nul
     <form>
       <Flex p={4} flexDirection="column" gap={6}>
         <FormControl isRequired>
-          <FormLabel>
+          <FormLabel className="label-align">
             <Flex className={`input-position fill`}>1</Flex> Banco
           </FormLabel>
           <Select
@@ -99,7 +99,7 @@ export default function formApplication({onFormData, errorsData, loginData = nul
         </FormControl>
 
         <FormControl isRequired>
-          <FormLabel>
+          <FormLabel className="label-align">
             <Flex className={`input-position fill`}>2</Flex> Numero de cuenta
           </FormLabel>
           <InputMask 
@@ -120,8 +120,8 @@ export default function formApplication({onFormData, errorsData, loginData = nul
           <FormLabel position="relative">
             <Flex className={`input-position fill`}>3</Flex>
           </FormLabel>
-          <Box boxShadow="base" p={6} borderRadius={10}>
-            <Calculator dayFive={loginData.firstDayFive} daytwenty={loginData.firstDayTwenty} min={loginData.min} max={loginData.max} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+          <Box boxShadow="base" p={{base: 3, md: 6}} borderRadius={10}>
+            <Calculator dayFive={loginData.firstDayFive} daytwenty={loginData.firstDayTwenty} min={loginData.firstMinimumAmountWithdrawn} max={loginData.max} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
             {errorsData.map((error) => (
             <>
               {(error.source.pointer.split('/')[3] === 'amount') ? <Text mt={2} color='red'>{error.detail} </Text> : ''}

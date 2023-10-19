@@ -14,7 +14,7 @@ import Calculator from "@/components/Calculator";
 import DocumentType from "@/components/DocumentType";
 import Tips from "@/components/Tips";
 import HeadTitle from "@/components/base/HeadTitle";
-import { useState, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { StoreContext } from "@/store/StoreProvider";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -40,6 +40,7 @@ export default function Home({ data }) {
   const [store, dispatch] = useContext(StoreContext);
   const { postData } = useAPI();
   const router = useRouter();
+  const ref = useRef(null);
 
   useEffect(() => {
     Cookies.remove('score')
@@ -64,6 +65,9 @@ export default function Home({ data }) {
   const handleButtonClick = async (section) => {
     if (section === "calculator") {
       setCalculatorCheck(true);
+      setTimeout(() => {
+        ref.current?.scrollIntoView({behavior: 'smooth'});
+      }, 500);
     } else if (
       section === "documentType" &&
       documentTypeSeted &&
@@ -203,9 +207,10 @@ export default function Home({ data }) {
                     color="black"
                     p={{ base: "2", sm: "5" }}
                     pt={5}
+                    ref={ref}
                   >
                     {!calculatorCheck && (
-                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} location='home' min={minCalculator} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
+                      <Calculator dayFive={homeData[0].attributes.firstDayFive} daytwenty={homeData[0].attributes.firstDayTwenty} location='home' min={homeData[0].attributes.firstMinimumAmountWithdrawn} max={maxCalculator} calculatorValues={setCalculatorData} calculatorResult={setCalculatorValues} />
                     )}
 
                     {calculatorCheck && (
