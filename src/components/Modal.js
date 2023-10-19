@@ -354,7 +354,7 @@ import {
     } else {
         return (
             <>
-            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit} className='modalcomple'>
+            <Modal closeOnOverlayClick={false}  isOpen={isOpenit} size={'xl'} onClose={onCloseit} className='modalcomple'>
                 <ModalOverlay />
                 <ModalContent>
                 <ModalBody className='body'>
@@ -368,9 +368,11 @@ import {
                             </Text>
                         </Center>
     
-                        <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
-                    Cerrar
-                    </Button>
+                        <Link href='/'>
+                            <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                            Regresar al Inicio
+                            </Button>
+                        </Link>
                     </Flex>
                 </ModalBody>
         
