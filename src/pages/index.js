@@ -43,6 +43,12 @@ export default function Home({ data }) {
   const ref = useRef(null);
 
   useEffect(() => {
+    Cookies.remove("loggedIn");
+    Cookies.remove("origin");
+    Cookies.remove("token");
+    Cookies.remove("account");
+    Cookies.remove("client");
+    Cookies.remove("user-data");
     Cookies.remove('score')
     setTimeout(() => {
       setMinCalculator(Number(homeData[0].attributes.firstMinimumAmountWithdrawn))

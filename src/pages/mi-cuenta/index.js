@@ -205,25 +205,34 @@ export default function miCuenta() {
           // }, 4000);
         } else if (result && result.errors) {
             setErrorLists(result.errors)
-            result.errors.forEach((error) => {
-                if (error.source.pointer.split('/')[3] === 'nonFieldErrors') {  
-                    const dataModal = {
-                        title: 'Ups..',
-                        description: error.detail
-                      }
-                      setModalType('nonFieldErrors')
-                      setModalData(dataModal);
-                      setOpenModal(true);
-                }
+            result.errors.forEach((error) => {  
+            toastHandle(error.source.pointer.split('/')[3] + ': ' + error.detail)
             })
         }
       } catch (error) {
         console.error('Error en la solicitud POST:', error);
+        if (formData.typeBankID === '') {
+          toastHandle('Debe Seleccionar un Banco')
+        } else if (!formData.calculator.payDay || !formData.quotes) {
+          toastHandle('Debe realizar el calculo para su solicitud')
+        }
+        
       }
   };
 
   const handleTabsChange = (index) => {
     setTabIndex(index)
+  }
+
+  const toastHandle = (descriptionToast) => {
+    toast({
+      position:'top-right',
+      title: 'Ups..',
+      description: descriptionToast,
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
   }
 
   const handleCloseSesion = () => {

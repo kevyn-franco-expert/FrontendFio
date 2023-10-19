@@ -21,8 +21,8 @@ export default function Nosotros({data}) {
   return (
     <>
       <HeadTitle title='¡Activa tu linea de efectivo con FIO.pe!' description='Obtén tu línea de efectivo con nosotros' />
-      {data && data.map((about) => (
-        <main>
+      {data && data.map((about, idx) => (
+        <main key={idx}>
           <Img 
           objectFit='cover'
           src={about.attributes.banner}
