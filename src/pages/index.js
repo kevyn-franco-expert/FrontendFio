@@ -209,6 +209,7 @@ export default function Home({ data }) {
                     className="home-box"
                     mt={{ base: "10", sm: "1" }}
                     maxW="full"
+                    w={{base: '100%', lg: '700px'}}
                     borderWidth="1px"
                     borderRadius="lg"
                     bg="white"
