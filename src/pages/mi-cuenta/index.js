@@ -80,14 +80,14 @@ export default function miCuenta() {
     } else {
       setApplication(true);
     }
-    setLoading(false);
+
     sessionTimer();
   }, []);
 
   useEffect(() => {
     if (loginResponseData.length !== 0 && loginResponseData.account_data.account_info) {
       handleGetUserData(loginResponseData.account_data.account_info);
-      // console.log('loginResponseData', loginResponseData)
+      setLoading(false);
     }
   }, [loginResponseData])
   
