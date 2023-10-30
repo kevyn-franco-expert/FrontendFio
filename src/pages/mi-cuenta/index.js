@@ -87,7 +87,6 @@ export default function miCuenta() {
   useEffect(() => {
     if (loginResponseData.length !== 0 && loginResponseData.account_data.account_info) {
       handleGetUserData(loginResponseData.account_data.account_info);
-      setLoading(false);
     }
   }, [loginResponseData])
   
@@ -142,6 +141,7 @@ export default function miCuenta() {
         Cookies.set('user-data', JSON.stringify(userInfo))
         Cookies.set('origin', result.data.origin)
         Cookies.set('id-account', result.data.account_data.id)
+        setLoading(false);
       } else {
         router.push('/login')
       }
@@ -391,6 +391,8 @@ export default function miCuenta() {
                 </TabPanels>
               )}
             </GridItem>
+            {!loading && 
+            
             <GridItem colStart={2} gap={4}>
               {(application && !hasAccount && loginResponseData.email_validated) && (
                 <Button isDisabled={!contract && formData} onClick={handleRequest} colorScheme="blue">
@@ -398,6 +400,7 @@ export default function miCuenta() {
                 </Button>
               )}
             </GridItem>
+            }
           </Grid>
         </Tabs>
       </Container>
