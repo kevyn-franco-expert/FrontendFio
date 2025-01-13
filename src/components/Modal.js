@@ -3,10 +3,10 @@ import {
     Modal,
     ModalOverlay,
     ModalContent,
-    ModalFooter,
+    ModalCloseButton,
     ModalBody,
     Button,
-    Heading,
+    Image,
     Text,
     Flex,
     Center,
@@ -351,6 +351,60 @@ import {
             </Modal>
             </>
         );
+    } else if (type === 'informativo') {
+        return (
+            <>
+            <Modal isOpen={isOpenit} size={'xl'} onClose={onCloseit} className='modalinformativo'>
+                <ModalOverlay />
+                <ModalContent style={{backgroundColor:'white'}}>
+                <ModalCloseButton className="Xbutton" />
+                <ModalBody>
+                <Flex p={4} borderRadius={10} gap={8} justifyContent='center' flexDirection='row' alignItems='center'> 
+                    <Box boxSize="400px" className='logo-watermark'>
+                        <Image
+                            src={'/fio-logo.jpeg'}
+                            alt="carousel image"
+                            boxSize="full"
+                            backgroundSize="cover"
+                        />
+                    </Box>
+                    <Text className='text-p' as='p'>
+                        <b>Obtén tu préstamo en efectivo con garantía hipotecaria</b><br/>
+
+                        ¡Cumple tus sueños hoy mismo con nuestros préstamos en efectivo! <br/><br/>
+
+                        <b>Montos disponibles:</b><br/>
+                        Desde $15,000USD<br/><br/>
+
+                        <b>Requisitos:</b><br/>
+                        - Título de propiedad como colateral sin gravámenes<br/><br/>
+
+                        <b>Ventajas:</b><br/>
+                        - Proceso fácil y rápido el mismo día <br/>
+                        - Atención personalizada<br/><br/>
+
+                        <b>Empresa:</b><br/>
+                        Fio Perú Sociedad Anonima Cerrada<br/>
+                        Registrada en la UIF de la Superintendencia de Banca, Seguros y AFP<br/>
+                        Sitio web: www.fio.pe<br/><br/>
+
+                        ¡No esperes más! Solicita tu préstamo ahora y transforma tus proyectos en realidad.
+                        <br/>
+                        <Center>
+                        <Link href='https://wa.me/51978648424?text=Hola%20equipo%20FIO.PE,%20quisiera%20recibir%20mayor%20informaci%C3%B3n%20sobre%20el%20pr%C3%A9stamo%20en%20efectivo%20con%20garant%C3%ADa%20hipotecaria'>
+                            <Button size='md' colorScheme="red" minW={{base:'80%', sm:'300px'}} borderRadius={20} mt={3} onClick={onCloseit}>
+                            Contáctanos
+                            </Button>
+                        </Link>
+                        </Center>
+                    </Text>
+                    </Flex>
+                </ModalBody>
+        
+                </ModalContent>
+            </Modal>
+            </>
+        );
     } else {
         return (
             <>
@@ -369,7 +423,7 @@ import {
                         </Center>
     
                         <Link href='/'>
-                            <Button size='lg' colorScheme="blue" minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
+                            <Button size='lg' colorScheme="blue" variant={'solid'} minW={{base:'80%', sm:'350px'}} borderRadius={20} mr={3} onClick={onCloseit}>
                             Regresar al Inicio
                             </Button>
                         </Link>

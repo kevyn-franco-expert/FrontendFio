@@ -22,6 +22,7 @@ import useAPI from "@/hooks/useAPI";
 import ReCAPTCHA from "react-google-recaptcha";
 import Modals from "@/components/Modal";
 
+
 export default function Home({ data }) {
   const toast = useToast();
   const [homeData, setHomeData] = useState(data);
@@ -35,6 +36,7 @@ export default function Home({ data }) {
   const [recaptcha, setRecaptcha] = useState(false);
   const [recaptchaExpired, setRecaptchaExpired] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalInformativo, setOpenModalInformativo] = useState(false);
   const [modalMsg, setModalMsg] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [store, dispatch] = useContext(StoreContext);
@@ -52,6 +54,7 @@ export default function Home({ data }) {
     Cookies.remove('score')
     setTimeout(() => {
       setMinCalculator(Number(homeData[0].attributes.firstMinimumAmountWithdrawn))
+      setOpenModalInformativo(true);
     }, 2000);
   }, [])
 
@@ -177,6 +180,20 @@ export default function Home({ data }) {
           isOpenit={openModal}
           onCloseit={() => setOpenModal(false)}
         />
+
+        <Modals
+          type="informativo"
+          isOpenit={openModalInformativo}
+          onCloseit={() => setOpenModalInformativo(false)}
+        />
+        <Button
+          onClick={() => setOpenModalInformativo(true)}
+          size="lg"
+          width="full"
+          colorScheme="blue"
+        >
+          test
+        </Button>
         {homeData && (
           <div>
             <Carousel sliders={homeData[0].attributes.banners} />
@@ -294,15 +311,15 @@ const features = [
   },
 ];
 
-export async function getServerSideProps() {
-  const url =
-    process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_HOME;
-  const res = await fetch(url);
-  const home = await res.json();
-  const { data } = home;
-  return {
-    props: {
-      data,
-    },
-  };
-}
+// export async function getServerSideProps() {
+//   const url =
+//     process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_HOME;
+//   const res = await fetch(url);
+//   const home = await res.json();
+//   const { data } = home;
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
