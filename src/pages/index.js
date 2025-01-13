@@ -186,14 +186,6 @@ export default function Home({ data }) {
           isOpenit={openModalInformativo}
           onCloseit={() => setOpenModalInformativo(false)}
         />
-        <Button
-          onClick={() => setOpenModalInformativo(true)}
-          size="lg"
-          width="full"
-          colorScheme="blue"
-        >
-          test
-        </Button>
         {homeData && (
           <div>
             <Carousel sliders={homeData[0].attributes.banners} />
@@ -311,15 +303,15 @@ const features = [
   },
 ];
 
-// export async function getServerSideProps() {
-//   const url =
-//     process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_HOME;
-//   const res = await fetch(url);
-//   const home = await res.json();
-//   const { data } = home;
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// }
+export async function getServerSideProps() {
+  const url =
+    process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_HOME;
+  const res = await fetch(url);
+  const home = await res.json();
+  const { data } = home;
+  return {
+    props: {
+      data,
+    },
+  };
+}
