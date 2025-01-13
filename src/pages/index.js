@@ -87,7 +87,7 @@ export default function Home({ data }) {
         documentSelected
       );
 
-      //caso exitoso - cliente nuevo con sentinel limpio
+      //caso exitoso - cliente nuevo con sentinel limpio.
       if (data && !data.errors && recaptcha && !recaptchaExpired && data.meta.origin === 'prospect') {
         dispatch({
           type: "userDataSentinel",
