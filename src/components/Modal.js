@@ -391,7 +391,7 @@ import {
                         ¡No esperes más! Solicita tu préstamo ahora y transforma tus proyectos en realidad.
                         <br/>
                         <Center>
-                        <Link href='https://wa.me/51978648424?text=Hola%20equipo%20FIO.PE,%20quisiera%20recibir%20mayor%20informaci%C3%B3n%20sobre%20el%20pr%C3%A9stamo%20en%20efectivo%20con%20garant%C3%ADa%20hipotecaria'>
+                        <Link href='https://wa.me/51972751602?text=Hola%20equipo%20FIO.PE,%20quisiera%20recibir%20mayor%20informaci%C3%B3n%20sobre%20el%20pr%C3%A9stamo%20en%20efectivo%20con%20garant%C3%ADa%20hipotecaria'>
                             <Button size='md' colorScheme="red" minW={{base:'80%', sm:'300px'}} borderRadius={20} mt={3} onClick={onCloseit}>
                             Contáctanos
                             </Button>
