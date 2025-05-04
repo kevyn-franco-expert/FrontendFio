@@ -8,12 +8,15 @@ import WhatsappBubble from './WhatsappBubble'
 
 export default function Layout({children}) {
   const [footerData, setFooterData] = useState('');
+  const [whatsappData, setWhatsappData] = useState('');
   useEffect(() => {
     const foot = async () => {
       const url = process.env.NEXT_PUBLIC_BASEURL + process.env.NEXT_PUBLIC_API_FOOTER;
       const res = await fetch(url);
       const footer = await res.json();
       setFooterData(footer);
+      setWhatsappData(footer.included[4].attributes.redirectLink);
+      console.log(footer.included[4].attributes.redirectLink)
     }
     foot();
     
@@ -34,7 +37,7 @@ export default function Layout({children}) {
           logged_in_greeting="¡Hola! ¿Cómo podemos ayudarte?"
           logged_out_greeting="¡Hola! ¿Cómo podemos ayudarte?"
         ></div>
-        <WhatsappBubble url={footerData.included[5].attributes.redirectLink} />
+        <WhatsappBubble url={whatsappData ? whatsappData : 'https://api.whatsapp.com/send/?phone=51940648079&text&type=phone_number&app_absent=0'} />
       </main>
     </>
   )

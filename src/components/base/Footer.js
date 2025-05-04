@@ -46,7 +46,7 @@ export default function Footer({data}) {
             textAlign="left"
           >
             <Flex justify="start" direction="column">
-              <Text color="white">Acerca de Fio</Text>
+            <Link href={'/nosotros'} color='white'>Acerca de Fio</Link>
             {data && data.included.map((about, index) => (
                 <div key={index}>
                 {about.type === 'AboutInfo' && (
