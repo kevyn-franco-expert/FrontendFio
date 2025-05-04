@@ -34,7 +34,7 @@ export default function Layout({children}) {
           logged_in_greeting="¡Hola! ¿Cómo podemos ayudarte?"
           logged_out_greeting="¡Hola! ¿Cómo podemos ayudarte?"
         ></div>
-        <WhatsappBubble />
+        <WhatsappBubble url={footerData.included[5].attributes.redirectLink} />
       </main>
     </>
   )
