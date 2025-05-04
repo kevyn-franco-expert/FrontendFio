@@ -38,11 +38,11 @@ export default function PreguntasFrecuentes({faqs}) {
       <main>
         <Img 
           objectFit='cover'
-          src='banner-4.jpg'
-          fallbackSrc='banner-4.jpg'
+          src='Banner-faq.jpg'
+          fallbackSrc='Banner-faq.jpg'
           width='100%'
           maxW='2000px'
-          height={{base: '200px', md: '430px'}}
+          height={{base: '200px', md: '380px'}}
           />
         <Container maxW='8xl' pt={{base: 10, md: 50}} pb={{base: 20, md: 100}}> 
             <Heading className='title-highlight' as='h1' size='2xl' mb={10}>PREGUNTAS FRECUENTES</Heading>
@@ -54,7 +54,7 @@ export default function PreguntasFrecuentes({faqs}) {
                     <>
                         <h2>
                         <AccordionButton>
-                            <Box as="span" flex='1' textAlign='left' style={{fontWeight: 'bold'}}>
+                            <Box as="span" flex='1' textAlign='left' style={{fontWeight: '600', fontSize: '20px'}}>
                             {item.attributes.question}
                             </Box>
                             {isExpanded ? (

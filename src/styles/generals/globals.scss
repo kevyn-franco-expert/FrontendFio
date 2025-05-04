@@ -208,3 +208,29 @@
 .Xbutton {
     color: black!important;
 }
+
+
+.whatsapp-bubble {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    z-index: 9999;
+    background-color: var(--red-color);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+
+    svg {
+        color: white;
+        font-size: 30px;
+        margin-bottom: -5px;
+        margin-left: -5px;
+        margin-top: -5px;
+    }
+}

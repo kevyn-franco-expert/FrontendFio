@@ -24,11 +24,14 @@ export default function Carousel({sliders = null}) {
 
   const slides = [
     {
-      img: "banner-1.jpg",
+      img: "banners-1.jpg",
     },
     {
-        img: "banner-2.jpg",
+        img: "banners-2.jpg",
     },
+    {
+      img: "banners-3.jpg",
+  },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);

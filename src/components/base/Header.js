@@ -21,7 +21,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 
 export default function Header() {
   const [islogged, setIslogged] = useState(null)
-  const bg = "#d62732";
+  const bg = "#B91428";
   const mobileNav = useDisclosure();
   
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Header() {
               <Link as={NextLink} href='/'><Button className="nav-li" colorScheme="brand">Inicio</Button></Link>
               {/* <Link as={NextLink} href='/productos'><Button className="nav-li" colorScheme="brand">Productos</Button></Link> */}
               <Link as={NextLink} href='/nosotros'><Button className="nav-li" colorScheme="brand">Nosotros</Button></Link>
-              <Link as={NextLink} href='/beneficios'><Button className="nav-li" colorScheme="brand">¿Cómo funciona?</Button></Link>
+              <Link as={NextLink} href='/beneficios'><Button className="nav-li" colorScheme="brand">Beneficios</Button></Link>
               <Link as={NextLink} href='/preguntas-frecuentes'><Button className="nav-li" colorScheme="brand">Preguntas Frecuentes</Button></Link>
             </HStack>
             {islogged && <Link href='/mi-cuenta' className="btn-outline">

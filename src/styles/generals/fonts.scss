@@ -1,3 +1,5 @@
+//Cocomat
+
 @font-face {
     font-family: 'Cocomat';
     src: url('fonts/Cocomat-UltraLightItalic.eot'),
@@ -117,3 +119,20 @@
     font-style: italic;
 }
 
+//figtree
+
+@font-face {
+    font-family: 'Figtree';
+    src: local('Figtree Bold'), local('Figtree-Bold'),
+        url('fonts/Figtree-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Figtree';
+    src: local('Figtree SemiBold'), local('Figtree-SemiBold'),
+        url('fonts/Figtree-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}

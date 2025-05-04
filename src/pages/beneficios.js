@@ -8,7 +8,7 @@ export default function BenefitsPage() {
     <>
       <HeadTitle title='Beneficios' description='Obtén tu línea de efectivo con nosotros' />
       <main>
-        <Box>
+        <Box bg={'#F1F1F1F1'}>
             <Container maxW='8xl' pt={{base: 2, md: 50}} pb={{base: 20, md: 100}}> 
                 <Heading className='title-highlight' as='h1' size='2xl' mb={10}>BENEFICIOS</Heading>
 
@@ -19,13 +19,9 @@ export default function BenefitsPage() {
         </Box>
         <Box bg='white'>
             <Container maxW='8xl' pt={{base: 2, md: 50}} pb={{base: 20, md: 100}}>
-                <Heading className='title-highlight blue' as='h1' size='2xl' mb={10}>¿CÓMO FUNCIONA?</Heading>
-
-                <Text as='p' textAlign='center' px={5} mb={10}>
-                  Obtén tu préstamo 100% online teniendo en cuenta los siguientes pasos
-                </Text>
+                <Heading className='title-highlight' as='h1' size='2xl' mb={10}>PASOS PARA ADQUIRIR UN PRÉSTAMO</Heading>
                 <Flex justifyContent='center' alignItems='center' flexWrap='wrap' gap={5}>
-                    <Box maxW='3xl' display={{base: 'none', md: 'flex'}} className='line-trought'></Box>
+                    <Box maxW='3xl' display={{base: 'none', md: 'flex'}}></Box>
                     <Benefits cols={4} benefits={howWorks} />
                 </Flex>
             </Container>
@@ -37,34 +33,36 @@ export default function BenefitsPage() {
 
 const benefits = [
   {
-    image: 'icon-phone.png',
-    content: 'Préstamo 100% online'
+    image: 'Banco@2x.svg',
+  content: 'CRÉDITOS MAYORES QUE LOS BANCOS'
   },
   {
-    image: 'icon-clock.png',
-    content: 'Recibe tu préstamo el mismo día'
+    image: 'Notariales@2x.svg',
+    content: <>
+    FIRMAS <br/> NOTARIALES
+    </>
   },
   {
-    image: 'icon-pay.png',
-    content: 'Paga solo por el tiempo que necesitas el dinero'
+    image: 'Cheque@2x.svg',
+    content: 'PRÉSTAMOS CON CHEQUE DE GERENCIA'
   }
 ]
 
 const howWorks = [
     {
-      image: 'soles.jpg',
-      content: 'Solicita tu préstamo'
+      image: 'Celu@2x.svg',
+      content: 'Contáctanos'
     },
     {
-      image: 'registro.jpg',
-      content: 'Registra tus datos'
+      image: 'Precalifica@2x.svg',
+      content: 'Rellena tu solicitud'
     },
     {
-      image: 'facial-recognition.png',
-      content: 'Reconocimiento Facial'
+      image: 'Documentación@2x.svg',
+      content: 'Presenta tu documentación'
     },
     {
-      image: 'check.jpg',
-      content: 'Espera la evaluación y ¡Listo!'
+      image: 'Desembolso@2x.svg',
+      content: 'Espera tu desembolso'
     }
   ]

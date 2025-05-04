@@ -7,6 +7,7 @@ import {
   Text,
   Heading,
   Button,
+  Image,
   Box,
   useToast,
 } from "@chakra-ui/react";
@@ -19,7 +20,6 @@ import { StoreContext } from "@/store/StoreProvider";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import useAPI from "@/hooks/useAPI";
-import ReCAPTCHA from "react-google-recaptcha";
 import Modals from "@/components/Modal";
 
 
@@ -152,9 +152,6 @@ export default function Home({ data }) {
             duration: 3000,
             isClosable: true,
           });
-          // setTimeout(() => {
-          //   router.push("/login");
-          // }, 3100);
       }
       //end cases
     } else if (
@@ -206,13 +203,47 @@ export default function Home({ data }) {
                     <Heading className="heading-red">
                       {homeData[0].attributes.title}
                     </Heading>
-                    <Text as="p" color="black" pt={5} mt={0} pb={6}>
+                    <Text as="p" color="black" textAlign={'center'} pt={5} mt={0} pb={6}>
                       {homeData[0].attributes.description}
                     </Text>
                     <Tips features={homeData[0].attributes.tips} />
                   </Stack>
                 </Center>
                 <Center w="100%" maxW={700}>
+                  <Box
+                    className="home-box"
+                    mt={{ base: "10", sm: "1" }}
+                    maxW="full"
+                    w={{base: '100%', lg: '700px'}}
+                    display={'flex'}
+                    flexDirection={'column'}
+                    gap={5}
+                    color="black"
+                    pt={5}
+                    ref={ref}
+                  >
+                  <Image
+                      src={'/mapita2.png'}
+                      alt="mapa peru fio"
+                      boxSize="full"
+                      maxWidth={450}
+                      margin={'0 auto'}
+                      backgroundSize="cover"
+                  />
+
+                  <Button
+                    onClick={() => window.open('https://wa.me/51978648424','_blank')}
+                    size="lg"
+                    width="full"
+                    height='85px'
+                    maxWidth='420px'
+                    style={{fontSize: '1.8rem', margin: '0 auto', backgroundColor: '#B91428', color: 'white', fontWeight: 'bold'}}
+                  >
+                    ¡SOLICITAR PRÉSTAMO!
+                  </Button>
+                  </Box>
+                </Center>
+                {/* <Center w="100%" maxW={700}>
                   <Box
                     boxShadow="md"
                     className="home-box"
@@ -270,7 +301,7 @@ export default function Home({ data }) {
                       </Button>
                     </Box>
                   </Box>
-                </Center>
+                </Center> */}
               </Flex>
             </Container>
           </div>

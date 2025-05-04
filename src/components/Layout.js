@@ -3,6 +3,7 @@ import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import { useState, useEffect } from 'react'
 import { fb } from '@/utils/chat-fb'
+import WhatsappBubble from './WhatsappBubble'
 
 
 export default function Layout({children}) {
@@ -33,6 +34,7 @@ export default function Layout({children}) {
           logged_in_greeting="¡Hola! ¿Cómo podemos ayudarte?"
           logged_out_greeting="¡Hola! ¿Cómo podemos ayudarte?"
         ></div>
+        <WhatsappBubble />
       </main>
     </>
   )

@@ -14,12 +14,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { GrInstagram } from "react-icons/gr";
 import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
-import { FiTwitter } from "react-icons/fi";
 
 export default function Footer({data}) {
 
   return (
-    <Box bg="#c7323e">
+    <Box bg="#B91428">
       <Container maxW="8xl">
         <Stack
           direction={{ base: "column", lg: "row" }}
@@ -29,11 +28,12 @@ export default function Footer({data}) {
         >
           <Flex justify={{base:"start", lg:"center"}}>
             <Image
-              src={data && data.data[0].attributes.image}
+              // src={data && data.data[0].attributes.image}
+              src={"/logo.svg"}
               alt="Fio Logo"
               rounded="lg"
-              width={{ base: "150px", lg: "200px" }}
-              height={{ base: "75px", lg: "100px" }}
+              width={{ base: "100px", lg: "100px" }}
+              height={{ base: "35px", lg: "50px" }}
               my={{ base: 2, lg: 0 }}
             />
           </Flex>
@@ -46,7 +46,7 @@ export default function Footer({data}) {
             textAlign="left"
           >
             <Flex justify="start" direction="column">
-              <Text as="b">Acerca de Fio</Text>
+              <Text color="white">Acerca de Fio</Text>
             {data && data.included.map((about, index) => (
                 <div key={index}>
                 {about.type === 'AboutInfo' && (
@@ -88,26 +88,18 @@ export default function Footer({data}) {
               </div>  
               ))}
               <VStack py={3}>
-                <HStack justify="center" gap={2}>
-                  <Link href='https://www.facebook.com/Fioprestamos/' className="social-icons">
+                <Flex alignSelf={'flex-start'} gap={2} alignItems={'start'}>
+                  <Link href='https://www.facebook.com/Fioprestamos/' backgroundColor={'white'} className="social-icons">
                     <Icon
-                      _dark={{ color: "white" }}
+                      color={"#B91428!important"}
                       h="20px"
                       w="20px"
                       as={FaFacebookF}
                     />
                   </Link>
-                  <Link href="https://twitter.com/FioPrestamos" className="social-icons">
+                  <Link href='https://www.instagram.com/fio.prestamos' backgroundColor={'white'} className="social-icons">
                     <Icon
-                      _dark={{ color: "white" }}
-                      h="20px"
-                      w="20px"
-                      as={FiTwitter}
-                    />
-                  </Link>
-                  <Link href='https://www.instagram.com/fio.prestamos' className="social-icons">
-                    <Icon
-                      _dark={{ color: "white" }}
+                      color={"#B91428!important"}
                       h="20px"
                       w="20px"
                       as={GrInstagram}
@@ -117,9 +109,9 @@ export default function Footer({data}) {
                   {data && data.included.map((contact, index) => (
                 <Box display={contact.type !== 'ContactInfo' ? 'none' : '' } key={index}>
                 {contact.type === 'ContactInfo' && (
-                  <Link href={contact.attributes.redirectLink} className="social-icons">
+                  <Link href={contact.attributes.redirectLink} backgroundColor={'white'} className="social-icons">
                     <Icon
-                      _dark={{ color: "white" }}
+                      color={"#B91428!important"}
                       h="20px"
                       w="20px"
                       as={FaWhatsapp}
@@ -128,7 +120,7 @@ export default function Footer({data}) {
                 )}
                 </Box>
                   ))}
-                </HStack>
+                </Flex>
               </VStack>
             </Flex>
           </HStack>

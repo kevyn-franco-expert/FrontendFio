@@ -7,7 +7,7 @@ a, p {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    font-family: 'Cocomat'!important;
+    font-family: 'Figtree'!important;
     font-weight: bold!important;
 }
 
@@ -57,14 +57,14 @@ h1,h2,h3,h4,h5,h6 {
 .title {
     &-highlight {
         background-color: var(--red-color);
-        border-radius: 10px;
+        border-radius: 16px;
         color: white;
         background-size: contain;
         text-align: center;
         width: fit-content;
         min-width: 600px;
         margin: auto;
-        padding: 10px 20px 0;
+        padding: 10px 60px;
 
         @include responsive(phone) {
             min-width: 100%;
@@ -98,4 +98,8 @@ h1,h2,h3,h4,h5,h6 {
         font-size: 28px;
         font-weight: 600;
     }
+}
+
+.feature-box {
+    background-color: #F2F2F2;
 }

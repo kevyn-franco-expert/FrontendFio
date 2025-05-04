@@ -7,13 +7,13 @@ export default function Nosotros({data}) {
   
   const features = [
     {
-      title: 'Misión',
-      image: 'mision.png',
+      title: 'MISIÓN',
+      image: 'mision-2.png',
       content: data[0].attributes.mission
     },
     {
-      title: 'Visión',
-      image: 'vision.png',
+      title: 'VISIÓN',
+      image: 'vision-2.png',
       content: data[0].attributes.vision
     }
   ]
@@ -37,7 +37,7 @@ export default function Nosotros({data}) {
               {about.attributes.description}
               </Text>
 
-              <Flex justifyContent='center' alignItems='center' flexWrap='wrap' gap={5}>
+              <Flex justifyContent='center' alignItems='center' gap={5}>
                   <Feature features={features} />
               </Flex>
           </Container>

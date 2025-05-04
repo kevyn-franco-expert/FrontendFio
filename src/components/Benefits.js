@@ -11,16 +11,14 @@ export default function Benefits({benefits, cols = 3}){
             src={props.image}
             alt={'image of ' + props.title}
         />
-        <Box>
-            <chakra.b
+        <Box maxW={'220px'}>
+            <chakra.span
             height='40px'
             fontSize={{base: 'md', md: 'xl'}}
-            lineHeight="tall"
             color="gray.600"
-            _dark={{ color: "gray.400" }}
             >
             {props.children}
-            </chakra.b>
+            </chakra.span>
         </Box>
       </Box>
     );
