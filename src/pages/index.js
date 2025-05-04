@@ -52,10 +52,10 @@ export default function Home({ data }) {
     Cookies.remove("client");
     Cookies.remove("user-data");
     Cookies.remove('score')
-    setTimeout(() => {
-      setMinCalculator(Number(homeData[0].attributes.firstMinimumAmountWithdrawn))
-      setOpenModalInformativo(true);
-    }, 2000);
+    // setTimeout(() => {
+    //   setMinCalculator(Number(homeData[0].attributes.firstMinimumAmountWithdrawn))
+    //   setOpenModalInformativo(true);
+    // }, 2000);
   }, [])
 
   useEffect(() => {
@@ -178,11 +178,11 @@ export default function Home({ data }) {
           onCloseit={() => setOpenModal(false)}
         />
 
-        <Modals
+        {/* <Modals
           type="informativo"
           isOpenit={openModalInformativo}
           onCloseit={() => setOpenModalInformativo(false)}
-        />
+        /> */}
         {homeData && (
           <div>
             <Carousel sliders={homeData[0].attributes.banners} />
